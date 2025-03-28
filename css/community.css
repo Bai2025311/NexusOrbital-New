@@ -1,0 +1,727 @@
+/**
+ * NexusOrbital - 社区页面样式
+ */
+
+/* 社区页面头部 */
+.community-header {
+    background: linear-gradient(135deg, #1a237e, #0d47a1);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.community-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.community-header p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* 社区概览 */
+.community-overview {
+    padding: 60px 0;
+    background-color: #f5f7fa;
+}
+
+.overview-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card i {
+    font-size: 2rem;
+    color: #1e88e5;
+    margin-bottom: 15px;
+}
+
+.stat-card h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.stat-card p {
+    color: #666;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.community-intro {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.community-intro h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.community-intro p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* 论坛板块 */
+.community-forums {
+    padding: 60px 0;
+}
+
+.community-forums h2,
+.latest-discussions h2,
+.community-events h2,
+.community-experts h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 40px;
+    color: #333;
+    position: relative;
+}
+
+.community-forums h2::after,
+.latest-discussions h2::after,
+.community-events h2::after,
+.community-experts h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #1e88e5;
+}
+
+.forums-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.forum-card {
+    display: flex;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.forum-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.forum-icon {
+    flex: 0 0 60px;
+    height: 60px;
+    background-color: #e3f2fd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.forum-icon i {
+    font-size: 1.5rem;
+    color: #1e88e5;
+}
+
+.forum-info {
+    flex: 1;
+}
+
+.forum-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.forum-info p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.forum-stats {
+    display: flex;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.forum-stats span {
+    margin-right: 15px;
+}
+
+.forum-stats i {
+    margin-right: 5px;
+}
+
+.view-all-forums,
+.view-all-discussions,
+.view-all-events,
+.view-all-experts {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* 最新讨论 */
+.latest-discussions {
+    padding: 60px 0;
+    background-color: #f5f7fa;
+}
+
+.discussions-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.discussion-item {
+    display: flex;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.discussion-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.discussion-avatar {
+    flex: 0 0 60px;
+    margin-right: 20px;
+}
+
+.discussion-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.discussion-content {
+    flex: 1;
+}
+
+.discussion-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.discussion-content h3 a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.discussion-content h3 a:hover {
+    color: #1e88e5;
+}
+
+.discussion-meta {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.discussion-meta .author {
+    font-weight: 600;
+    color: #555;
+}
+
+.discussion-meta .time,
+.discussion-meta .category {
+    margin-left: 15px;
+}
+
+.discussion-excerpt {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.discussion-stats {
+    display: flex;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.discussion-stats span {
+    margin-right: 15px;
+}
+
+.discussion-stats i {
+    margin-right: 5px;
+}
+
+/* 社区活动 */
+.community-events {
+    padding: 60px 0;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.event-card {
+    display: flex;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.event-date {
+    flex: 0 0 80px;
+    background-color: #1e88e5;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+}
+
+.event-date .month {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.event-date .day {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.event-info {
+    flex: 1;
+    padding: 20px;
+}
+
+.event-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.event-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.event-details {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.event-details span {
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.event-details i {
+    margin-right: 5px;
+}
+
+/* 社区专家 */
+.community-experts {
+    padding: 60px 0;
+    background-color: #f5f7fa;
+}
+
+.experts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.expert-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.expert-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.expert-avatar {
+    height: 200px;
+    overflow: hidden;
+}
+
+.expert-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.expert-card:hover .expert-avatar img {
+    transform: scale(1.05);
+}
+
+.expert-info {
+    padding: 20px;
+}
+
+.expert-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.expert-title {
+    font-size: 0.9rem;
+    color: #1e88e5;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.expert-bio {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.expert-stats {
+    display: flex;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.expert-stats span {
+    margin-right: 15px;
+}
+
+.expert-stats i {
+    margin-right: 5px;
+}
+
+/* 加入社区 */
+.join-community {
+    background: linear-gradient(135deg, #1e88e5, #1a237e);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.join-community h2 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+.join-community p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.join-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.join-actions .btn-outline {
+    border-color: white;
+    color: white;
+}
+
+.join-actions .btn-outline:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 反馈按钮和模态框 */
+.feedback-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #1e88e5;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.feedback-button:hover {
+    background-color: #1565c0;
+    transform: scale(1.05);
+}
+
+.feedback-button i {
+    font-size: 1.5rem;
+}
+
+.feedback-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.feedback-modal.active {
+    display: flex;
+}
+
+.feedback-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.feedback-modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.feedback-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.feedback-close:hover {
+    color: #333;
+}
+
+.feedback-modal-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #1e88e5;
+    outline: none;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.rating-container {
+    display: flex;
+    align-items: center;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    position: relative;
+    background-color: #ddd;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.rating label:before {
+    content: '\f005';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+    color: white;
+}
+
+.rating input:checked ~ label {
+    background-color: #ffb400;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+    background-color: #ffb400;
+}
+
+.form-actions {
+    text-align: right;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .community-header {
+        padding: 60px 0;
+    }
+    
+    .community-header h1 {
+        font-size: 2rem;
+    }
+    
+    .overview-stats {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .forums-grid,
+    .events-grid,
+    .experts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .discussion-item {
+        flex-direction: column;
+    }
+    
+    .discussion-avatar {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+    
+    .feedback-button {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-actions,
+    .join-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .event-card {
+        flex-direction: column;
+    }
+    
+    .event-date {
+        flex: 0 0 auto;
+        flex-direction: row;
+        padding: 10px;
+    }
+    
+    .event-date .month {
+        margin-right: 5px;
+    }
+}

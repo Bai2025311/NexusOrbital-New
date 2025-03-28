@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - NexusOrbital</title>
+    <meta name="description" content="注册NexusOrbital太空人居技术协作平台，连接工程师与太空科技企业。">
+    <link rel="stylesheet" href="css/web-base.css">
+    <link rel="stylesheet" href="css/web-header.css">
+    <link rel="stylesheet" href="css/web-footer.css">
+    <link rel="stylesheet" href="css/web-auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars-background"></div>
+    
+    <!-- 页面容器 -->
+    <div class="page-container">
+        <!-- 顶部导航 -->
+        <header class="main-header">
+            <div class="header-container">
+                <div class="logo">
+                    <a href="index.html"><h1>NexusOrbital</h1></a>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html">首页</a></li>
+                        <li class="nav-item"><a href="projects.html">项目</a></li>
+                        <li class="nav-item"><a href="resources.html">技术资源</a></li>
+                        <li class="nav-item"><a href="experts.html">专家目录</a></li>
+                        <li class="nav-item"><a href="about.html">关于我们</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-actions">
+                    <button class="login-btn">登录</button>
+                    <button class="join-btn primary-btn-small">成为创始会员</button>
+                    <button class="mobile-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 注册区域 -->
+        <section class="auth-section">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h2 class="auth-title">创建账户</h2>
+                        <p class="auth-subtitle">加入NexusOrbital太空人居技术协作平台</p>
+                    </div>
+                    
+                    <div class="auth-social">
+                        <button class="social-btn wechat">
+                            <i class="fab fa-weixin"></i>
+                            <span>微信注册</span>
+                        </button>
+                        <button class="social-btn github">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub注册</span>
+                        </button>
+                    </div>
+                    
+                    <div class="auth-divider">
+                        <span>或使用邮箱注册</span>
+                    </div>
+                    
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="fullName">姓名</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="fullName" name="fullName" placeholder="请输入您的姓名" required>
+                            </div>
+                            <div class="error-message" id="nameError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">邮箱地址</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" name="email" placeholder="请输入您的邮箱" required>
+                            </div>
+                            <div class="error-message" id="emailError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">密码</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" name="password" placeholder="请设置密码（至少8位字符）" required minlength="8">
+                                <button type="button" class="toggle-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="passwordError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">确认密码</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="请再次输入密码" required minlength="8">
+                                <button type="button" class="toggle-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="confirmPasswordError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>您的身份</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="roleEngineer" name="userRole" value="engineer" checked>
+                                    <label for="roleEngineer">工程师/科学家</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="roleCompany" name="userRole" value="company">
+                                    <label for="roleCompany">企业/机构</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="roleEnthusiast" name="userRole" value="enthusiast">
+                                    <label for="roleEnthusiast">太空爱好者</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="termsAgree" name="termsAgree" required>
+                            <label for="termsAgree">我已阅读并同意 <a href="terms.html" target="_blank">服务条款</a> 和 <a href="privacy.html" target="_blank">隐私政策</a></label>
+                            <div class="error-message" id="termsError"></div>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="newsletterAgree" name="newsletterAgree">
+                            <label for="newsletterAgree">订阅NexusOrbital通讯，获取最新太空技术资讯</label>
+                        </div>
+                        
+                        <button type="submit" class="auth-submit">创建账户</button>
+                        
+                        <div class="auth-message" id="registerMessage"></div>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>已有账户？<a href="login.html">立即登录</a></p>
+                    </div>
+                </div>
+                
+                <div class="auth-info">
+                    <div class="info-content">
+                        <h3>为什么加入NexusOrbital？</h3>
+                        <p>NexusOrbital是太空人居技术的协作平台，连接工程师与太空科技企业</p>
+                        
+                        <ul class="info-benefits">
+                            <li><i class="fas fa-rocket"></i> <strong>降低技术门槛</strong><br>通过AI设计工具和智能推荐系统，简化太空设施设计</li>
+                            <li><i class="fas fa-users"></i> <strong>开源协作</strong><br>参与技术开源库与众筹任务，共享资源与知识</li>
+                            <li><i class="fas fa-star"></i> <strong>创始会员特权</strong><br>早期加入享受独家资源、专家咨询和未来价格锁定</li>
+                        </ul>
+                        
+                        <div class="testimonial">
+                            <p>"NexusOrbital让我能够将航天工程知识应用到实际项目中，并与志同道合的专业人士合作。"</p>
+                            <div class="testimonial-author">
+                                <span>— 张明，航天结构工程师</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 底部区域 -->
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <h2>NexusOrbital</h2>
+                    <p>太空人居技术协作平台</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>关于我们</h3>
+                        <ul>
+                            <li><a href="#">团队介绍</a></li>
+                            <li><a href="#">使命愿景</a></li>
+                            <li><a href="#">发展历程</a></li>
+                            <li><a href="#">加入我们</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>项目中心</h3>
+                        <ul>
+                            <li><a href="#">月球基地</a></li>
+                            <li><a href="#">火星前哨</a></li>
+                            <li><a href="#">太空农业</a></li>
+                            <li><a href="#">低重力家居</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>技术资源</h3>
+                        <ul>
+                            <li><a href="#">设计工具</a></li>
+                            <li><a href="#">技术文档</a></li>
+                            <li><a href="#">研究报告</a></li>
+                            <li><a href="#">3D模型库</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>会员中心</h3>
+                        <ul>
+                            <li><a href="#">创始会员计划</a></li>
+                            <li><a href="#">会员权益</a></li>
+                            <li><a href="#">专家咨询</a></li>
+                            <li><a href="#">常见问题</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2025 NexusOrbital. 保留所有权利。
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-weibo"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-weixin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 脚本引用 -->
+    <script src="js/oauth-providers.js"></script>
+    <script src="js/web-auth.js"></script>
+    <script src="js/web-navigation.js"></script>
+</body>
+</html>

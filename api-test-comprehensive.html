@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusOrbital API 全面测试</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .test-controls {
+            flex: 1;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .test-output {
+            flex: 2;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .test-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .test-result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .test-result.success {
+            background-color: #e6f7e6;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .test-result.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .test-log {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .log-info {
+            margin-bottom: 5px;
+        }
+        
+        .log-error {
+            margin-bottom: 5px;
+            color: #ff6b6b;
+        }
+        
+        .result-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .result-item {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .result-label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .result-value {
+            font-family: monospace;
+        }
+        
+        .result-value.passed {
+            color: #28a745;
+        }
+        
+        .result-value.failed {
+            color: #dc3545;
+        }
+        
+        .result-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .test-detail {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .test-detail.passed {
+            border-left: 4px solid #28a745;
+        }
+        
+        .test-detail.failed {
+            border-left: 4px solid #dc3545;
+        }
+        
+        .test-detail-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .test-detail-name {
+            font-weight: bold;
+        }
+        
+        .test-detail-status.passed {
+            color: #28a745;
+        }
+        
+        .test-detail-status.failed {
+            color: #dc3545;
+        }
+        
+        .test-detail-message {
+            margin-bottom: 5px;
+        }
+        
+        .test-detail-data {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .tab-button {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .tab-button.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                    <span>NexusOrbital</span>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="resources.html">资源库</a></li>
+                    <li><a href="projects.html">项目展示</a></li>
+                    <li><a href="experts.html">专家目录</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="test-container">
+        <h1>NexusOrbital API 全面测试</h1>
+        <p>此页面用于全面测试 NexusOrbital 平台的 API 集成功能是否正常工作。</p>
+        
+        <div class="test-panel">
+            <div class="test-controls">
+                <h2>测试控制</h2>
+                
+                <div class="form-group">
+                    <label for="testEmail">测试邮箱:</label>
+                    <input type="email" id="testEmail" value="test@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="testPassword">测试密码:</label>
+                    <input type="password" id="testPassword" value="password123">
+                </div>
+                
+                <div class="btn-group">
+                    <button id="runAllTests" class="btn primary-btn">运行所有测试</button>
+                    <button id="clearResults" class="btn secondary-btn">清除结果</button>
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="individualTests">单项测试</button>
+                        <button class="tab-button" data-tab="testConfig">测试配置</button>
+                    </div>
+                    
+                    <div id="individualTests" class="tab-content active">
+                        <h3>单项测试</h3>
+                        <button id="testAuthentication" class="btn secondary-btn">测试用户认证</button>
+                        <button id="testResourceLoading" class="btn secondary-btn">测试资源加载</button>
+                        <button id="testResourceDetail" class="btn secondary-btn">测试资源详情</button>
+                        <button id="testResourceInteraction" class="btn secondary-btn">测试资源交互</button>
+                        <button id="testMembershipSubscription" class="btn secondary-btn">测试会员订阅</button>
+                        <button id="testResourceSubmission" class="btn secondary-btn">测试资源提交</button>
+                    </div>
+                    
+                    <div id="testConfig" class="tab-content">
+                        <h3>测试配置</h3>
+                        <div class="form-group">
+                            <label for="apiEndpoint">API 端点:</label>
+                            <input type="text" id="apiEndpoint" value="https://api.nexusorbital.com/v1">
+                        </div>
+                        <div class="form-group">
+                            <label for="testTimeout">测试超时 (毫秒):</label>
+                            <input type="number" id="testTimeout" value="10000">
+                        </div>
+                        <button id="saveConfig" class="btn primary-btn">保存配置</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-output">
+                <h2>测试输出</h2>
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="testResults">测试结果</button>
+                        <button class="tab-button" data-tab="testLogs">测试日志</button>
+                    </div>
+                    
+                    <div id="testResults" class="tab-content active">
+                        <div id="resultsSummary" class="test-section">
+                            <h3>结果摘要</h3>
+                            <p>运行测试后，此处将显示测试结果摘要。</p>
+                        </div>
+                    </div>
+                    
+                    <div id="testLogs" class="tab-content">
+                        <div id="testLogOutput" class="test-log"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>测试说明</h2>
+            <p>此测试页面用于验证 NexusOrbital 平台的 API 集成功能是否正常工作。测试内容包括：</p>
+            <ul>
+                <li><strong>用户认证测试</strong>：验证用户登录、获取用户信息和登出功能</li>
+                <li><strong>资源加载测试</strong>：验证资源列表加载和筛选功能</li>
+                <li><strong>资源详情测试</strong>：验证资源详情和相关资源加载功能</li>
+                <li><strong>资源交互测试</strong>：验证资源评分、收藏等交互功能</li>
+                <li><strong>会员订阅测试</strong>：验证会员计划和订阅功能</li>
+                <li><strong>资源提交测试</strong>：验证资源提交功能</li>
+            </ul>
+            <p>测试结果将显示在右侧的测试输出区域，包括测试结果摘要和详细的测试日志。</p>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                    <span>NexusOrbital</span>
+                </div>
+                <div class="footer-links">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="resources.html">资源库</a></li>
+                        <li><a href="projects.html">项目展示</a></li>
+                        <li><a href="experts.html">专家目录</a></li>
+                        <li><a href="about.html">关于我们</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>联系我们</h3>
+                    <p>邮箱：info@nexusorbital.com</p>
+                    <p>电话：+86 123 4567 8910</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { apiService } from './js/api-service.js';
+        import { apiTestRunner } from './js/api-test-runner.js';
+        
+        // 初始化测试运行器
+        apiTestRunner.init(
+            document.getElementById('testLogOutput'),
+            document.getElementById('resultsSummary')
+        );
+        
+        // 设置测试凭据
+        document.getElementById('testEmail').addEventListener('change', function() {
+            apiTestRunner.testCredentials.email = this.value;
+        });
+        
+        document.getElementById('testPassword').addEventListener('change', function() {
+            apiTestRunner.testCredentials.password = this.value;
+        });
+        
+        // 运行所有测试
+        document.getElementById('runAllTests').addEventListener('click', async function() {
+            this.disabled = true;
+            this.textContent = '测试运行中...';
+            
+            try {
+                await apiTestRunner.runAllTests();
+            } catch (error) {
+                console.error('测试运行出错:', error);
+            }
+            
+            this.disabled = false;
+            this.textContent = '运行所有测试';
+        });
+        
+        // 清除结果
+        document.getElementById('clearResults').addEventListener('click', function() {
+            document.getElementById('testLogOutput').innerHTML = '';
+            document.getElementById('resultsSummary').innerHTML = '<h3>结果摘要</h3><p>运行测试后，此处将显示测试结果摘要。</p>';
+            apiTestRunner.testResults = {
+                passed: 0,
+                failed: 0,
+                total: 0,
+                details: []
+            };
+        });
+        
+        // 单项测试按钮
+        document.getElementById('testAuthentication').addEventListener('click', async function() {
+            this.disabled = true;
+            try {
+                await apiTestRunner.testAuthentication();
+            } catch (error) {
+                console.error('认证测试出错:', error);
+            }
+            this.disabled = false;
+        });
+        
+        document.getElementById('testResourceLoading').addEventListener('click', async function() {
+            this.disabled = true;
+            try {
+                await apiTestRunner.testResourceLoading();
+            } catch (error) {
+                console.error('资源加载测试出错:', error);
+            }
+            this.disabled = false;
+        });
+        
+        document.getElementById('testResourceDetail').addEventListener('click', async function() {
+            this.disabled = true;
+            try {
+                await apiTestRunner.testResourceDetail();
+            } catch (error) {
+                console.error('资源详情测试出错:', error);
+            }
+            this.disabled = false;
+        });
+        
+        document.getElementById('testResourceInteraction').addEventListener('click', async function() {
+            this.disabled = true;
+            try {
+                await apiTestRunner.testResourceInteraction();
+            } catch (error) {
+                console.error('资源交互测试出错:', error);
+            }
+            this.disabled = false;
+        });
+        
+        document.getElementById('testMembershipSubscription').addEventListener('click', async function() {
+            this.disabled = true;
+            try {
+                await apiTestRunner.testMembershipSubscription();
+            } catch (error) {
+                console.error('会员订阅测试出错:', error);
+            }
+            this.disabled = false;
+        });
+        
+        document.getElementById('testResourceSubmission').addEventListener('click', async function() {
+            this.disabled = true;
+            try {
+                await apiTestRunner.testResourceSubmission();
+            } catch (error) {
+                console.error('资源提交测试出错:', error);
+            }
+            this.disabled = false;
+        });
+        
+        // 保存配置
+        document.getElementById('saveConfig').addEventListener('click', function() {
+            const apiEndpoint = document.getElementById('apiEndpoint').value;
+            const testTimeout = parseInt(document.getElementById('testTimeout').value);
+            
+            // 更新API服务配置
+            apiService.setConfig({
+                apiEndpoint,
+                timeout: testTimeout
+            });
+            
+            alert('配置已保存');
+        });
+        
+        // 标签切换
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // 切换按钮状态
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // 切换内容
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

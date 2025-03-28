@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自动续费管理 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .renewal-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .renewal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .renewal-card .card-header {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .renewal-card.active {
+            border-color: #28a745;
+        }
+        .renewal-card.active .card-header {
+            background-color: #28a745;
+            color: white;
+        }
+        .renewal-card.disabled {
+            border-color: #dc3545;
+            opacity: 0.7;
+        }
+        .renewal-card.disabled .card-header {
+            background-color: #dc3545;
+            color: white;
+        }
+        .renewal-logs {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .log-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .log-item:last-child {
+            border-bottom: none;
+        }
+        .log-item .badge {
+            font-size: 0.8rem;
+        }
+        .payment-method-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">NexusOrbital</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="membership.html">会员</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="payment.html">支付</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="refund.html">退款</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="auto-renewal.html">自动续费</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <span id="currentUser">用户</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">个人资料</a></li>
+                            <li><a class="dropdown-item" href="orders.html">我的订单</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">退出登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="mb-4">自动续费管理</h2>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    自动续费可以确保您的会员服务不中断。我们会在会员到期前自动为您续费，无需手动操作。
+                </div>
+                
+                <!-- 自动续费列表 -->
+                <div id="renewalsList" class="mt-4">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                        <p class="mt-2">正在加载您的自动续费信息...</p>
+                    </div>
+                </div>
+                
+                <!-- 无自动续费时显示 -->
+                <div id="noRenewals" class="d-none">
+                    <div class="card">
+                        <div class="card-body text-center py-5">
+                            <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                            <h4 class="mt-3">您还没有设置自动续费</h4>
+                            <p class="text-muted">购买会员时可以选择开启自动续费功能</p>
+                            <a href="membership.html" class="btn btn-primary mt-3">查看会员套餐</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <!-- 自动续费说明 -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">自动续费说明</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                系统会在会员到期前自动为您续费
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                您可以随时取消自动续费
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                取消后，当前会员期限内的服务不受影响
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                我们会在续费前3天发送提醒
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                支持多种支付方式的自动续费
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 自动续费日志 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">自动续费日志</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="renewalLogs" class="renewal-logs">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">加载中...</span>
+                                </div>
+                                <p class="mt-2">正在加载日志...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 确认取消自动续费模态框 -->
+    <div class="modal fade" id="cancelRenewalModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">确认取消自动续费</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>您确定要取消 <span id="cancelMembershipName" class="fw-bold"></span> 的自动续费吗？</p>
+                    <p>取消后，当前会员有效期内的服务不会受到影响，但会员到期后将不会自动续费。</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancelBtn">确认取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/auto-renewal.js"></script>
+</body>
+</html>

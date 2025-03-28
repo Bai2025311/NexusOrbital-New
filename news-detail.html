@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻详情 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/web-news.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="projects.html">项目展示</a>
+                <a href="resources.html">技术资源</a>
+                <a href="news.html" class="active">新闻动态</a>
+                <a href="experts.html">专家目录</a>
+                <a href="about.html">关于我们</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="搜索...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-actions">
+                    <a href="login.html" class="btn btn-outline login-btn">登录</a>
+                    <a href="register.html" class="btn btn-primary register-btn">注册</a>
+                    <div class="user-profile hidden">
+                        <img src="images/avatars/default.jpg" alt="用户头像">
+                        <div class="dropdown-menu">
+                            <a href="profile.html">个人中心</a>
+                            <a href="dashboard.html">我的项目</a>
+                            <a href="settings.html">账号设置</a>
+                            <a href="#" id="logoutBtn">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="main-content">
+        <div class="container">
+            <!-- 新闻详情 -->
+            <section class="news-detail-section">
+                <div class="news-detail-container">
+                    <div class="news-detail-header">
+                        <div class="news-meta">
+                            <span class="news-category" id="newsCategory">技术突破</span>
+                            <span class="news-date" id="newsDate">2025年3月15日</span>
+                        </div>
+                        <h1 class="news-title" id="newsTitle">NexusOrbital与国际空间站合作项目启动</h1>
+                        <div class="news-author">
+                            <div class="author-avatar" id="authorAvatar">
+                                <img src="images/team/zhang.jpg" alt="作者头像">
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name" id="authorName">张天行</div>
+                                <div class="author-role">太空建筑专家</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="news-detail-featured-image">
+                        <img src="images/news/iss-collaboration.jpg" alt="新闻图片" id="newsImage">
+                    </div>
+                    
+                    <div class="news-detail-content" id="newsContent">
+                        <!-- 新闻内容将通过JavaScript动态加载 -->
+                    </div>
+                    
+                    <div class="news-detail-tags">
+                        <span>相关标签：</span>
+                        <a href="#" class="tag">国际空间站</a>
+                        <a href="#" class="tag">合作项目</a>
+                        <a href="#" class="tag">太空居住</a>
+                    </div>
+                    
+                    <div class="news-detail-share">
+                        <span>分享到：</span>
+                        <a href="#" class="share-btn" id="shareWeixin"><i class="fab fa-weixin"></i></a>
+                        <a href="#" class="share-btn" id="shareWeibo"><i class="fab fa-weibo"></i></a>
+                        <a href="#" class="share-btn" id="shareQQ"><i class="fab fa-qq"></i></a>
+                        <a href="#" class="share-btn" id="shareLinkedin"><i class="fab fa-linkedin"></i></a>
+                        <button class="btn btn-outline btn-sm" id="copyLinkBtn"><i class="fas fa-link"></i> 复制链接</button>
+                    </div>
+                </div>
+                
+                <!-- 相关新闻 -->
+                <div class="related-news">
+                    <h3>相关阅读</h3>
+                    <div class="related-news-grid" id="relatedNews">
+                        <!-- 相关新闻将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <!-- 新闻评论区 -->
+                <div class="news-comments-section">
+                    <h3>评论区 (<span id="commentCount">0</span>)</h3>
+                    
+                    <!-- 评论表单 -->
+                    <div class="comment-form-container">
+                        <form id="commentForm" class="comment-form">
+                            <div class="comment-avatar">
+                                <img src="images/avatars/default.jpg" alt="用户头像" id="userCommentAvatar">
+                            </div>
+                            <div class="comment-input">
+                                <textarea id="commentContent" placeholder="发表您的评论..." required></textarea>
+                                <button type="submit" class="btn btn-primary">发表评论</button>
+                            </div>
+                        </form>
+                        <div class="login-reminder" id="loginReminder" style="display: none;">
+                            <p>请 <a href="login.html">登录</a> 后发表评论</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 评论列表 -->
+                    <div class="comments-list" id="commentsList">
+                        <!-- 评论将通过JavaScript动态加载 -->
+                    </div>
+                    
+                    <!-- 加载更多评论 -->
+                    <div class="load-more-comments" id="loadMoreComments" style="display: none;">
+                        <button class="btn btn-outline">加载更多评论</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <img src="images/logo-white.png" alt="NexusOrbital Logo">
+                    <p>连接地球工程师，共建太空未来</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h4>平台导航</h4>
+                        <a href="index.html">首页</a>
+                        <a href="projects.html">项目展示</a>
+                        <a href="resources.html">技术资源</a>
+                        <a href="news.html">新闻动态</a>
+                        <a href="experts.html">专家目录</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>会员服务</h4>
+                        <a href="membership.html">会员计划</a>
+                        <a href="benefits.html">会员权益</a>
+                        <a href="tutorials.html">教程资源</a>
+                        <a href="webinars.html">线上研讨会</a>
+                        <a href="support.html">会员支持</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>关于我们</h4>
+                        <a href="about.html">平台介绍</a>
+                        <a href="team.html">团队成员</a>
+                        <a href="partners.html">合作伙伴</a>
+                        <a href="careers.html">加入我们</a>
+                        <a href="contact.html">联系方式</a>
+                    </div>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>订阅更新</h4>
+                    <p>获取最新的太空居住技术和项目信息</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="您的邮箱地址">
+                        <button type="submit" class="btn btn-primary">订阅</button>
+                    </form>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+                <div class="footer-bottom-links">
+                    <a href="terms.html">使用条款</a>
+                    <a href="privacy.html">隐私政策</a>
+                    <a href="cookies.html">Cookie 政策</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript 文件 -->
+    <script src="js/main.js"></script>
+    <script src="js/web-news.js"></script>
+</body>
+</html>

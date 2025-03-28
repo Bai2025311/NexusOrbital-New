@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusOrbital API 集成测试</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .test-results {
+            margin-top: 20px;
+        }
+        
+        .test-summary {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .test-summary.all-passed {
+            background-color: #e6f7e6;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .test-summary.has-failures {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .test-counts {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .test-count {
+            font-weight: bold;
+        }
+        
+        .test-count.passed {
+            color: #28a745;
+        }
+        
+        .test-count.failed {
+            color: #dc3545;
+        }
+        
+        .test-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .test-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .test-item.passed {
+            background-color: #e6f7e6;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .test-item.failed {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .test-name {
+            font-weight: bold;
+        }
+        
+        .test-message {
+            color: #666;
+        }
+        
+        .console-output {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .console-output .log {
+            color: #fff;
+        }
+        
+        .console-output .error {
+            color: #ff6b6b;
+        }
+        
+        .console-output .warn {
+            color: #feca57;
+        }
+        
+        .console-output .info {
+            color: #54a0ff;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                    <span>NexusOrbital</span>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="resources.html">资源库</a></li>
+                    <li><a href="projects.html">项目展示</a></li>
+                    <li><a href="experts.html">专家目录</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="test-container">
+        <h1>API 集成测试</h1>
+        <p>此页面用于测试 NexusOrbital 平台的 API 集成功能是否正常工作。</p>
+        
+        <div class="test-controls">
+            <h2>测试控制</h2>
+            <p>点击下方按钮开始运行测试：</p>
+            <button id="runTestsBtn" class="btn primary-btn">运行所有测试</button>
+            <div class="test-options">
+                <label>
+                    <input type="checkbox" id="showConsoleOutput" checked>
+                    显示控制台输出
+                </label>
+            </div>
+        </div>
+        
+        <div class="test-results" id="testResults">
+            <div class="placeholder">测试结果将显示在这里...</div>
+        </div>
+        
+        <div class="console-output" id="consoleOutput" style="display: none;">
+            <h3>控制台输出</h3>
+            <div id="consoleMessages"></div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                    <span>NexusOrbital</span>
+                </div>
+                <div class="footer-links">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="resources.html">资源库</a></li>
+                        <li><a href="projects.html">项目展示</a></li>
+                        <li><a href="experts.html">专家目录</a></li>
+                        <li><a href="about.html">关于我们</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>联系我们</h3>
+                    <p>邮箱：info@nexusorbital.com</p>
+                    <p>电话：+86 123 4567 8910</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { runAllTests } from './js/api-test.js';
+        
+        // 重写控制台方法以捕获输出
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn,
+            info: console.info
+        };
+        
+        const consoleMessages = document.getElementById('consoleMessages');
+        const consoleOutput = document.getElementById('consoleOutput');
+        const showConsoleOutput = document.getElementById('showConsoleOutput');
+        
+        // 更新控制台输出显示
+        showConsoleOutput.addEventListener('change', function() {
+            consoleOutput.style.display = this.checked ? 'block' : 'none';
+        });
+        
+        // 重写控制台方法
+        console.log = function() {
+            originalConsole.log.apply(console, arguments);
+            appendConsoleMessage('log', arguments);
+        };
+        
+        console.error = function() {
+            originalConsole.error.apply(console, arguments);
+            appendConsoleMessage('error', arguments);
+        };
+        
+        console.warn = function() {
+            originalConsole.warn.apply(console, arguments);
+            appendConsoleMessage('warn', arguments);
+        };
+        
+        console.info = function() {
+            originalConsole.info.apply(console, arguments);
+            appendConsoleMessage('info', arguments);
+        };
+        
+        // 添加控制台消息到输出区域
+        function appendConsoleMessage(type, args) {
+            const message = Array.from(args).map(arg => {
+                if (typeof arg === 'object') {
+                    try {
+                        return JSON.stringify(arg, null, 2);
+                    } catch (e) {
+                        return String(arg);
+                    }
+                }
+                return String(arg);
+            }).join(' ');
+            
+            const messageElement = document.createElement('div');
+            messageElement.className = type;
+            messageElement.textContent = message;
+            consoleMessages.appendChild(messageElement);
+            
+            // 滚动到底部
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        // 运行测试按钮事件
+        document.getElementById('runTestsBtn').addEventListener('click', async function() {
+            // 清空控制台输出
+            consoleMessages.innerHTML = '';
+            
+            // 显示控制台输出区域
+            if (showConsoleOutput.checked) {
+                consoleOutput.style.display = 'block';
+            }
+            
+            // 更改按钮状态
+            const button = this;
+            button.disabled = true;
+            button.textContent = '测试运行中...';
+            
+            try {
+                // 运行测试
+                await runAllTests();
+            } catch (error) {
+                console.error('运行测试失败:', error);
+            } finally {
+                // 恢复按钮状态
+                button.disabled = false;
+                button.textContent = '运行所有测试';
+            }
+        });
+    </script>
+</body>
+</html>

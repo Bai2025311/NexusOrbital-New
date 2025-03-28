@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会员订阅 - NexusOrbital太空技术协作平台</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/payment.css">
+  <script src="/js/payment.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <a href="/">
+          <img src="/images/logo.png" alt="NexusOrbital Logo">
+          <span>NexusOrbital</span>
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">首页</a></li>
+          <li><a href="/projects">项目</a></li>
+          <li><a href="/community">社区</a></li>
+          <li><a href="/resources">资源</a></li>
+          <li><a href="/about">关于我们</a></li>
+          <li class="active"><a href="/membership">会员</a></li>
+        </ul>
+      </nav>
+      <div class="user-actions">
+        <a href="/login" class="btn btn-outline">登录</a>
+        <a href="/register" class="btn btn-primary">注册</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="payment-page">
+    <section class="hero-section">
+      <div class="container">
+        <h1>加入NexusOrbital会员</h1>
+        <p>成为会员，参与建造下一个太空城市</p>
+      </div>
+    </section>
+
+    <section class="membership-plans-section">
+      <div class="container">
+        <h2>选择会员计划</h2>
+        <div id="membership-plans" class="plans-container">
+          <!-- 会员计划将通过JavaScript动态生成 -->
+        </div>
+      </div>
+    </section>
+
+    <section id="payment-methods-section" class="payment-methods-section">
+      <div class="container">
+        <h2>选择支付方式</h2>
+        <div id="payment-methods" class="payment-methods-container">
+          <!-- 支付方式将通过JavaScript动态生成 -->
+        </div>
+      </div>
+    </section>
+
+    <section class="payment-action-section">
+      <div class="container">
+        <div class="payment-summary">
+          <h3>订单摘要</h3>
+          <div class="summary-item">
+            <span class="label">会员计划:</span>
+            <span class="value" id="selected-plan">未选择</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">支付方式:</span>
+            <span class="value" id="selected-payment-method">未选择</span>
+          </div>
+          <div class="summary-item total">
+            <span class="label">总计:</span>
+            <span class="value" id="total-amount">$0.00</span>
+          </div>
+        </div>
+        <div class="payment-actions">
+          <button id="pay-button" class="btn btn-primary btn-large">立即支付</button>
+          <button id="transaction-history-button" class="btn btn-outline">查看交易记录</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="NexusOrbital Logo">
+          <span>NexusOrbital</span>
+        </div>
+        <div class="footer-links">
+          <div class="link-group">
+            <h4>平台</h4>
+            <ul>
+              <li><a href="/projects">项目</a></li>
+              <li><a href="/community">社区</a></li>
+              <li><a href="/resources">资源</a></li>
+              <li><a href="/membership">会员</a></li>
+            </ul>
+          </div>
+          <div class="link-group">
+            <h4>关于</h4>
+            <ul>
+              <li><a href="/about">关于我们</a></li>
+              <li><a href="/team">团队</a></li>
+              <li><a href="/careers">招聘</a></li>
+              <li><a href="/contact">联系我们</a></li>
+            </ul>
+          </div>
+          <div class="link-group">
+            <h4>支持</h4>
+            <ul>
+              <li><a href="/faq">常见问题</a></li>
+              <li><a href="/support">支持中心</a></li>
+              <li><a href="/terms">服务条款</a></li>
+              <li><a href="/privacy">隐私政策</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 NexusOrbital. 保留所有权利。</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="icon-twitter"></i></a>
+          <a href="#" class="social-link"><i class="icon-facebook"></i></a>
+          <a href="#" class="social-link"><i class="icon-linkedin"></i></a>
+          <a href="#" class="social-link"><i class="icon-github"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

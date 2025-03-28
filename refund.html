@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退款申请 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="NexusOrbital Logo" height="30">
+                NexusOrbital
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projects.html">项目</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">社区</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="membership.html">会员</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i> <span id="user-name">用户</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="profile.html">个人中心</a>
+                            <a class="dropdown-item" href="transactions.html">交易记录</a>
+                            <a class="dropdown-item active" href="refund.html">退款申请</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" id="logout-btn">退出登录</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <div class="container py-5">
+        <div id="alert-container"></div>
+        
+        <h1 class="mb-4">退款申请</h1>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">申请退款</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="refund-form">
+                            <div class="form-group">
+                                <label for="transaction-id">选择交易记录</label>
+                                <select class="form-control" id="transaction-id" name="transaction-id" required>
+                                    <option value="">请选择交易记录</option>
+                                </select>
+                            </div>
+                            
+                            <input type="hidden" id="order-id" name="order-id">
+                            
+                            <div class="form-group">
+                                <label for="refund-amount">退款金额</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">¥</span>
+                                    </div>
+                                    <input type="number" class="form-control" id="refund-amount" name="refund-amount" step="0.01" min="0.01" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="refund-reason">退款原因</label>
+                                <textarea class="form-control" id="refund-reason" name="refund-reason" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-info">联系方式（可选）</label>
+                                <input type="text" class="form-control" id="contact-info" name="contact-info" placeholder="电话或其他联系方式">
+                                <small class="form-text text-muted">如需加急处理，请留下您的联系方式</small>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">提交申请</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">退款说明</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>退款政策</h6>
+                        <ul>
+                            <li>会员订阅在购买后7天内可申请全额退款（未使用高级功能）</li>
+                            <li>已使用的会员服务将按比例扣除相应费用</li>
+                            <li>退款申请提交后，我们将在3个工作日内进行审核</li>
+                            <li>退款金额将原路退回，到账时间取决于支付渠道，一般为1-7个工作日</li>
+                        </ul>
+                        
+                        <h6>注意事项</h6>
+                        <ul>
+                            <li>请确保退款原因真实详细，以便我们更好地处理您的申请</li>
+                            <li>如有特殊情况需要加急处理，请在联系方式中注明</li>
+                            <li>退款成功后，相应的会员权益将被取消</li>
+                            <li>如有任何疑问，请联系客服：support@nexusorbital.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">我的退款申请记录</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>申请ID</th>
+                                <th>订单ID</th>
+                                <th>退款金额</th>
+                                <th>申请时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="refund-list">
+                            <tr>
+                                <td colspan="6" class="text-center">加载中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>关于我们</h5>
+                    <p>NexusOrbital是一个致力于推动太空技术创新与协作的平台，连接全球航天爱好者、专业人士和企业。</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html" class="text-white">关于我们</a></li>
+                        <li><a href="terms.html" class="text-white">服务条款</a></li>
+                        <li><a href="privacy.html" class="text-white">隐私政策</a></li>
+                        <li><a href="contact.html" class="text-white">联系我们</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>联系我们</h5>
+                    <address>
+                        <p><i class="fas fa-envelope mr-2"></i> info@nexusorbital.com</p>
+                        <p><i class="fas fa-phone mr-2"></i> +86 10 8888 8888</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i> 北京市海淀区中关村科技园</p>
+                    </address>
+                    <div class="social-icons">
+                        <a href="#" class="text-white mr-3"><i class="fab fa-weixin fa-lg"></i></a>
+                        <a href="#" class="text-white mr-3"><i class="fab fa-weibo fa-lg"></i></a>
+                        <a href="#" class="text-white mr-3"><i class="fab fa-github fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 NexusOrbital. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript 文件 -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/fontawesome.min.js"></script>
+    <script src="js/refund-management.js"></script>
+</body>
+</html>

@@ -1,0 +1,502 @@
+/**
+ * NexusOrbital 认证页面样式
+ * 版本: 2025.03.25
+ * 作者: 星际人居技术设计团队
+ */
+
+/* 认证页面容器 */
+.auth-section {
+    padding: 60px 0;
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-container {
+    display: flex;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(25, 35, 65, 0.9) 0%, rgba(15, 25, 55, 0.95) 100%);
+    border: 1px solid rgba(100, 120, 200, 0.2);
+    position: relative;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/stars-pattern.png');
+    background-size: cover;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+/* 认证卡片 */
+.auth-card {
+    flex: 3;
+    padding: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 认证信息侧边栏 */
+.auth-info {
+    flex: 2;
+    background: linear-gradient(135deg, rgba(30, 40, 80, 0.9) 0%, rgba(20, 30, 70, 0.95) 100%);
+    padding: 40px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
+
+.auth-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/auth-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.info-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* 认证头部 */
+.auth-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.auth-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #fff;
+    background: linear-gradient(90deg, #fff, #2ae9c9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.auth-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+}
+
+/* 社交登录 */
+.auth-social {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-btn i {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.social-btn.wechat {
+    background-color: rgba(9, 187, 7, 0.2);
+    border: 1px solid rgba(9, 187, 7, 0.3);
+}
+
+.social-btn.wechat:hover {
+    background-color: rgba(9, 187, 7, 0.3);
+}
+
+.social-btn.github {
+    background-color: rgba(36, 41, 46, 0.2);
+    border: 1px solid rgba(36, 41, 46, 0.3);
+}
+
+.social-btn.github:hover {
+    background-color: rgba(36, 41, 46, 0.3);
+}
+
+/* 分隔线 */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.auth-divider span {
+    padding: 0 15px;
+}
+
+/* 表单样式 */
+.auth-form {
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: rgba(74, 107, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.input-wrapper input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.toggle-password:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    min-height: 20px;
+}
+
+/* 表单选项 */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.remember-me label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.forgot-link {
+    color: #4a6bff;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+    color: #2ae9c9;
+    text-decoration: underline;
+}
+
+/* 单选框组 */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+}
+
+.radio-option input[type="radio"] {
+    margin-right: 8px;
+}
+
+.radio-option label {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+/* 复选框组 */
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.checkbox-group label a {
+    color: #4a6bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.checkbox-group label a:hover {
+    color: #2ae9c9;
+    text-decoration: underline;
+}
+
+/* 提交按钮 */
+.auth-submit {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(90deg, #4a6bff, #2ae9c9);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(74, 107, 255, 0.3);
+}
+
+.auth-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(74, 107, 255, 0.4);
+}
+
+/* 认证消息 */
+.auth-message {
+    text-align: center;
+    margin-top: 15px;
+    min-height: 24px;
+    color: #2ae9c9;
+    font-size: 0.95rem;
+}
+
+.auth-message.error {
+    color: #ff6b6b;
+}
+
+/* 认证页脚 */
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+}
+
+.auth-footer a {
+    color: #4a6bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.auth-footer a:hover {
+    color: #2ae9c9;
+    text-decoration: underline;
+}
+
+/* 信息区域样式 */
+.info-content h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.info-content p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.info-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px 0;
+}
+
+.info-benefits li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.info-benefits li i {
+    color: #2ae9c9;
+    margin-right: 10px;
+    font-size: 1.1rem;
+    margin-top: 3px;
+}
+
+.info-benefits li strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.info-cta {
+    margin-top: 30px;
+}
+
+.info-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.info-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+}
+
+/* 推荐语 */
+.testimonial {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid #2ae9c9;
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 30px;
+}
+
+.testimonial p {
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.testimonial-author {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+    .auth-container {
+        flex-direction: column;
+        max-width: 600px;
+    }
+    
+    .auth-info {
+        padding: 30px;
+    }
+    
+    .auth-card {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-section {
+        padding: 30px 15px;
+    }
+    
+    .auth-card, .auth-info {
+        padding: 25px 20px;
+    }
+    
+    .auth-title {
+        font-size: 1.8rem;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .social-btn span {
+        display: none;
+    }
+    
+    .social-btn i {
+        margin-right: 0;
+        font-size: 1.5rem;
+    }
+}

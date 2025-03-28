@@ -1,0 +1,56 @@
+{
+  "transactions": [
+    {
+      "id": "txn_001",
+      "transactionId": "NO20250327001",
+      "userId": "user_001",
+      "amount": 299.00,
+      "paymentMethod": "alipay",
+      "membershipId": "founder",
+      "description": "升级到创始会员计划",
+      "status": "completed",
+      "date": "2025-03-15T10:30:00Z",
+      "metadata": {
+        "paymentId": "2025031510300001",
+        "platform": "web"
+      },
+      "createdAt": "2025-03-15T10:30:00Z",
+      "updatedAt": "2025-03-15T10:35:00Z"
+    },
+    {
+      "id": "txn_002",
+      "transactionId": "NO20250327002",
+      "userId": "user_001",
+      "amount": 599.00,
+      "paymentMethod": "wechat",
+      "membershipId": "professional",
+      "description": "升级到专业会员计划",
+      "status": "pending",
+      "date": "2025-03-20T14:45:00Z",
+      "metadata": {
+        "paymentId": "2025032014450001",
+        "platform": "mobile"
+      },
+      "createdAt": "2025-03-20T14:45:00Z",
+      "updatedAt": "2025-03-20T14:45:00Z"
+    },
+    {
+      "id": "txn_003",
+      "transactionId": "NO20250327003",
+      "userId": "user_001",
+      "amount": 999.00,
+      "paymentMethod": "creditcard",
+      "membershipId": "enterprise",
+      "description": "升级到企业会员计划",
+      "status": "failed",
+      "date": "2025-03-25T09:15:00Z",
+      "metadata": {
+        "paymentId": "2025032509150001",
+        "platform": "web",
+        "errorCode": "insufficient_funds"
+      },
+      "createdAt": "2025-03-25T09:15:00Z",
+      "updatedAt": "2025-03-25T09:16:30Z"
+    }
+  ]
+}

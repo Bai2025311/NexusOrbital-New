@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术资源库 - NexusOrbital</title>
+    <meta name="description" content="NexusOrbital技术资源库提供太空人居技术的开源资料、研究报告、设计模型和教程，助力工程师参与太空城市建设。">
+    <link rel="stylesheet" href="css/web-base.css">
+    <link rel="stylesheet" href="css/web-header.css">
+    <link rel="stylesheet" href="css/web-footer.css">
+    <link rel="stylesheet" href="css/web-layers.css">
+    <link rel="stylesheet" href="css/web-resources.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars-background"></div>
+    
+    <!-- 页面容器 -->
+    <div class="page-container">
+        <!-- 顶部导航 -->
+        <header class="main-header">
+            <div class="header-container">
+                <div class="logo">
+                    <h1>NexusOrbital</h1>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html">首页</a></li>
+                        <li class="nav-item"><a href="projects.html">项目</a></li>
+                        <li class="nav-item active"><a href="resources.html">技术资源</a></li>
+                        <li class="nav-item"><a href="experts.html">专家目录</a></li>
+                        <li class="nav-item"><a href="about.html">关于我们</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-actions">
+                    <button class="login-btn">登录</button>
+                    <button class="join-btn primary-btn-small">成为创始会员</button>
+                    <button class="mobile-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 页面标题 -->
+        <section class="page-title-section">
+            <div class="container">
+                <h1 class="page-title">技术资源库</h1>
+                <p class="page-subtitle">探索太空人居技术的开源资料、研究报告、设计模型和教程</p>
+            </div>
+        </section>
+        
+        <!-- 资源筛选区 -->
+        <section class="resources-filter-section">
+            <div class="container">
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <input type="text" id="resourceSearch" placeholder="搜索资源...">
+                        <button type="button" id="searchBtn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="filter-dropdowns">
+                        <select id="resourceType" class="filter-select">
+                            <option value="">所有类型</option>
+                            <option value="研究报告">研究报告</option>
+                            <option value="技术文档">技术文档</option>
+                            <option value="3D模型">3D模型</option>
+                            <option value="教程">教程</option>
+                            <option value="数据集">数据集</option>
+                            <option value="工具">工具</option>
+                        </select>
+                        <select id="resourceCategory" class="filter-select">
+                            <option value="">所有分类</option>
+                            <option value="结构工程">结构工程</option>
+                            <option value="生命支持">生命支持</option>
+                            <option value="能源系统">能源系统</option>
+                            <option value="材料科学">材料科学</option>
+                            <option value="空间设计">空间设计</option>
+                            <option value="辐射防护">辐射防护</option>
+                        </select>
+                        <select id="resourceAccess" class="filter-select">
+                            <option value="">所有权限</option>
+                            <option value="免费">免费资源</option>
+                            <option value="部分开放">部分开放</option>
+                            <option value="会员专享">会员专享</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-tags" id="filterTags">
+                    <!-- 筛选标签将通过JS动态生成 -->
+                </div>
+                
+                <!-- 添加标签云 -->
+                <div class="tags-cloud-container">
+                    <h3 class="tags-cloud-title">热门标签</h3>
+                    <div class="tags-cloud" id="tagsCloud">
+                        <!-- 标签将通过JS动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 资源列表 -->
+        <section class="resources-list-section">
+            <div class="container">
+                <div class="resources-header">
+                    <h2 class="section-title">全部资源</h2>
+                    <div class="resources-sort">
+                        <label for="sortOptions">排序方式：</label>
+                        <select id="sortOptions" class="sort-select">
+                            <option value="latest">最新上传</option>
+                            <option value="popular">最受欢迎</option>
+                            <option value="rating">评分最高</option>
+                            <option value="downloads">下载最多</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="resources-grid" id="resourcesGrid">
+                    <!-- 资源卡片将通过JS动态加载 -->
+                    <div class="loading-spinner" id="loadingSpinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>加载中...</span>
+                    </div>
+                </div>
+                <div class="no-results" id="noResults" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <p>未找到匹配的资源，请尝试其他筛选条件</p>
+                </div>
+                
+                <!-- 添加分页控制 -->
+                <div class="pagination-container" id="paginationContainer">
+                    <!-- 分页控制将通过JS动态生成 -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- 添加推荐资源部分 -->
+        <section class="recommended-resources-section">
+            <div class="container">
+                <h2 class="section-title">推荐资源</h2>
+                <p class="section-subtitle">根据您的浏览历史和兴趣推荐的资源</p>
+                <div class="recommended-resources-grid" id="recommendedResourcesGrid">
+                    <!-- 推荐资源将通过JS动态加载 -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- 会员特权提示 -->
+        <section class="membership-prompt">
+            <div class="container">
+                <div class="prompt-content">
+                    <div class="prompt-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="prompt-text">
+                        <h3>解锁完整技术资源库</h3>
+                        <p>成为创始会员，获取所有高级资源的完整访问权限，包括详细研究报告、高精度3D模型和专家教程。</p>
+                    </div>
+                    <div class="prompt-action">
+                        <a href="membership.html" class="primary-btn">了解会员特权</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 资源贡献 -->
+        <section class="contribute-section">
+            <div class="container">
+                <div class="contribute-content">
+                    <h2>分享您的技术资源</h2>
+                    <p>NexusOrbital鼓励工程师和研究者分享太空人居技术的知识和创新。通过贡献您的技术资源，您将获得社区认可和潜在的合作机会。</p>
+                    <div class="contribute-benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-star"></i>
+                            <span>获得社区声誉积分</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-handshake"></i>
+                            <span>建立专业合作关系</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-certificate"></i>
+                            <span>获得技术贡献认证</span>
+                        </div>
+                    </div>
+                    <button class="secondary-btn" id="contributeBtn">提交资源</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 页脚 -->
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <h2>NexusOrbital</h2>
+                    <p>太空人居技术协作平台</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h3>平台</h3>
+                        <ul>
+                            <li><a href="index.html">首页</a></li>
+                            <li><a href="projects.html">项目</a></li>
+                            <li><a href="resources.html">技术资源</a></li>
+                            <li><a href="experts.html">专家目录</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>社区</h3>
+                        <ul>
+                            <li><a href="about.html">关于我们</a></li>
+                            <li><a href="blog.html">博客</a></li>
+                            <li><a href="events.html">活动</a></li>
+                            <li><a href="faq.html">常见问题</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>法律</h3>
+                        <ul>
+                            <li><a href="terms.html">服务条款</a></li>
+                            <li><a href="privacy.html">隐私政策</a></li>
+                            <li><a href="copyright.html">版权声明</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>联系我们</h3>
+                        <ul>
+                            <li><a href="mailto:info@nexusorbital.com">info@nexusorbital.com</a></li>
+                            <li><a href="tel:+8610123456789">+86 (10) 12345-6789</a></li>
+                            <li>北京市海淀区中关村创新中心</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-icon"><i class="fab fa-weixin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-weibo"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 资源详情模态框 -->
+    <div id="resourceDetailModal" class="modal">
+        <div class="modal-content resource-detail-modal">
+            <div class="modal-header">
+                <h2 id="detailTitle">资源标题</h2>
+                <span class="close" onclick="document.getElementById('resourceDetailModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="resource-detail-container">
+                    <div class="resource-detail-main">
+                        <div class="resource-preview">
+                            <img id="detailPreview" src="images/resource-placeholder.jpg" alt="资源预览">
+                        </div>
+                        <div class="resource-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">类型:</span>
+                                <span id="detailType" class="meta-value">文档</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">分类:</span>
+                                <span id="detailCategory" class="meta-value">月球基地</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">权限:</span>
+                                <span id="detailAccess" class="meta-value">公开</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">创建者:</span>
+                                <span id="detailCreator" class="meta-value">NexusOrbital</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">创建时间:</span>
+                                <span id="detailCreatedAt" class="meta-value">2023-06-15</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">下载次数:</span>
+                                <span id="detailDownloads" class="meta-value">0</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">浏览次数:</span>
+                                <span id="detailViews" class="meta-value">0</span>
+                            </div>
+                            <div class="meta-item rating-item">
+                                <span class="meta-label">评分:</span>
+                                <span id="detailRating" class="meta-value">0.0</span>
+                                <div id="detailRatingStars" class="rating-stars"></div>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button id="saveResourceBtn" class="action-btn"><i class="far fa-bookmark"></i> 收藏</button>
+                            <button id="downloadResourceBtn" class="action-btn"><i class="fas fa-download"></i> 下载</button>
+                            <button id="shareResourceBtn" class="action-btn"><i class="fas fa-share-alt"></i> 分享</button>
+                        </div>
+                        <div class="resource-description">
+                            <h3>资源描述</h3>
+                            <p id="detailDescription">资源描述内容...</p>
+                        </div>
+                        <div class="resource-tags">
+                            <h3>标签</h3>
+                            <div id="detailTags" class="tags-container"></div>
+                        </div>
+                        <div class="resource-rating">
+                            <h3>评分</h3>
+                            <div class="rating-container">
+                                <div id="detailRatingInteractive" class="rating-interactive"></div>
+                                <span class="rating-hint">点击星星进行评分</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="resource-detail-sidebar">
+                        <div class="related-resources">
+                            <h3>相关资源</h3>
+                            <div id="relatedResources" class="related-resources-container">
+                                <!-- 相关资源将通过JS动态加载 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 会员订阅模态框 -->
+    <div id="membershipModal" class="modal">
+        <div class="modal-content membership-modal">
+            <div class="modal-header">
+                <h2>升级会员</h2>
+                <span class="close" onclick="document.getElementById('membershipModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="membership-plans">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3>基础会员</h3>
+                            <div class="plan-price">¥99<span>/年</span></div>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> 访问所有基础资源</li>
+                                <li><i class="fas fa-check"></i> 每月5次高级资源下载</li>
+                                <li><i class="fas fa-check"></i> 社区讨论参与权限</li>
+                                <li><i class="fas fa-check"></i> 基础技术支持</li>
+                            </ul>
+                        </div>
+                        <button class="plan-btn">立即订阅</button>
+                    </div>
+                    <div class="plan-card featured">
+                        <div class="plan-header">
+                            <h3>专业会员</h3>
+                            <div class="plan-price">¥299<span>/年</span></div>
+                            <div class="plan-badge">推荐</div>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> 访问所有资源（包括专业资源）</li>
+                                <li><i class="fas fa-check"></i> 无限下载</li>
+                                <li><i class="fas fa-check"></i> 优先技术支持</li>
+                                <li><i class="fas fa-check"></i> 专家问答服务</li>
+                                <li><i class="fas fa-check"></i> 月度研究报告</li>
+                            </ul>
+                        </div>
+                        <button class="plan-btn">立即订阅</button>
+                    </div>
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3>企业会员</h3>
+                            <div class="plan-price">¥999<span>/年</span></div>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> 所有专业会员权益</li>
+                                <li><i class="fas fa-check"></i> 5个账号使用权</li>
+                                <li><i class="fas fa-check"></i> 定制化技术咨询</li>
+                                <li><i class="fas fa-check"></i> 优先参与内测</li>
+                                <li><i class="fas fa-check"></i> 企业品牌展示</li>
+                            </ul>
+                        </div>
+                        <button class="plan-btn">联系我们</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 资源贡献模态框 -->
+    <div id="contributeModal" class="modal">
+        <div class="modal-content contribute-modal">
+            <div class="modal-header">
+                <h2>贡献资源</h2>
+                <span class="close" onclick="document.getElementById('contributeModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="contributeForm" class="contribute-form">
+                    <div class="form-group">
+                        <label for="contributeTitle">资源标题 *</label>
+                        <input type="text" id="contributeTitle" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contributeType">资源类型 *</label>
+                            <select id="contributeType" required>
+                                <option value="">请选择</option>
+                                <option value="文档">文档</option>
+                                <option value="图纸">图纸</option>
+                                <option value="模型">模型</option>
+                                <option value="代码">代码</option>
+                                <option value="视频">视频</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contributeCategory">资源分类 *</label>
+                            <select id="contributeCategory" required>
+                                <option value="">请选择</option>
+                                <option value="月球基地">月球基地</option>
+                                <option value="太空舱">太空舱</option>
+                                <option value="生命支持">生命支持</option>
+                                <option value="能源系统">能源系统</option>
+                                <option value="通信系统">通信系统</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contributeDescription">资源描述 *</label>
+                        <textarea id="contributeDescription" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="contributeTags">标签（用逗号分隔）</label>
+                        <input type="text" id="contributeTags" placeholder="例如: 月球, 基地, 设计">
+                    </div>
+                    <div class="form-group">
+                        <label for="contributeAccess">访问权限</label>
+                        <select id="contributeAccess">
+                            <option value="公开">公开</option>
+                            <option value="会员">会员</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contributeFile">上传文件</label>
+                        <input type="file" id="contributeFile">
+                        <p class="form-hint">支持的文件格式: PDF, DOCX, DWG, STL, ZIP, MP4 (最大50MB)</p>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="document.getElementById('contributeModal').style.display='none'">取消</button>
+                        <button type="button" class="submit-btn" onclick="submitResource()">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知容器 -->
+    <div id="notificationsContainer" class="notifications-container"></div>
+    
+    <!-- 脚本引用 -->
+    <script src="js/web-navigation.js"></script>
+    <script src="js/web-resources.js"></script>
+</body>
+</html>

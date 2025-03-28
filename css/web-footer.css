@@ -1,0 +1,258 @@
+/**
+ * NexusOrbital 网页端页脚样式
+ * 版本: 2025.03.23
+ * 作者: 星际人居技术设计团队
+ */
+
+.main-footer {
+    background-color: rgba(10, 25, 47, 0.95);
+    padding-top: 80px;
+    position: relative;
+    margin-top: 80px;
+}
+
+.main-footer::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to bottom right, transparent 49%, rgba(10, 25, 47, 0.95) 50%);
+}
+
+.footer-container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+.footer-logo {
+    width: 25%;
+    padding-right: 40px;
+}
+
+.footer-logo h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background: linear-gradient(to right, var(--text-primary), var(--accent-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.footer-logo p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.footer-links {
+    width: 75%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.footer-column {
+    width: 25%;
+    padding: 0 15px;
+}
+
+.footer-column h3 {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(to right, var(--accent-blue), var(--accent-teal));
+    border-radius: 1.5px;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.footer-column ul li a:hover {
+    color: var(--accent-teal);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    margin-top: 60px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(84, 106, 140, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--container-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.copyright {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-link {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(23, 42, 69, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.social-link:hover {
+    background-color: rgba(58, 123, 213, 0.1);
+    color: var(--accent-teal);
+    border-color: rgba(58, 123, 213, 0.3);
+    transform: translateY(-3px);
+}
+
+/* 合作伙伴区域 */
+.partners-section {
+    padding: 80px 0;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.partners-section .section-title {
+    margin-bottom: 40px;
+}
+
+.partners-section .section-title:after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.partners-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.partner-logo {
+    width: 160px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: grayscale(100%) brightness(0.8);
+    opacity: 0.6;
+    transition: var(--transition);
+}
+
+.partner-logo:hover {
+    filter: grayscale(0) brightness(1);
+    opacity: 1;
+}
+
+.partner-logo img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .main-footer {
+        padding-top: 60px;
+    }
+    
+    .partners-section {
+        padding: 60px 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .footer-logo {
+        width: 100%;
+        margin-bottom: 40px;
+        padding-right: 0;
+    }
+    
+    .footer-links {
+        width: 100%;
+    }
+    
+    .footer-column {
+        width: 50%;
+        margin-bottom: 30px;
+    }
+    
+    .partners-grid {
+        gap: 30px;
+    }
+    
+    .partner-logo {
+        width: 140px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-footer {
+        padding-top: 50px;
+        margin-top: 50px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .copyright {
+        text-align: center;
+    }
+    
+    .partners-section {
+        padding: 50px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-column {
+        width: 100%;
+    }
+    
+    .partners-grid {
+        gap: 20px;
+    }
+    
+    .partner-logo {
+        width: 120px;
+        height: 60px;
+    }
+}

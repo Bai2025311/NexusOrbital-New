@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交易记录 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="css/web-global.css">
+    <link rel="stylesheet" href="css/web-membership.css">
+    <style>
+        .transaction-history-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transaction-history-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .transaction-history-header h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .transaction-history-header p {
+            color: #666;
+        }
+        
+        .transaction-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .transaction-table th,
+        .transaction-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .transaction-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .transaction-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .transaction-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .transaction-status.completed {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .transaction-status.pending {
+            background-color: #fff8e1;
+            color: #f57f17;
+        }
+        
+        .transaction-status.failed {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .transaction-amount {
+            font-weight: 600;
+        }
+        
+        .transaction-details-btn {
+            padding: 5px 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #333;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .transaction-details-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .empty-transactions {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+        }
+        
+        .empty-transactions i {
+            font-size: 50px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        /* 交易详情模态框样式 */
+        .transaction-detail-row {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .transaction-detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-detail-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .transaction-detail-value {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="NexusOrbital Logo" height="30">
+                NexusOrbital
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projects.html">项目</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">社区</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="membership.html">会员中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">关于我们</a>
+                    </li>
+                </ul>
+                <div class="d-flex" id="navbarButtons">
+                    <a href="login.html" class="btn btn-outline-light me-2">登录</a>
+                    <a href="register.html" class="btn btn-primary">注册</a>
+                </div>
+                <div class="d-none" id="userProfileNav">
+                    <div class="dropdown">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <img src="images/avatar-placeholder.jpg" alt="用户头像" class="avatar-small me-1" id="navbarUserAvatar">
+                            <span id="navbarUsername">用户名</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.html">个人资料</a></li>
+                            <li><a class="dropdown-item" href="membership.html">会员中心</a></li>
+                            <li><a class="dropdown-item" href="transaction-history.html">交易记录</a></li>
+                            <li><a class="dropdown-item" href="settings.html">账号设置</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton">退出登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 交易记录容器 -->
+    <div class="container">
+        <div class="transaction-history-container">
+            <div class="transaction-history-header">
+                <h2>交易记录</h2>
+                <p>查看您的所有交易记录和会员订阅历史</p>
+            </div>
+            
+            <!-- 交易筛选 -->
+            <div class="transaction-filters">
+                <div class="row w-100">
+                    <div class="col-md-4 mb-2">
+                        <select class="form-select" id="statusFilter">
+                            <option value="all">所有状态</option>
+                            <option value="completed">已完成</option>
+                            <option value="pending">处理中</option>
+                            <option value="failed">失败</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <select class="form-select" id="paymentMethodFilter">
+                            <option value="all">所有支付方式</option>
+                            <option value="alipay">支付宝</option>
+                            <option value="wechat">微信支付</option>
+                            <option value="creditcard">信用卡</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <select class="form-select" id="timeFilter">
+                            <option value="all">所有时间</option>
+                            <option value="last7days">最近7天</option>
+                            <option value="last30days">最近30天</option>
+                            <option value="last3months">最近3个月</option>
+                            <option value="last6months">最近6个月</option>
+                            <option value="lastyear">最近1年</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 交易表格 -->
+            <div class="table-responsive">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>交易编号</th>
+                            <th>日期</th>
+                            <th>描述</th>
+                            <th>金额</th>
+                            <th>支付方式</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                        <!-- 交易记录将通过JavaScript动态加载 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 空状态 -->
+            <div class="empty-transactions d-none" id="emptyTransactions">
+                <i class="fas fa-receipt"></i>
+                <h4>暂无交易记录</h4>
+                <p>您还没有任何交易记录。<a href="membership.html">升级会员</a>以享受更多特权。</p>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="pagination-container">
+                <nav aria-label="交易记录分页">
+                    <ul class="pagination" id="transactionPagination">
+                        <!-- 分页将通过JavaScript动态加载 -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 交易详情模态框 -->
+    <div class="modal fade" id="transactionDetailModal" tabindex="-1" aria-labelledby="transactionDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transactionDetailModalLabel">交易详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="transaction-detail-row">
+                        <div class="row">
+                            <div class="col-md-4 transaction-detail-label">交易编号</div>
+                            <div class="col-md-8 transaction-detail-value" id="detailTransactionId">-</div>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-row">
+                        <div class="row">
+                            <div class="col-md-4 transaction-detail-label">交易日期</div>
+                            <div class="col-md-8 transaction-detail-value" id="detailTransactionDate">-</div>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-row">
+                        <div class="row">
+                            <div class="col-md-4 transaction-detail-label">交易描述</div>
+                            <div class="col-md-8 transaction-detail-value" id="detailTransactionDescription">-</div>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-row">
+                        <div class="row">
+                            <div class="col-md-4 transaction-detail-label">交易金额</div>
+                            <div class="col-md-8 transaction-detail-value" id="detailTransactionAmount">-</div>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-row">
+                        <div class="row">
+                            <div class="col-md-4 transaction-detail-label">支付方式</div>
+                            <div class="col-md-8 transaction-detail-value" id="detailTransactionPaymentMethod">-</div>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-row">
+                        <div class="row">
+                            <div class="col-md-4 transaction-detail-label">交易状态</div>
+                            <div class="col-md-8 transaction-detail-value" id="detailTransactionStatus">-</div>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-row">
+                        <div class="row">
+                            <div class="col-md-4 transaction-detail-label">会员计划</div>
+                            <div class="col-md-8 transaction-detail-value" id="detailTransactionMembership">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary d-none" id="downloadReceiptBtn">下载收据</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>NexusOrbital</h5>
+                    <p>连接创新者，共建未来</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>链接</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">首页</a></li>
+                        <li><a href="projects.html" class="text-white">项目</a></li>
+                        <li><a href="community.html" class="text-white">社区</a></li>
+                        <li><a href="about.html" class="text-white">关于我们</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>资源</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">文档</a></li>
+                        <li><a href="#" class="text-white">API</a></li>
+                        <li><a href="#" class="text-white">教程</a></li>
+                        <li><a href="#" class="text-white">常见问题</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>联系我们</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i>contact@nexusorbital.com</li>
+                        <li><i class="fas fa-phone me-2"></i>+86 123 4567 8910</li>
+                        <li class="mt-3">
+                            <a href="#" class="text-white me-2"><i class="fab fa-weixin fa-lg"></i></a>
+                            <a href="#" class="text-white me-2"><i class="fab fa-weibo fa-lg"></i></a>
+                            <a href="#" class="text-white me-2"><i class="fab fa-github fa-lg"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript 库 -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/web-auth.js"></script>
+    <script src="js/transaction-history.js"></script>
+</body>
+</html>

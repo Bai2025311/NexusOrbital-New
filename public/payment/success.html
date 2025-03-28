@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful - NexusOrbital Space Technology Platform</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .success-container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background-color: #2ecc71;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px;
+      color: white;
+      font-size: 50px;
+    }
+    
+    .success-title {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .order-details {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 30px 0;
+      text-align: left;
+    }
+    
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .detail-item:last-child {
+      border-bottom: none;
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    
+    @media (max-width: 768px) {
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .action-buttons .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <a href="/">
+          <img src="/images/logo.png" alt="NexusOrbital Logo">
+          <span>NexusOrbital</span>
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/community">Community</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li class="active"><a href="/membership">Membership</a></li>
+        </ul>
+      </nav>
+      <div class="user-actions">
+        <a href="/login" class="btn btn-outline">Login</a>
+        <a href="/register" class="btn btn-primary">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="success-container">
+        <div class="success-icon">✓</div>
+        <h1 class="success-title">Payment Successful!</h1>
+        <p class="success-message">Thank you for your payment. Your membership has been successfully activated.</p>
+        
+        <div class="order-details">
+          <h3>Order Details</h3>
+          <div class="detail-item">
+            <span>Order ID:</span>
+            <span id="order-id">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <span>Date:</span>
+            <span id="order-date">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <span>Membership Plan:</span>
+            <span id="membership-plan">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <span>Payment Method:</span>
+            <span id="payment-method">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <span>Amount:</span>
+            <span id="payment-amount">Loading...</span>
+          </div>
+        </div>
+        
+        <p>You now have access to all the features and benefits of your membership plan. Start exploring the NexusOrbital platform and join the community of space technology enthusiasts.</p>
+        
+        <div class="action-buttons">
+          <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+          <a href="/membership" class="btn btn-outline">View Membership Benefits</a>
+          <button id="download-receipt" class="btn btn-outline">Download Receipt</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="NexusOrbital Logo">
+          <span>NexusOrbital</span>
+        </div>
+        <div class="footer-links">
+          <div class="link-group">
+            <h4>Platform</h4>
+            <ul>
+              <li><a href="/projects">Projects</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/resources">Resources</a></li>
+              <li><a href="/membership">Membership</a></li>
+            </ul>
+          </div>
+          <div class="link-group">
+            <h4>About</h4>
+            <ul>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/team">Team</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/contact">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="link-group">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/support">Support Center</a></li>
+              <li><a href="/terms">Terms of Service</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 NexusOrbital. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="icon-twitter"></i></a>
+          <a href="#" class="social-link"><i class="icon-facebook"></i></a>
+          <a href="#" class="social-link"><i class="icon-linkedin"></i></a>
+          <a href="#" class="social-link"><i class="icon-github"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Get order ID from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('order_id') || urlParams.get('session_id');
+      
+      if (orderId) {
+        try {
+          // Fetch transaction details
+          const response = await fetch(`/api/payment/transactions/${orderId}`);
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch transaction details');
+          }
+          
+          const result = await response.json();
+          
+          if (!result.success) {
+            throw new Error(result.error || 'Failed to fetch transaction details');
+          }
+          
+          const transaction = result.data;
+          
+          // Update order details
+          document.getElementById('order-id').textContent = transaction.transactionId;
+          document.getElementById('order-date').textContent = new Date(transaction.payTime || transaction.createTime).toLocaleString();
+          document.getElementById('membership-plan').textContent = getMembershipName(transaction.membershipId);
+          document.getElementById('payment-method').textContent = getPaymentMethodName(transaction.paymentMethod);
+          document.getElementById('payment-amount').textContent = `$${transaction.amount}`;
+          
+          // Add download receipt functionality
+          document.getElementById('download-receipt').addEventListener('click', async () => {
+            try {
+              const receiptResponse = await fetch(`/api/payment/receipt/${transaction.transactionId}`);
+              
+              if (!receiptResponse.ok) {
+                throw new Error('Failed to download receipt');
+              }
+              
+              const receiptResult = await receiptResponse.json();
+              
+              if (!receiptResult.success) {
+                throw new Error(receiptResult.error || 'Failed to download receipt');
+              }
+              
+              // Generate PDF receipt (in a real implementation, the server would generate this)
+              alert('Receipt downloaded successfully!');
+            } catch (error) {
+              console.error('Failed to download receipt:', error);
+              alert('Failed to download receipt. Please try again later.');
+            }
+          });
+        } catch (error) {
+          console.error('Error fetching transaction details:', error);
+          document.querySelector('.success-message').textContent = 'Your payment was successful, but we couldn\'t load the transaction details. Please check your account for confirmation.';
+        }
+      } else {
+        document.querySelector('.success-message').textContent = 'Your payment was successful, but we couldn\'t identify your transaction. Please check your account for confirmation.';
+      }
+    });
+    
+    // Helper functions
+    function getMembershipName(membershipId) {
+      const membershipNames = {
+        'basic': 'Basic Membership',
+        'professional': 'Professional Membership',
+        'enterprise': 'Enterprise Membership',
+        'founder': 'Founder Membership'
+      };
+      
+      return membershipNames[membershipId] || 'Unknown Membership';
+    }
+    
+    function getPaymentMethodName(paymentMethod) {
+      const methodNames = {
+        'alipay': 'Alipay',
+        'wechat': 'WeChat Pay',
+        'paypal': 'PayPal',
+        'stripe': 'Credit Card'
+      };
+      
+      return methodNames[paymentMethod] || paymentMethod;
+    }
+  </script>
+</body>
+</html>

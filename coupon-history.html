@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>优惠券使用历史 - NexusOrbital太空技术协作平台</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
+      padding-top: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      background-color: #4a90e2;
+      color: white;
+      font-weight: bold;
+      padding: 15px 20px;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    .table th {
+      background-color: #f1f5f9;
+    }
+    
+    .badge-success {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    .badge-warning {
+      background-color: #ffc107;
+      color: #212529;
+    }
+    
+    .badge-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+    
+    .badge-info {
+      background-color: #17a2b8;
+      color: white;
+    }
+    
+    .badge-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 50px 0;
+      color: #6c757d;
+    }
+    
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    .coupon-card {
+      border: 2px dashed #4a90e2;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #f5f9ff;
+      position: relative;
+    }
+    
+    .coupon-code {
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: bold;
+      color: #4a90e2;
+      letter-spacing: 1px;
+    }
+    
+    .coupon-used {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #dc3545;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      transform: rotate(5deg);
+    }
+    
+    .discount-amount {
+      font-size: 20px;
+      font-weight: bold;
+      color: #28a745;
+    }
+    
+    .pagination {
+      justify-content: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mb-4">优惠券使用历史</h1>
+    
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>我的优惠券使用记录</span>
+        <a href="promotion-management.html" class="btn btn-sm btn-light">返回优惠券管理</a>
+      </div>
+      <div class="card-body">
+        <div id="coupon-history-container">
+          <!-- 优惠券使用历史将在这里动态加载 -->
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="mt-2">正在加载优惠券使用历史...</p>
+          </div>
+        </div>
+        
+        <div id="pagination" class="pagination-container mt-4">
+          <!-- 分页控件将在这里动态加载 -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mt-4">
+      <div class="card-header">
+        <span>优惠券使用统计</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title">总使用次数</h5>
+                <h2 id="total-usage-count" class="mb-0">0</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title">总优惠金额</h5>
+                <h2 id="total-discount-amount" class="mb-0">$0.00</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title">平均优惠</h5>
+                <h2 id="average-discount" class="mb-0">$0.00</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title">最大优惠</h5>
+                <h2 id="max-discount" class="mb-0">$0.00</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 优惠券详情模态框 -->
+  <div class="modal fade" id="couponDetailModal" tabindex="-1" aria-labelledby="couponDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="couponDetailModalLabel">优惠券详情</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="coupon-detail-content">
+          <!-- 优惠券详情将在这里动态加载 -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 优惠券使用记录模板 -->
+  <template id="coupon-history-template">
+    <div class="coupon-card">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="d-flex align-items-center mb-2">
+            <span class="coupon-code me-2">{code}</span>
+            <span class="badge bg-{statusColor}">{statusText}</span>
+            {usedBadge}
+          </div>
+          <div class="mb-2">
+            <strong>订单金额:</strong> ${orderAmount}
+            <span class="ms-2 discount-amount">-${discountAmount}</span>
+          </div>
+          <div class="mb-2">
+            <strong>使用时间:</strong> {usedAt}
+          </div>
+          <div>
+            <strong>订单ID:</strong> <a href="javascript:void(0)" onclick="viewOrderDetails('{orderId}')">{orderId}</a>
+          </div>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <button class="btn btn-sm btn-outline-primary mt-2" onclick="viewCouponDetails('{couponId}')">
+            查看优惠券详情
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+  
+  <!-- 空状态模板 -->
+  <template id="empty-state-template">
+    <div class="empty-state">
+      <i class="bi bi-ticket-perforated"></i>
+      <h4>暂无优惠券使用记录</h4>
+      <p>您还没有使用过任何优惠券。</p>
+      <a href="payment-test.html" class="btn btn-primary mt-3">去使用优惠券</a>
+    </div>
+  </template>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script>
+    // 全局变量
+    let couponUsageHistory = [];
+    let currentPage = 1;
+    const itemsPerPage = 5;
+    
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 加载优惠券使用历史
+      await loadCouponUsageHistory();
+      
+      // 更新统计数据
+      updateStatistics();
+    });
+    
+    // 加载优惠券使用历史
+    async function loadCouponUsageHistory() {
+      try {
+        const token = await getAuthToken();
+        
+        const response = await fetch('/api/promotion/coupons/usage/history', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          couponUsageHistory = data.data;
+          renderCouponUsageHistory();
+        } else {
+          showEmptyState(data.error || '加载优惠券使用历史失败');
+        }
+      } catch (error) {
+        console.error('加载优惠券使用历史失败:', error);
+        showEmptyState('加载优惠券使用历史失败，请稍后重试');
+      }
+    }
+    
+    // 渲染优惠券使用历史
+    function renderCouponUsageHistory() {
+      const container = document.getElementById('coupon-history-container');
+      
+      // 如果没有使用记录，显示空状态
+      if (!couponUsageHistory || couponUsageHistory.length === 0) {
+        showEmptyState();
+        return;
+      }
+      
+      // 清空容器
+      container.innerHTML = '';
+      
+      // 计算分页
+      const totalPages = Math.ceil(couponUsageHistory.length / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, couponUsageHistory.length);
+      
+      // 获取当前页的数据
+      const currentPageData = couponUsageHistory.slice(startIndex, endIndex);
+      
+      // 渲染每条记录
+      currentPageData.forEach(record => {
+        const template = document.getElementById('coupon-history-template').innerHTML;
+        
+        // 格式化使用时间
+        const usedAt = moment(record.usedAt).format('YYYY-MM-DD HH:mm:ss');
+        
+        // 状态颜色和文本
+        const statusColor = 'success';
+        const statusText = '已使用';
+        
+        // 替换模板中的占位符
+        let html = template
+          .replace('{code}', record.couponCode || '未知优惠券')
+          .replace('{statusColor}', statusColor)
+          .replace('{statusText}', statusText)
+          .replace('{usedBadge}', '')
+          .replace(/\{orderAmount\}/g, record.orderAmount.toFixed(2))
+          .replace(/\{discountAmount\}/g, record.discountAmount.toFixed(2))
+          .replace('{usedAt}', usedAt)
+          .replace(/\{orderId\}/g, record.orderId)
+          .replace(/\{couponId\}/g, record.couponId);
+        
+        // 添加到容器
+        container.innerHTML += html;
+      });
+      
+      // 渲染分页
+      renderPagination(totalPages);
+    }
+    
+    // 渲染分页
+    function renderPagination(totalPages) {
+      const paginationContainer = document.getElementById('pagination');
+      
+      // 如果只有一页，不显示分页
+      if (totalPages <= 1) {
+        paginationContainer.innerHTML = '';
+        return;
+      }
+      
+      let html = '<nav aria-label="优惠券使用历史分页"><ul class="pagination">';
+      
+      // 上一页按钮
+      html += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+          <a class="page-link" href="javascript:void(0)" onclick="changePage(${currentPage - 1})" aria-label="上一页">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      `;
+      
+      // 页码按钮
+      for (let i = 1; i <= totalPages; i++) {
+        html += `
+          <li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link" href="javascript:void(0)" onclick="changePage(${i})">${i}</a>
+          </li>
+        `;
+      }
+      
+      // 下一页按钮
+      html += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+          <a class="page-link" href="javascript:void(0)" onclick="changePage(${currentPage + 1})" aria-label="下一页">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      `;
+      
+      html += '</ul></nav>';
+      
+      paginationContainer.innerHTML = html;
+    }
+    
+    // 切换页码
+    function changePage(page) {
+      currentPage = page;
+      renderCouponUsageHistory();
+      
+      // 滚动到顶部
+      window.scrollTo(0, 0);
+    }
+    
+    // 显示空状态
+    function showEmptyState(message) {
+      const container = document.getElementById('coupon-history-container');
+      const template = document.getElementById('empty-state-template').innerHTML;
+      
+      container.innerHTML = template;
+      
+      // 如果有错误消息，显示错误消息
+      if (message) {
+        const errorElement = document.createElement('div');
+        errorElement.className = 'alert alert-danger mt-3';
+        errorElement.textContent = message;
+        container.appendChild(errorElement);
+      }
+      
+      // 隐藏分页
+      document.getElementById('pagination').innerHTML = '';
+    }
+    
+    // 更新统计数据
+    function updateStatistics() {
+      if (!couponUsageHistory || couponUsageHistory.length === 0) {
+        return;
+      }
+      
+      // 计算总使用次数
+      const totalUsageCount = couponUsageHistory.length;
+      
+      // 计算总优惠金额
+      const totalDiscountAmount = couponUsageHistory.reduce((sum, record) => sum + record.discountAmount, 0);
+      
+      // 计算平均优惠
+      const averageDiscount = totalDiscountAmount / totalUsageCount;
+      
+      // 计算最大优惠
+      const maxDiscount = Math.max(...couponUsageHistory.map(record => record.discountAmount));
+      
+      // 更新DOM
+      document.getElementById('total-usage-count').textContent = totalUsageCount;
+      document.getElementById('total-discount-amount').textContent = `$${totalDiscountAmount.toFixed(2)}`;
+      document.getElementById('average-discount').textContent = `$${averageDiscount.toFixed(2)}`;
+      document.getElementById('max-discount').textContent = `$${maxDiscount.toFixed(2)}`;
+    }
+    
+    // 查看优惠券详情
+    async function viewCouponDetails(couponId) {
+      try {
+        const token = await getAuthToken();
+        
+        const response = await fetch(`/api/promotion/coupons/${couponId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          const coupon = data.data;
+          
+          // 获取优惠券所属的促销活动
+          const promotionResponse = await fetch(`/api/promotion/${coupon.promotionId}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          const promotionData = await promotionResponse.json();
+          const promotion = promotionData.success ? promotionData.data : null;
+          
+          // 渲染优惠券详情
+          renderCouponDetails(coupon, promotion);
+          
+          // 显示模态框
+          const modal = new bootstrap.Modal(document.getElementById('couponDetailModal'));
+          modal.show();
+        } else {
+          alert('获取优惠券详情失败: ' + (data.error || '未知错误'));
+        }
+      } catch (error) {
+        console.error('获取优惠券详情失败:', error);
+        alert('获取优惠券详情失败，请稍后重试');
+      }
+    }
+    
+    // 渲染优惠券详情
+    function renderCouponDetails(coupon, promotion) {
+      const container = document.getElementById('coupon-detail-content');
+      
+      // 格式化日期
+      const createdAt = moment(coupon.createdAt).format('YYYY-MM-DD HH:mm:ss');
+      const expiresAt = coupon.expiresAt ? moment(coupon.expiresAt).format('YYYY-MM-DD HH:mm:ss') : '永不过期';
+      
+      // 折扣类型和金额
+      let discountText = '';
+      if (coupon.discountType === 'percentage') {
+        discountText = `${coupon.discountValue}% 折扣`;
+      } else if (coupon.discountType === 'fixed') {
+        discountText = `$${coupon.discountValue.toFixed(2)} 固定金额`;
+      } else if (coupon.discountType === 'free_upgrade') {
+        discountText = '免费升级';
+      }
+      
+      // 构建HTML
+      let html = `
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">优惠券信息</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>优惠券码:</strong> <span class="coupon-code">${coupon.code}</span></p>
+                <p><strong>折扣类型:</strong> ${discountText}</p>
+                <p><strong>最低消费:</strong> ${coupon.minPurchaseAmount ? `$${coupon.minPurchaseAmount.toFixed(2)}` : '无限制'}</p>
+                <p><strong>最大使用次数:</strong> ${coupon.maxUses || '无限制'}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>已使用次数:</strong> ${coupon.usedCount || 0}</p>
+                <p><strong>创建时间:</strong> ${createdAt}</p>
+                <p><strong>过期时间:</strong> ${expiresAt}</p>
+                <p><strong>状态:</strong> <span class="badge bg-${coupon.isActive ? 'success' : 'danger'}">${coupon.isActive ? '有效' : '无效'}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // 如果有促销活动信息，添加促销活动卡片
+      if (promotion) {
+        const startDate = moment(promotion.startDate).format('YYYY-MM-DD');
+        const endDate = promotion.endDate ? moment(promotion.endDate).format('YYYY-MM-DD') : '永不过期';
+        
+        html += `
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">所属促销活动</h5>
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>活动名称:</strong> ${promotion.name}</p>
+                  <p><strong>活动描述:</strong> ${promotion.description || '无描述'}</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>开始日期:</strong> ${startDate}</p>
+                  <p><strong>结束日期:</strong> ${endDate}</p>
+                  <p><strong>状态:</strong> <span class="badge bg-${promotion.isActive ? 'success' : 'danger'}">${promotion.isActive ? '有效' : '无效'}</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      container.innerHTML = html;
+    }
+    
+    // 查看订单详情
+    async function viewOrderDetails(orderId) {
+      try {
+        const token = await getAuthToken();
+        
+        const response = await fetch(`/api/payment/status/${orderId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // 这里可以显示订单详情模态框
+          alert(`订单 ${orderId} 状态: ${data.data.status}`);
+        } else {
+          alert('获取订单详情失败: ' + (data.error || '未知错误'));
+        }
+      } catch (error) {
+        console.error('获取订单详情失败:', error);
+        alert('获取订单详情失败，请稍后重试');
+      }
+    }
+    
+    // 获取认证令牌
+    async function getAuthToken() {
+      // 这里应该是从localStorage或其他存储中获取令牌
+      // 为了演示，我们返回一个模拟的令牌
+      return 'mock_token_123456';
+    }
+  </script>
+</body>
+</html>

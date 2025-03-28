@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NexusOrbital - 跨星球人居技术中枢</title>
+    <meta name="description" content="NexusOrbital是连接地球与太空人居的技术平台，融合AI设计、众创协作与实体项目落地，为人类创建跨星球生存的操作系统。">
+    <link rel="stylesheet" href="../css/mobile-base.css">
+    <link rel="stylesheet" href="../css/dome-effect.css">
+    <link rel="stylesheet" href="../css/mobile-nav.css">
+    <link rel="stylesheet" href="../css/mobile-news.css">
+    <link rel="stylesheet" href="../css/mobile-projects.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 星空背景 -->
+        <div class="stars-background"></div>
+        
+        <!-- 穹顶效果 -->
+        <div class="dome-container">
+            <svg class="dome-svg" viewBox="0 0 100 50" preserveAspectRatio="none">
+                <path d="M0,50 Q50,0 100,50" fill="url(#dome-gradient)"></path>
+            </svg>
+            <div id="domeStars" class="dome-stars"></div>
+        </div>
+        
+        <!-- 页面标题 -->
+        <header class="page-header">
+            <h1>NexusOrbital</h1>
+            <p>跨星球人居技术中枢</p>
+        </header>
+        
+        <!-- 数据卡片区域 -->
+        <div class="data-cards">
+            <div class="data-card">
+                <div class="card-header">
+                    <i class="fas fa-users"></i>
+                    <span>社区活跃度</span>
+                </div>
+                <div class="card-content">
+                    <span class="card-value">92%</span>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 92%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-card">
+                <div class="card-header">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>项目完成率</span>
+                </div>
+                <div class="card-content">
+                    <span class="card-value">78%</span>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 78%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-card">
+                <div class="card-header">
+                    <i class="fas fa-rocket"></i>
+                    <span>技术指数</span>
+                </div>
+                <div class="card-content">
+                    <span class="card-value">85%</span>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 项目展示区域 -->
+        <section class="projects-section">
+            <div class="projects-header">
+                <h2 class="section-title"><i class="fas fa-project-diagram"></i> 星际项目</h2>
+            </div>
+            <div id="projectsFilter" class="projects-filter">
+                <!-- 筛选标签将通过JS动态加载 -->
+            </div>
+            <div id="projectsGrid" class="projects-grid">
+                <!-- 项目卡片将通过JS动态加载 -->
+            </div>
+            <a href="#" id="viewAllProjects" class="view-all-projects">查看全部项目</a>
+        </section>
+        
+        <!-- 新闻动态区域 -->
+        <section class="news-section">
+            <h2 class="section-title"><i class="fas fa-newspaper"></i> 新闻动态</h2>
+            <ul id="newsList" class="news-list">
+                <!-- 新闻项目将通过JS动态加载 -->
+            </ul>
+            <a href="#" id="viewMoreNews" class="view-more">查看更多</a>
+        </section>
+        
+        <!-- 底部导航 -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-project-diagram"></i>
+                <span>项目</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>社区</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-user-astronaut"></i>
+                <span>我的</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- 脚本引用 -->
+    <script src="../js/mobile-dome.js"></script>
+    <script src="../js/mobile-news.js"></script>
+    <script src="../js/mobile-projects.js"></script>
+    <script src="../js/image-placeholder.js"></script>
+</body>
+</html>

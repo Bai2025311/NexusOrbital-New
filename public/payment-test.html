@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>支付API测试 - NexusOrbital太空技术协作平台</title>
+  <!-- 添加Stripe.js库 -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .test-section {
+      flex: 1;
+      min-width: 300px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    button {
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    button:hover {
+      background-color: #3a80d2;
+    }
+    
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      border-left: 4px solid #4a90e2;
+      overflow-x: auto;
+    }
+    
+    .error {
+      border-left-color: #e74c3c;
+    }
+    
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      margin-bottom: -1px;
+    }
+    
+    .tab.active {
+      border-color: #ddd;
+      border-radius: 4px 4px 0 0;
+      background-color: white;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .qr-code {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .qr-code img {
+      max-width: 200px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background-color: white;
+    }
+    
+    .coupon-section {
+      margin-top: 15px;
+      padding: 15px;
+      border: 1px dashed #4a90e2;
+      border-radius: 4px;
+      background-color: #f5f9ff;
+    }
+    
+    .coupon-input {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .coupon-input input {
+      flex: 1;
+    }
+    
+    .coupon-input button {
+      white-space: nowrap;
+    }
+    
+    .coupon-result {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    
+    .coupon-valid {
+      color: #27ae60;
+    }
+    
+    .coupon-invalid {
+      color: #e74c3c;
+    }
+    
+    .price-summary {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    .price-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .price-total {
+      font-weight: bold;
+      border-top: 1px solid #ddd;
+      padding-top: 5px;
+      margin-top: 5px;
+    }
+    
+    .discount {
+      color: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>NexusOrbital 支付API测试</h1>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="create-payment">创建支付</div>
+    <div class="tab" data-tab="query-payment">查询支付</div>
+    <div class="tab" data-tab="transaction-history">交易记录</div>
+    <div class="tab" data-tab="coupon-test">优惠券测试</div>
+  </div>
+  
+  <div class="tab-content active" id="create-payment">
+    <h2>创建支付订单</h2>
+    
+    <div class="container">
+      <div class="test-section">
+        <h3>支付参数</h3>
+        <form id="create-payment-form">
+          <div class="form-group">
+            <label for="payment-method">支付方式</label>
+            <select id="payment-method" name="paymentMethod">
+              <option value="alipay">支付宝</option>
+              <option value="wechat">微信支付</option>
+              <option value="paypal">PayPal</option>
+              <option value="stripe">Stripe信用卡</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="amount">金额 (USD)</label>
+            <input type="number" id="amount" name="amount" value="9.99" step="0.01" min="0.01">
+          </div>
+          
+          <div class="form-group">
+            <label for="membership-id">会员计划</label>
+            <select id="membership-id" name="membershipId">
+              <option value="basic">基础会员 ($9.99/月)</option>
+              <option value="professional">专业会员 ($29.99/月)</option>
+              <option value="enterprise">企业会员 ($99.99/月)</option>
+              <option value="founder">创始会员 ($299.99/月)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="description">描述</label>
+            <input type="text" id="description" name="description" value="NexusOrbital会员订阅">
+          </div>
+          
+          <!-- 优惠券部分 -->
+          <div class="coupon-section">
+            <label for="coupon-code">优惠券码 (可选)</label>
+            <div class="coupon-input">
+              <input type="text" id="coupon-code" name="couponCode" placeholder="输入优惠券码">
+              <button type="button" id="validate-coupon-btn">验证</button>
+            </div>
+            <div id="coupon-result" class="coupon-result" style="display: none;"></div>
+            
+            <!-- 价格摘要 -->
+            <div id="price-summary" class="price-summary" style="display: none;">
+              <div class="price-item">
+                <span>原价:</span>
+                <span id="original-price">$0.00</span>
+              </div>
+              <div class="price-item discount">
+                <span>优惠:</span>
+                <span id="discount-amount">-$0.00</span>
+              </div>
+              <div class="price-item price-total">
+                <span>最终价格:</span>
+                <span id="final-price">$0.00</span>
+              </div>
+            </div>
+          </div>
+          
+          <button type="submit">创建支付订单</button>
+        </form>
+        
+        <div id="create-payment-result" class="result" style="display: none;">
+          <h4>API响应</h4>
+          <pre id="create-payment-response"></pre>
+        </div>
+        
+        <div id="qr-code-container" class="qr-code" style="display: none;">
+          <h4>扫码支付</h4>
+          <div id="qr-code"></div>
+          <p>订单号: <span id="order-id"></span></p>
+          <p>状态: <span id="payment-status">等待支付...</span></p>
+          <button id="check-status-btn">检查状态</button>
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h3>使用说明</h3>
+        <p>此测试页面可以创建真实的支付订单，请使用以下指南进行测试：</p>
+        
+        <h4>支付宝测试</h4>
+        <ul>
+          <li>选择"支付宝"支付方式</li>
+          <li>点击"创建支付订单"</li>
+          <li>使用支付宝沙箱账户扫描生成的二维码</li>
+        </ul>
+        
+        <h4>微信支付测试</h4>
+        <ul>
+          <li>选择"微信支付"支付方式</li>
+          <li>点击"创建支付订单"</li>
+          <li>使用微信扫描生成的二维码</li>
+        </ul>
+        
+        <h4>PayPal测试</h4>
+        <ul>
+          <li>选择"PayPal"支付方式</li>
+          <li>点击"创建支付订单"</li>
+          <li>系统将重定向到PayPal支付页面</li>
+        </ul>
+        
+        <h4>Stripe信用卡测试</h4>
+        <ul>
+          <li>选择"Stripe信用卡"支付方式</li>
+          <li>点击"创建支付订单"</li>
+          <li>使用测试卡号: 4242 4242 4242 4242</li>
+          <li>任意有效期和CVC</li>
+        </ul>
+        
+        <h4>优惠券使用</h4>
+        <ul>
+          <li>输入优惠券码并点击"验证"</li>
+          <li>验证成功后，系统会自动计算折扣价格</li>
+          <li>点击"创建支付订单"时会自动应用优惠券</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="query-payment">
+    <h2>查询支付订单</h2>
+    
+    <div class="test-section">
+      <form id="query-payment-form">
+        <div class="form-group">
+          <label for="order-id-query">订单号</label>
+          <input type="text" id="order-id-query" name="orderId" placeholder="输入订单号">
+        </div>
+        
+        <div class="form-group">
+          <label for="payment-method-query">支付方式</label>
+          <select id="payment-method-query" name="paymentMethod">
+            <option value="">自动检测</option>
+            <option value="alipay">支付宝</option>
+            <option value="wechat">微信支付</option>
+            <option value="paypal">PayPal</option>
+            <option value="stripe">Stripe信用卡</option>
+          </select>
+        </div>
+        
+        <button type="submit">查询订单状态</button>
+      </form>
+      
+      <div id="query-payment-result" class="result" style="display: none;">
+        <h4>API响应</h4>
+        <pre id="query-payment-response"></pre>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="transaction-history">
+    <h2>交易记录</h2>
+    
+    <div class="test-section">
+      <form id="transaction-history-form">
+        <div class="form-group">
+          <label for="status-filter">状态</label>
+          <select id="status-filter" name="status">
+            <option value="all">所有状态</option>
+            <option value="paid">已支付</option>
+            <option value="pending">待支付</option>
+            <option value="failed">失败</option>
+            <option value="refunded">已退款</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="payment-method-filter">支付方式</label>
+          <select id="payment-method-filter" name="paymentMethod">
+            <option value="all">所有方式</option>
+            <option value="alipay">支付宝</option>
+            <option value="wechat">微信支付</option>
+            <option value="paypal">PayPal</option>
+            <option value="stripe">Stripe信用卡</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="page">页码</label>
+          <input type="number" id="page" name="page" value="1" min="1">
+        </div>
+        
+        <div class="form-group">
+          <label for="limit">每页数量</label>
+          <input type="number" id="limit" name="limit" value="10" min="1" max="50">
+        </div>
+        
+        <button type="submit">获取交易记录</button>
+      </form>
+      
+      <div id="transaction-history-result" class="result" style="display: none;">
+        <h4>API响应</h4>
+        <pre id="transaction-history-response"></pre>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 优惠券测试标签页 -->
+  <div class="tab-content" id="coupon-test">
+    <h2>优惠券测试</h2>
+    
+    <div class="container">
+      <div class="test-section">
+        <h3>验证优惠券</h3>
+        <form id="validate-coupon-form">
+          <div class="form-group">
+            <label for="test-coupon-code">优惠券码</label>
+            <input type="text" id="test-coupon-code" name="couponCode" placeholder="输入优惠券码" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="test-amount">订单金额 (USD)</label>
+            <input type="number" id="test-amount" name="amount" value="99.99" step="0.01" min="0.01" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="test-membership-id">会员计划 (可选)</label>
+            <select id="test-membership-id" name="membershipId">
+              <option value="">无</option>
+              <option value="basic">基础会员</option>
+              <option value="professional">专业会员</option>
+              <option value="enterprise">企业会员</option>
+              <option value="founder">创始会员</option>
+            </select>
+          </div>
+          
+          <button type="submit">验证优惠券</button>
+        </form>
+        
+        <div id="validate-coupon-result" class="result" style="display: none;">
+          <h4>验证结果</h4>
+          <pre id="validate-coupon-response"></pre>
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h3>优惠券使用说明</h3>
+        <p>您可以使用此页面测试优惠券的有效性和折扣计算：</p>
+        <ul>
+          <li>输入优惠券码和订单金额</li>
+          <li>如果优惠券限定特定会员等级，请选择相应的会员计划</li>
+          <li>点击"验证优惠券"按钮</li>
+          <li>系统将显示优惠券的有效性和折扣金额</li>
+        </ul>
+        <p>优惠券类型说明：</p>
+        <ul>
+          <li><strong>百分比折扣</strong>：按订单金额的百分比计算折扣</li>
+          <li><strong>固定金额折扣</strong>：直接减免固定金额</li>
+          <li><strong>免费升级</strong>：适用于会员升级场景</li>
+        </ul>
+        <p>注意：某些优惠券可能有使用限制，如最低消费金额、特定会员等级限制等。</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 模拟登录令牌 -->
+  <script>
+    // 生成模拟令牌并存储
+    if (!localStorage.getItem('authToken')) {
+      const mockToken = 'mock_' + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('authToken', mockToken);
+    }
+    
+    // 获取令牌
+    function getAuthToken() {
+      return localStorage.getItem('authToken');
+    }
+    
+    // 格式化JSON
+    function formatJson(json) {
+      return JSON.stringify(json, null, 2);
+    }
+    
+    // 显示结果
+    function showResult(elementId, responseElementId, data, isError = false) {
+      const resultElement = document.getElementById(elementId);
+      const responseElement = document.getElementById(responseElementId);
+      
+      resultElement.style.display = 'block';
+      
+      if (isError) {
+        resultElement.classList.add('error');
+      } else {
+        resultElement.classList.remove('error');
+      }
+      
+      responseElement.textContent = formatJson(data);
+    }
+    
+    // 切换标签页
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // 移除所有标签页的活动状态
+        document.querySelectorAll('.tab').forEach(t => {
+          t.classList.remove('active');
+        });
+        
+        // 移除所有内容的活动状态
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        
+        // 添加当前标签页的活动状态
+        tab.classList.add('active');
+        
+        // 显示对应的内容
+        const tabId = tab.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+    
+    // 全局变量
+    let currentCoupon = null;
+    
+    // 验证优惠券
+    document.getElementById('validate-coupon-btn').addEventListener('click', async () => {
+      const couponCode = document.getElementById('coupon-code').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const membershipId = document.getElementById('membership-id').value;
+      
+      if (!couponCode) {
+        showCouponResult('请输入优惠券码', false);
+        return;
+      }
+      
+      try {
+        const token = await getAuthToken();
+        
+        const response = await fetch('/api/promotion/coupons/validate', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            code: couponCode,
+            amount,
+            membershipId
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          currentCoupon = data.data;
+          showCouponResult(`优惠券有效！折扣: $${data.data.discountAmount.toFixed(2)}`, true);
+          updatePriceSummary(amount, data.data.discountAmount);
+        } else {
+          currentCoupon = null;
+          showCouponResult(`优惠券无效: ${data.error}`, false);
+          hidePriceSummary();
+        }
+      } catch (error) {
+        console.error('验证优惠券失败:', error);
+        currentCoupon = null;
+        showCouponResult('验证优惠券失败，请稍后重试', false);
+        hidePriceSummary();
+      }
+    });
+    
+    // 显示优惠券验证结果
+    function showCouponResult(message, isValid) {
+      const couponResult = document.getElementById('coupon-result');
+      couponResult.textContent = message;
+      couponResult.className = 'coupon-result ' + (isValid ? 'coupon-valid' : 'coupon-invalid');
+      couponResult.style.display = 'block';
+    }
+    
+    // 更新价格摘要
+    function updatePriceSummary(originalAmount, discountAmount) {
+      const priceSummary = document.getElementById('price-summary');
+      const originalPrice = document.getElementById('original-price');
+      const discountAmountElement = document.getElementById('discount-amount');
+      const finalPrice = document.getElementById('final-price');
+      
+      originalPrice.textContent = `$${originalAmount.toFixed(2)}`;
+      discountAmountElement.textContent = `-$${discountAmount.toFixed(2)}`;
+      finalPrice.textContent = `$${(originalAmount - discountAmount).toFixed(2)}`;
+      
+      priceSummary.style.display = 'block';
+    }
+    
+    // 隐藏价格摘要
+    function hidePriceSummary() {
+      document.getElementById('price-summary').style.display = 'none';
+    }
+    
+    // 监听金额变化，更新价格摘要
+    document.getElementById('amount').addEventListener('change', () => {
+      if (currentCoupon) {
+        const amount = parseFloat(document.getElementById('amount').value);
+        updatePriceSummary(amount, currentCoupon.discountAmount);
+      }
+    });
+    
+    // 创建支付订单
+    document.getElementById('create-payment-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const paymentMethod = document.getElementById('payment-method').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      const membershipId = document.getElementById('membership-id').value;
+      const description = document.getElementById('description').value;
+      const couponCode = document.getElementById('coupon-code').value.trim();
+      
+      try {
+        const token = await getAuthToken();
+        
+        const paymentData = {
+          paymentMethod,
+          amount,
+          membershipId,
+          description
+        };
+        
+        // 如果有优惠券，添加到请求中
+        if (currentCoupon) {
+          paymentData.couponId = currentCoupon.couponId;
+          paymentData.discountAmount = currentCoupon.discountAmount;
+          paymentData.finalAmount = amount - currentCoupon.discountAmount;
+        }
+        
+        const response = await fetch('/api/payment/create', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(paymentData)
+        });
+        
+        const data = await response.json();
+        
+        showResult('create-payment-result', 'create-payment-response', data, !data.success);
+        
+        if (data.success) {
+          const paymentData = data.data;
+          document.getElementById('order-id').textContent = paymentData.orderId;
+          
+          if (paymentMethod === 'alipay' || paymentMethod === 'wechat') {
+            document.getElementById('qr-code-container').style.display = 'block';
+            generateQRCode(paymentData);
+          } else if (paymentMethod === 'paypal') {
+            window.location.href = paymentData.paymentUrl;
+          } else {
+            handleStripePayment(paymentData);
+          }
+          
+          // 启动状态检查
+          if (paymentMethod === 'alipay' || paymentMethod === 'wechat') {
+            startStatusCheck(paymentData.orderId, paymentMethod);
+          }
+        }
+      } catch (error) {
+        console.error('创建支付订单失败:', error);
+        showResult('create-payment-result', 'create-payment-response', { success: false, error: error.message }, true);
+      }
+    });
+    
+    // 优惠券测试表单提交
+    document.getElementById('validate-coupon-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const couponCode = document.getElementById('test-coupon-code').value.trim();
+      const amount = parseFloat(document.getElementById('test-amount').value);
+      const membershipId = document.getElementById('test-membership-id').value;
+      
+      try {
+        const token = await getAuthToken();
+        
+        const response = await fetch('/api/promotion/coupons/validate', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            code: couponCode,
+            amount,
+            membershipId
+          })
+        });
+        
+        const data = await response.json();
+        
+        showResult('validate-coupon-result', 'validate-coupon-response', data, !data.success);
+      } catch (error) {
+        console.error('验证优惠券失败:', error);
+        showResult('validate-coupon-result', 'validate-coupon-response', { success: false, error: error.message }, true);
+      }
+    });
+    
+    // 查询支付订单
+    document.getElementById('query-payment-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      if (!data.orderId) {
+        showResult('query-payment-result', 'query-payment-response', { error: '请输入订单号' }, true);
+        return;
+      }
+      
+      try {
+        let url = `/api/payment/status/${data.orderId}`;
+        
+        if (data.paymentMethod) {
+          url += `?paymentMethod=${data.paymentMethod}`;
+        }
+        
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        
+        const result = await response.json();
+        
+        showResult('query-payment-result', 'query-payment-response', result, !result.success);
+      } catch (error) {
+        showResult('query-payment-result', 'query-payment-response', { error: error.message }, true);
+      }
+    });
+    
+    // 获取交易记录
+    document.getElementById('transaction-history-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      try {
+        const queryParams = new URLSearchParams();
+        
+        if (data.status !== 'all') {
+          queryParams.append('status', data.status);
+        }
+        
+        if (data.paymentMethod !== 'all') {
+          queryParams.append('paymentMethod', data.paymentMethod);
+        }
+        
+        queryParams.append('page', data.page);
+        queryParams.append('limit', data.limit);
+        
+        const response = await fetch(`/api/payment/transactions?${queryParams.toString()}`, {
+          headers: {
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        
+        const result = await response.json();
+        
+        showResult('transaction-history-result', 'transaction-history-response', result, !result.success);
+      } catch (error) {
+        showResult('transaction-history-result', 'transaction-history-response', { error: error.message }, true);
+      }
+    });
+    
+    // 生成二维码
+    function generateQRCode(paymentData) {
+      const qrCodeElement = document.getElementById('qr-code');
+      qrCodeElement.innerHTML = '';
+      
+      // 获取二维码URL
+      let qrCodeUrl = '';
+      
+      if (paymentData.paymentMethod === 'alipay') {
+        qrCodeUrl = paymentData.qrCodeUrl || paymentData.paymentUrl;
+      } else if (paymentData.paymentMethod === 'wechat') {
+        qrCodeUrl = paymentData.qrCodeUrl || paymentData.codeUrl;
+      }
+      
+      if (qrCodeUrl) {
+        new QRCode(qrCodeElement, {
+          text: qrCodeUrl,
+          width: 200,
+          height: 200,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } else {
+        qrCodeElement.textContent = '无法生成二维码，请检查支付数据';
+      }
+    }
+    
+    // 处理Stripe支付
+    function handleStripePayment(paymentData) {
+      // 创建Stripe支付表单
+      const stripe = Stripe(paymentData.publicKey || 'pk_test_sample');
+      
+      // 重定向到Stripe Checkout
+      if (paymentData.sessionId) {
+        stripe.redirectToCheckout({
+          sessionId: paymentData.sessionId
+        }).then(function (result) {
+          if (result.error) {
+            showResult('create-payment-result', 'create-payment-response', { error: result.error.message }, true);
+          }
+        });
+      } else if (paymentData.clientSecret) {
+        // 创建支付表单
+        const elements = stripe.elements();
+        
+        // 创建卡片元素
+        const cardElement = document.createElement('div');
+        cardElement.id = 'card-element';
+        cardElement.style.padding = '10px';
+        cardElement.style.border = '1px solid #ddd';
+        cardElement.style.borderRadius = '4px';
+        cardElement.style.marginBottom = '20px';
+        
+        // 创建错误元素
+        const cardErrors = document.createElement('div');
+        cardErrors.id = 'card-errors';
+        cardErrors.style.color = '#e74c3c';
+        cardErrors.style.marginBottom = '20px';
+        
+        // 创建支付按钮
+        const payButton = document.createElement('button');
+        payButton.textContent = '确认支付';
+        payButton.className = 'btn';
+        
+        // 创建表单容器
+        const formContainer = document.createElement('div');
+        formContainer.id = 'stripe-form';
+        formContainer.appendChild(cardElement);
+        formContainer.appendChild(cardErrors);
+        formContainer.appendChild(payButton);
+        
+        // 添加到页面
+        const qrCodeContainer = document.getElementById('qr-code-container');
+        qrCodeContainer.style.display = 'block';
+        qrCodeContainer.innerHTML = '<h4>Stripe信用卡支付</h4>';
+        qrCodeContainer.appendChild(formContainer);
+        
+        // 创建卡片元素
+        const card = elements.create('card');
+        card.mount('#card-element');
+        
+        // 处理验证错误
+        card.addEventListener('change', function(event) {
+          const displayError = document.getElementById('card-errors');
+          if (event.error) {
+            displayError.textContent = event.error.message;
+          } else {
+            displayError.textContent = '';
+          }
+        });
+        
+        // 处理表单提交
+        payButton.addEventListener('click', async function() {
+          // 禁用按钮
+          payButton.disabled = true;
+          payButton.textContent = '处理中...';
+          
+          try {
+            const result = await stripe.confirmCardPayment(paymentData.clientSecret, {
+              payment_method: {
+                card: card
+              }
+            });
+            
+            if (result.error) {
+              // 显示错误
+              document.getElementById('card-errors').textContent = result.error.message;
+              
+              // 恢复按钮
+              payButton.disabled = false;
+              payButton.textContent = '确认支付';
+            } else {
+              if (result.paymentIntent.status === 'succeeded') {
+                // 支付成功
+                document.getElementById('payment-status').textContent = '支付成功';
+                
+                // 跳转到成功页面
+                setTimeout(() => {
+                  window.location.href = `/payment/success?order_id=${paymentData.orderId}`;
+                }, 1000);
+              } else {
+                // 需要进一步处理
+                document.getElementById('payment-status').textContent = getStatusText(result.paymentIntent.status);
+                
+                // 启动状态检查
+                startStatusCheck(paymentData.orderId, 'stripe');
+              }
+            }
+          } catch (error) {
+            document.getElementById('card-errors').textContent = error.message;
+            
+            // 恢复按钮
+            payButton.disabled = false;
+            payButton.textContent = '确认支付';
+          }
+        });
+      }
+    }
+    
+    // 状态检查定时器
+    let statusCheckInterval = null;
+    
+    // 开始状态检查
+    function startStatusCheck(orderId, paymentMethod) {
+      // 清除之前的定时器
+      if (statusCheckInterval) {
+        clearInterval(statusCheckInterval);
+      }
+      
+      // 设置检查按钮事件
+      document.getElementById('check-status-btn').onclick = function() {
+        checkOrderStatus(orderId, paymentMethod);
+      };
+      
+      // 立即检查一次
+      checkOrderStatus(orderId, paymentMethod);
+      
+      // 设置定时检查
+      statusCheckInterval = setInterval(() => {
+        checkOrderStatus(orderId, paymentMethod);
+      }, 5000); // 每5秒检查一次
+    }
+    
+    // 检查订单状态
+    async function checkOrderStatus(orderId, paymentMethod) {
+      try {
+        const response = await fetch(`/api/payment/status/${orderId}?paymentMethod=${paymentMethod}`, {
+          headers: {
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          const status = result.data.status;
+          document.getElementById('payment-status').textContent = getStatusText(status);
+          
+          // 如果支付完成，停止检查
+          if (status === 'paid' || status === 'completed') {
+            clearInterval(statusCheckInterval);
+            
+            // 跳转到成功页面
+            setTimeout(() => {
+              window.location.href = `/payment/success?order_id=${orderId}`;
+            }, 1000);
+          } else if (status === 'failed' || status === 'cancelled') {
+            clearInterval(statusCheckInterval);
+          }
+        }
+      } catch (error) {
+        console.error('检查订单状态失败:', error);
+      }
+    }
+    
+    // 获取状态文本
+    function getStatusText(status) {
+      const statusMap = {
+        'created': '等待支付',
+        'pending': '等待支付',
+        'processing': '处理中',
+        'paid': '支付成功',
+        'completed': '支付成功',
+        'failed': '支付失败',
+        'cancelled': '已取消',
+        'refunded': '已退款'
+      };
+      
+      return statusMap[status] || status;
+    }
+  </script>
+</body>
+</html>

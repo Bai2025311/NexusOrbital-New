@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建项目 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/web-main.css">
+    <link rel="stylesheet" href="css/web-projects.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                </a>
+            </div>
+            <div class="navbar-menu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a href="index.html">首页</a></li>
+                    <li class="nav-item active"><a href="projects.html">项目</a></li>
+                    <li class="nav-item"><a href="resources.html">资源</a></li>
+                    <li class="nav-item"><a href="experts.html">专家</a></li>
+                    <li class="nav-item"><a href="about.html">关于我们</a></li>
+                </ul>
+            </div>
+            <div class="navbar-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="搜索...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-login">登录</a>
+                    <a href="register.html" class="btn btn-primary">注册</a>
+                </div>
+                <div class="user-profile" style="display: none;">
+                    <img src="images/avatar.jpg" alt="用户头像" class="avatar">
+                    <div class="user-dropdown">
+                        <a href="profile.html">个人资料</a>
+                        <a href="dashboard.html">我的项目</a>
+                        <a href="settings.html">设置</a>
+                        <a href="#" id="logoutBtn">退出</a>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 创建项目页面主体 -->
+    <div class="create-project-container">
+        <div class="page-header">
+            <h1>创建太空人居技术项目</h1>
+            <p>分享您的创新理念，寻找志同道合的合作伙伴</p>
+        </div>
+
+        <div class="create-project-form">
+            <form id="projectForm">
+                <!-- 基本信息 -->
+                <div class="form-section">
+                    <h2>基本信息</h2>
+                    <div class="form-group">
+                        <label for="projectTitle">项目名称 <span class="required">*</span></label>
+                        <input type="text" id="projectTitle" name="title" required placeholder="为您的项目取一个简洁明了的名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectCategory">项目类别 <span class="required">*</span></label>
+                        <select id="projectCategory" name="category" required>
+                            <option value="">选择类别</option>
+                            <option value="月球项目">月球项目</option>
+                            <option value="火星项目">火星项目</option>
+                            <option value="轨道站">轨道站</option>
+                            <option value="生命支持">生命支持</option>
+                            <option value="资源利用">资源利用</option>
+                            <option value="能源系统">能源系统</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTags">项目标签</label>
+                        <input type="text" id="projectTags" name="tags" placeholder="输入标签，用逗号分隔（如：3D打印,模块化,辐射防护）">
+                    </div>
+                </div>
+
+                <!-- 项目描述 -->
+                <div class="form-section">
+                    <h2>项目描述</h2>
+                    <div class="form-group">
+                        <label for="projectSummary">简介 <span class="required">*</span></label>
+                        <textarea id="projectSummary" name="summary" rows="3" required placeholder="简要描述您的项目（100字以内）"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDescription">详细描述 <span class="required">*</span></label>
+                        <textarea id="projectDescription" name="description" rows="6" required placeholder="详细描述您的项目目标、技术方案和预期成果"></textarea>
+                    </div>
+                </div>
+
+                <!-- 项目图片 -->
+                <div class="form-section">
+                    <h2>项目图片</h2>
+                    <div class="form-group">
+                        <label for="projectCover">封面图片 <span class="required">*</span></label>
+                        <div class="file-upload">
+                            <input type="file" id="projectCover" name="cover" accept="image/*" required>
+                            <div class="upload-placeholder">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>点击上传或拖放图片</p>
+                                <span>建议尺寸：1200 x 800 像素</span>
+                            </div>
+                            <div class="upload-preview" style="display: none;">
+                                <img id="coverPreview" src="#" alt="封面预览">
+                                <button type="button" class="remove-image"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectGallery">项目图库（最多5张）</label>
+                        <div class="file-upload multiple">
+                            <input type="file" id="projectGallery" name="gallery" accept="image/*" multiple>
+                            <div class="upload-placeholder">
+                                <i class="fas fa-images"></i>
+                                <p>点击上传或拖放多张图片</p>
+                            </div>
+                            <div class="gallery-preview">
+                                <!-- 预览图片将在这里显示 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 团队与合作 -->
+                <div class="form-section">
+                    <h2>团队与合作</h2>
+                    <div class="form-group">
+                        <label for="teamSize">预期团队规模</label>
+                        <select id="teamSize" name="teamSize">
+                            <option value="small">小型（1-5人）</option>
+                            <option value="medium" selected>中型（6-20人）</option>
+                            <option value="large">大型（21-50人）</option>
+                            <option value="xlarge">超大型（50人以上）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="requiredSkills">所需技能</label>
+                        <textarea id="requiredSkills" name="skills" rows="3" placeholder="描述项目所需的技能和专业知识（如：结构工程、材料科学、环境控制等）"></textarea>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>合作选项</label>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="openToCollaboration" name="openToCollaboration" checked>
+                            <label for="openToCollaboration">开放加入申请</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="seekingFunding" name="seekingFunding">
+                            <label for="seekingFunding">寻求资金支持</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="openSource" name="openSource">
+                            <label for="openSource">开源项目</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 提交按钮 -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="saveAsDraft">保存为草稿</button>
+                    <button type="submit" class="btn btn-primary" id="submitProject">创建项目</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="images/logo-white.png" alt="NexusOrbital Logo">
+                <p>连接地球与太空的人居技术协作平台</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>关于我们</h3>
+                    <ul>
+                        <li><a href="about.html">平台介绍</a></li>
+                        <li><a href="team.html">团队成员</a></li>
+                        <li><a href="careers.html">加入我们</a></li>
+                        <li><a href="contact.html">联系方式</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>探索</h3>
+                    <ul>
+                        <li><a href="projects.html">项目展示</a></li>
+                        <li><a href="resources.html">技术资源</a></li>
+                        <li><a href="experts.html">专家目录</a></li>
+                        <li><a href="events.html">活动与会议</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>支持</h3>
+                    <ul>
+                        <li><a href="faq.html">常见问题</a></li>
+                        <li><a href="tutorials.html">使用教程</a></li>
+                        <li><a href="terms.html">服务条款</a></li>
+                        <li><a href="privacy.html">隐私政策</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-newsletter">
+                <h3>订阅更新</h3>
+                <p>获取最新的太空人居技术进展和平台动态</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="您的邮箱地址">
+                    <button type="submit" class="btn btn-primary">订阅</button>
+                </form>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-weixin"></i></a>
+                    <a href="#"><i class="fab fa-weibo"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 引入 -->
+    <script src="js/web-navigation.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/web-projects.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查用户登录状态
+            if (!isLoggedIn()) {
+                window.location.href = 'login.html?redirect=create-project.html';
+                return;
+            }
+
+            // 封面图片预览
+            const projectCover = document.getElementById('projectCover');
+            const coverPreview = document.getElementById('coverPreview');
+            const uploadPlaceholder = document.querySelector('.upload-placeholder');
+            const uploadPreview = document.querySelector('.upload-preview');
+            const removeImage = document.querySelector('.remove-image');
+
+            projectCover.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        coverPreview.src = e.target.result;
+                        uploadPlaceholder.style.display = 'none';
+                        uploadPreview.style.display = 'block';
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            removeImage.addEventListener('click', function() {
+                projectCover.value = '';
+                uploadPlaceholder.style.display = 'flex';
+                uploadPreview.style.display = 'none';
+            });
+
+            // 项目图库预览
+            const projectGallery = document.getElementById('projectGallery');
+            const galleryPreview = document.querySelector('.gallery-preview');
+
+            projectGallery.addEventListener('change', function() {
+                galleryPreview.innerHTML = '';
+                
+                if (this.files) {
+                    const maxFiles = 5;
+                    const filesArray = Array.from(this.files).slice(0, maxFiles);
+                    
+                    filesArray.forEach(file => {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const imgContainer = document.createElement('div');
+                            imgContainer.className = 'gallery-item';
+                            
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = 'Gallery Image';
+                            
+                            const removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-gallery-item';
+                            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                            removeBtn.addEventListener('click', function() {
+                                imgContainer.remove();
+                            });
+                            
+                            imgContainer.appendChild(img);
+                            imgContainer.appendChild(removeBtn);
+                            galleryPreview.appendChild(imgContainer);
+                        }
+                        
+                        reader.readAsDataURL(file);
+                    });
+                }
+            });
+
+            // 表单提交
+            const projectForm = document.getElementById('projectForm');
+            const saveAsDraft = document.getElementById('saveAsDraft');
+            const submitProject = document.getElementById('submitProject');
+
+            saveAsDraft.addEventListener('click', function() {
+                // 保存草稿逻辑
+                alert('项目草稿已保存');
+            });
+
+            projectForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 表单验证
+                const title = document.getElementById('projectTitle').value;
+                const category = document.getElementById('projectCategory').value;
+                const summary = document.getElementById('projectSummary').value;
+                const description = document.getElementById('projectDescription').value;
+                const cover = document.getElementById('projectCover').files[0];
+                
+                if (!title || !category || !summary || !description || !cover) {
+                    alert('请填写所有必填字段');
+                    return;
+                }
+                
+                // 创建项目逻辑
+                alert('项目创建成功！');
+                window.location.href = 'project-detail.html?id=new';
+            });
+        });
+    </script>
+</body>
+</html>

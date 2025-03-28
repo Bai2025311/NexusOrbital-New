@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusOrbital 支付API测试</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        
+        .api-test-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .api-test-sidebar {
+            flex: 0 0 250px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .api-test-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .api-test-panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .api-test-section {
+            margin-bottom: 30px;
+        }
+        
+        .api-test-section h3 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button.primary {
+            background-color: var(--primary-color);
+        }
+        
+        button.primary:hover {
+            background-color: #1a252f;
+        }
+        
+        button.success {
+            background-color: var(--success-color);
+        }
+        
+        button.success:hover {
+            background-color: #27ae60;
+        }
+        
+        button.warning {
+            background-color: var(--warning-color);
+        }
+        
+        button.warning:hover {
+            background-color: #e67e22;
+        }
+        
+        button.error {
+            background-color: var(--error-color);
+        }
+        
+        button.error:hover {
+            background-color: #c0392b;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .result-container pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        
+        .log-container {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        
+        .log-info {
+            color: #ecf0f1;
+            margin: 5px 0;
+        }
+        
+        .log-error {
+            color: #e74c3c;
+            margin: 5px 0;
+        }
+        
+        .log-success {
+            color: #2ecc71;
+            margin: 5px 0;
+        }
+        
+        .log-warning {
+            color: #f39c12;
+            margin: 5px 0;
+        }
+        
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-item {
+            margin-bottom: 5px;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: background-color 0.3s;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: #f0f2f5;
+            color: var(--secondary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .status-badge.pending {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: #e67e22;
+        }
+        
+        .status-badge.failed {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            margin: -20px -20px 20px;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .card-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+        
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .transaction-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-info {
+            flex: 1;
+        }
+        
+        .transaction-id {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .transaction-date {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 18px;
+            margin-left: 20px;
+        }
+        
+        .transaction-actions {
+            margin-left: 20px;
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-method {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--secondary-color);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .payment-method img {
+            height: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .payment-qrcode {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .payment-qrcode img {
+            max-width: 200px;
+        }
+        
+        .timer {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .api-test-container {
+                flex-direction: column;
+            }
+            
+            .api-test-sidebar {
+                flex: 0 0 auto;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>NexusOrbital 支付API测试</h1>
+            <p>测试支付和会员相关API功能</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="api-test-container">
+            <div class="api-test-sidebar">
+                <h3>API测试导航</h3>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-tab="auth">用户认证</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-tab="membership">会员管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-tab="transactions">交易记录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-tab="payment">支付处理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-tab="auto-test">自动化测试</a>
+                    </li>
+                </ul>
+                
+                <div class="api-test-section" style="margin-top: 30px;">
+                    <h3>当前状态</h3>
+                    <div id="auth-status">
+                        <p>未登录</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="api-test-content">
+                <!-- 用户认证 -->
+                <div class="tab-content active" id="auth-tab">
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>用户登录</h3>
+                            <div class="form-group">
+                                <label for="login-email">邮箱</label>
+                                <input type="email" id="login-email" value="test@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">密码</label>
+                                <input type="password" id="login-password" value="password123">
+                            </div>
+                            <div class="button-group">
+                                <button id="login-btn" class="primary">登录</button>
+                                <button id="logout-btn">登出</button>
+                            </div>
+                            <div class="result-container" id="login-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>用户注册</h3>
+                            <div class="form-group">
+                                <label for="register-name">用户名</label>
+                                <input type="text" id="register-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-email">邮箱</label>
+                                <input type="email" id="register-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-password">密码</label>
+                                <input type="password" id="register-password">
+                            </div>
+                            <div class="button-group">
+                                <button id="register-btn" class="primary">注册</button>
+                            </div>
+                            <div class="result-container" id="register-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>获取用户信息</h3>
+                            <div class="button-group">
+                                <button id="get-user-info-btn" class="primary">获取用户信息</button>
+                            </div>
+                            <div class="result-container" id="user-info-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 会员管理 -->
+                <div class="tab-content" id="membership-tab">
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>获取会员计划列表</h3>
+                            <div class="button-group">
+                                <button id="get-membership-plans-btn" class="primary">获取会员计划</button>
+                            </div>
+                            <div class="result-container" id="membership-plans-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>获取当前用户会员信息</h3>
+                            <div class="button-group">
+                                <button id="get-user-membership-btn" class="primary">获取会员信息</button>
+                            </div>
+                            <div class="result-container" id="user-membership-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>更新用户会员信息</h3>
+                            <div class="form-group">
+                                <label for="membership-id">会员计划ID</label>
+                                <select id="membership-id">
+                                    <option value="founder">创始会员计划</option>
+                                    <option value="professional">专业会员计划</option>
+                                    <option value="enterprise">企业会员计划</option>
+                                </select>
+                            </div>
+                            <div class="button-group">
+                                <button id="update-membership-btn" class="primary">更新会员信息</button>
+                            </div>
+                            <div class="result-container" id="update-membership-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 交易记录 -->
+                <div class="tab-content" id="transactions-tab">
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>获取交易记录列表</h3>
+                            <div class="form-group">
+                                <label for="transaction-status">交易状态</label>
+                                <select id="transaction-status">
+                                    <option value="all">全部</option>
+                                    <option value="completed">已完成</option>
+                                    <option value="pending">处理中</option>
+                                    <option value="failed">失败</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction-payment-method">支付方式</label>
+                                <select id="transaction-payment-method">
+                                    <option value="all">全部</option>
+                                    <option value="alipay">支付宝</option>
+                                    <option value="wechat">微信支付</option>
+                                    <option value="creditcard">信用卡</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction-page">页码</label>
+                                <input type="number" id="transaction-page" value="1" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction-limit">每页数量</label>
+                                <input type="number" id="transaction-limit" value="10" min="1" max="50">
+                            </div>
+                            <div class="button-group">
+                                <button id="get-transactions-btn" class="primary">获取交易记录</button>
+                            </div>
+                            <div class="result-container" id="transactions-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>获取交易详情</h3>
+                            <div class="form-group">
+                                <label for="transaction-id">交易ID</label>
+                                <input type="text" id="transaction-id" placeholder="输入交易ID">
+                            </div>
+                            <div class="button-group">
+                                <button id="get-transaction-detail-btn" class="primary">获取交易详情</button>
+                            </div>
+                            <div class="result-container" id="transaction-detail-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>下载交易收据</h3>
+                            <div class="form-group">
+                                <label for="receipt-transaction-id">交易ID</label>
+                                <input type="text" id="receipt-transaction-id" placeholder="输入交易ID">
+                            </div>
+                            <div class="button-group">
+                                <button id="download-receipt-btn" class="primary">下载收据</button>
+                            </div>
+                            <div class="result-container" id="receipt-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>创建交易记录</h3>
+                            <div class="form-group">
+                                <label for="create-transaction-amount">金额</label>
+                                <input type="number" id="create-transaction-amount" value="299.00" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="create-transaction-payment-method">支付方式</label>
+                                <select id="create-transaction-payment-method">
+                                    <option value="alipay">支付宝</option>
+                                    <option value="wechat">微信支付</option>
+                                    <option value="creditcard">信用卡</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="create-transaction-membership-id">会员计划ID</label>
+                                <select id="create-transaction-membership-id">
+                                    <option value="founder">创始会员计划</option>
+                                    <option value="professional">专业会员计划</option>
+                                    <option value="enterprise">企业会员计划</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="create-transaction-description">描述</label>
+                                <input type="text" id="create-transaction-description" placeholder="交易描述">
+                            </div>
+                            <div class="button-group">
+                                <button id="create-transaction-btn" class="primary">创建交易记录</button>
+                            </div>
+                            <div class="result-container" id="create-transaction-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 支付处理 -->
+                <div class="tab-content" id="payment-tab">
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>创建支付订单</h3>
+                            <div class="form-group">
+                                <label for="create-order-amount">金额</label>
+                                <input type="number" id="create-order-amount" value="299.00" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="create-order-payment-method">支付方式</label>
+                                <select id="create-order-payment-method">
+                                    <option value="alipay">支付宝</option>
+                                    <option value="wechat">微信支付</option>
+                                    <option value="creditcard">信用卡</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="create-order-membership-id">会员计划ID</label>
+                                <select id="create-order-membership-id">
+                                    <option value="founder">创始会员计划</option>
+                                    <option value="professional">专业会员计划</option>
+                                    <option value="enterprise">企业会员计划</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="create-order-description">描述</label>
+                                <input type="text" id="create-order-description" placeholder="订单描述">
+                            </div>
+                            <div class="button-group">
+                                <button id="create-order-btn" class="primary">创建支付订单</button>
+                            </div>
+                            <div class="result-container" id="create-order-result" style="display: none;"></div>
+                            
+                            <div id="payment-info" style="display: none; margin-top: 20px;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>支付信息</h3>
+                                    </div>
+                                    <div class="timer" id="payment-timer">
+                                        剩余支付时间: 30:00
+                                    </div>
+                                    <div id="payment-qrcode" class="payment-qrcode">
+                                        <!-- 支付二维码将显示在这里 -->
+                                    </div>
+                                    <div class="button-group" style="justify-content: center;">
+                                        <button id="check-payment-status-btn" class="primary">检查支付状态</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>查询支付订单状态</h3>
+                            <div class="form-group">
+                                <label for="order-id">订单ID</label>
+                                <input type="text" id="order-id" placeholder="输入订单ID">
+                            </div>
+                            <div class="button-group">
+                                <button id="query-order-status-btn" class="primary">查询订单状态</button>
+                            </div>
+                            <div class="result-container" id="order-status-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>模拟支付回调</h3>
+                            <div class="form-group">
+                                <label for="callback-payment-method">支付方式</label>
+                                <select id="callback-payment-method">
+                                    <option value="alipay">支付宝</option>
+                                    <option value="wechat">微信支付</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="callback-order-id">订单号</label>
+                                <input type="text" id="callback-order-id" placeholder="输入订单号或自动生成">
+                            </div>
+                            <div class="form-group">
+                                <label for="callback-amount">金额</label>
+                                <input type="number" id="callback-amount" value="299.00" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="callback-status">交易状态</label>
+                                <select id="callback-status">
+                                    <option value="TRADE_SUCCESS">支付成功</option>
+                                    <option value="TRADE_CLOSED">交易关闭</option>
+                                    <option value="TRADE_FINISHED">交易完成</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="callback-membership-id">会员计划ID (passback_params)</label>
+                                <input type="text" id="callback-membership-id" value="founder">
+                            </div>
+                            <div class="button-group">
+                                <button id="simulate-callback-btn" class="primary">模拟回调</button>
+                            </div>
+                            <div class="result-container" id="callback-result" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 自动化测试 -->
+                <div class="tab-content" id="auto-test-tab">
+                    <div class="api-test-panel">
+                        <div class="api-test-section">
+                            <h3>自动化测试</h3>
+                            <p>点击下方按钮开始自动化测试所有支付和会员相关API功能。测试结果将显示在下方日志中。</p>
+                            <div class="button-group">
+                                <button id="run-all-tests-btn" class="primary">运行所有测试</button>
+                                <button id="clear-log-btn">清除日志</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div class="log-container" id="test-log">
+                            <!-- 测试日志将显示在这里 -->
+                        </div>
+                    </div>
+                    
+                    <div class="api-test-panel">
+                        <div id="test-results">
+                            <!-- 测试结果将显示在这里 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { apiService } from './js/api-service.js';
+        import { apiTestRunner } from './js/api-test-runner.js';
+        
+        // DOM元素
+        const authStatusEl = document.getElementById('auth-status');
+        const tabLinks = document.querySelectorAll('.nav-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // 初始化API测试运行器
+        apiTestRunner.init(
+            document.getElementById('test-log'),
+            document.getElementById('test-results')
+        );
+        
+        // 更新认证状态显示
+        function updateAuthStatus() {
+            if (apiService.isAuthenticated()) {
+                authStatusEl.innerHTML = `
+                    <p class="status-badge success">已登录</p>
+                    <p>用户: ${apiService.getUserData()?.name || '未知用户'}</p>
+                `;
+            } else {
+                authStatusEl.innerHTML = `
+                    <p class="status-badge failed">未登录</p>
+                    <p>请先登录以测试API功能</p>
+                `;
+            }
+        }
+        
+        // 显示结果
+        function showResult(elementId, data, success = true) {
+            const resultEl = document.getElementById(elementId);
+            resultEl.style.display = 'block';
+            resultEl.style.borderLeftColor = success ? '#2ecc71' : '#e74c3c';
+            
+            if (typeof data === 'object') {
+                resultEl.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } else {
+                resultEl.innerHTML = `<pre>${data}</pre>`;
+            }
+        }
+        
+        // 标签页切换
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // 移除所有active类
+                tabLinks.forEach(l => l.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // 添加active类到当前标签
+                link.classList.add('active');
+                const tabId = link.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // 初始化页面
+        updateAuthStatus();
+        
+        // 用户认证相关事件处理
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            try {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                const response = await apiService.login(email, password);
+                showResult('login-result', response);
+                updateAuthStatus();
+            } catch (error) {
+                showResult('login-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            try {
+                await apiService.logout();
+                showResult('login-result', { message: '已成功登出' });
+                updateAuthStatus();
+            } catch (error) {
+                showResult('login-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('register-btn').addEventListener('click', async () => {
+            try {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                
+                const response = await apiService.register(name, email, password);
+                showResult('register-result', response);
+            } catch (error) {
+                showResult('register-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('get-user-info-btn').addEventListener('click', async () => {
+            try {
+                const userInfo = await apiService.getUserInfo();
+                showResult('user-info-result', userInfo);
+            } catch (error) {
+                showResult('user-info-result', { error: error.message }, false);
+            }
+        });
+        
+        // 会员管理相关事件处理
+        document.getElementById('get-membership-plans-btn').addEventListener('click', async () => {
+            try {
+                const plans = await apiService.getMembershipPlans();
+                showResult('membership-plans-result', plans);
+            } catch (error) {
+                showResult('membership-plans-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('get-user-membership-btn').addEventListener('click', async () => {
+            try {
+                const membership = await apiService.getUserMembership();
+                showResult('user-membership-result', membership);
+            } catch (error) {
+                showResult('user-membership-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('update-membership-btn').addEventListener('click', async () => {
+            try {
+                const membershipId = document.getElementById('membership-id').value;
+                const response = await apiService.updateUserMembership(membershipId);
+                showResult('update-membership-result', response);
+            } catch (error) {
+                showResult('update-membership-result', { error: error.message }, false);
+            }
+        });
+        
+        // 交易记录相关事件处理
+        document.getElementById('get-transactions-btn').addEventListener('click', async () => {
+            try {
+                const status = document.getElementById('transaction-status').value;
+                const paymentMethod = document.getElementById('transaction-payment-method').value;
+                const page = document.getElementById('transaction-page').value;
+                const limit = document.getElementById('transaction-limit').value;
+                
+                const params = {};
+                if (status !== 'all') params.status = status;
+                if (paymentMethod !== 'all') params.paymentMethod = paymentMethod;
+                if (page) params.page = page;
+                if (limit) params.limit = limit;
+                
+                const response = await apiService.getTransactions(params);
+                showResult('transactions-result', response);
+            } catch (error) {
+                showResult('transactions-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('get-transaction-detail-btn').addEventListener('click', async () => {
+            try {
+                const transactionId = document.getElementById('transaction-id').value;
+                if (!transactionId) throw new Error('请输入交易ID');
+                
+                const response = await apiService.getTransactionDetail(transactionId);
+                showResult('transaction-detail-result', response);
+            } catch (error) {
+                showResult('transaction-detail-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('download-receipt-btn').addEventListener('click', async () => {
+            try {
+                const transactionId = document.getElementById('receipt-transaction-id').value;
+                if (!transactionId) throw new Error('请输入交易ID');
+                
+                const response = await apiService.downloadReceipt(transactionId);
+                showResult('receipt-result', response);
+            } catch (error) {
+                showResult('receipt-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('create-transaction-btn').addEventListener('click', async () => {
+            try {
+                const amount = document.getElementById('create-transaction-amount').value;
+                const paymentMethod = document.getElementById('create-transaction-payment-method').value;
+                const membershipId = document.getElementById('create-transaction-membership-id').value;
+                const description = document.getElementById('create-transaction-description').value || `升级到${membershipId}会员`;
+                
+                const transactionData = {
+                    amount: parseFloat(amount),
+                    paymentMethod,
+                    membershipId,
+                    description
+                };
+                
+                const response = await apiService.createTransaction(transactionData);
+                showResult('create-transaction-result', response);
+            } catch (error) {
+                showResult('create-transaction-result', { error: error.message }, false);
+            }
+        });
+        
+        // 支付处理相关事件处理
+        document.getElementById('create-order-btn').addEventListener('click', async () => {
+            try {
+                const amount = document.getElementById('create-order-amount').value;
+                const paymentMethod = document.getElementById('create-order-payment-method').value;
+                const membershipId = document.getElementById('create-order-membership-id').value;
+                const description = document.getElementById('create-order-description').value || `升级到${membershipId}会员`;
+                
+                const orderData = {
+                    amount: parseFloat(amount),
+                    paymentMethod,
+                    membershipId,
+                    description
+                };
+                
+                const response = await apiService.createPaymentOrder(orderData);
+                showResult('create-order-result', response);
+                
+                // 显示支付信息
+                if (response.success && response.data) {
+                    const paymentInfoEl = document.getElementById('payment-info');
+                    const qrcodeEl = document.getElementById('payment-qrcode');
+                    
+                    paymentInfoEl.style.display = 'block';
+                    
+                    // 显示支付二维码或链接
+                    if (response.data.qrCodeUrl) {
+                        qrcodeEl.innerHTML = `
+                            <img src="${response.data.qrCodeUrl}" alt="支付二维码">
+                            <p>请使用微信扫描二维码完成支付</p>
+                        `;
+                    } else if (response.data.paymentUrl) {
+                        qrcodeEl.innerHTML = `
+                            <p>点击下方按钮跳转到支付页面</p>
+                            <a href="${response.data.paymentUrl}" target="_blank" class="button primary">
+                                跳转到支付页面
+                            </a>
+                        `;
+                    }
+                    
+                    // 设置订单ID用于查询状态
+                    document.getElementById('order-id').value = response.data.orderId;
+                    
+                    // 启动倒计时
+                    let timeLeft = 30 * 60; // 30分钟
+                    const timerEl = document.getElementById('payment-timer');
+                    
+                    const timer = setInterval(() => {
+                        timeLeft--;
+                        
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+                        
+                        timerEl.textContent = `剩余支付时间: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            timerEl.textContent = '支付已超时';
+                        }
+                    }, 1000);
+                }
+            } catch (error) {
+                showResult('create-order-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('check-payment-status-btn').addEventListener('click', async () => {
+            try {
+                const orderId = document.getElementById('order-id').value;
+                if (!orderId) throw new Error('订单ID不存在');
+                
+                const response = await apiService.queryPaymentOrderStatus(orderId);
+                showResult('order-status-result', response);
+            } catch (error) {
+                showResult('order-status-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('query-order-status-btn').addEventListener('click', async () => {
+            try {
+                const orderId = document.getElementById('order-id').value;
+                if (!orderId) throw new Error('请输入订单ID');
+                
+                const response = await apiService.queryPaymentOrderStatus(orderId);
+                showResult('order-status-result', response);
+            } catch (error) {
+                showResult('order-status-result', { error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('simulate-callback-btn').addEventListener('click', async () => {
+            try {
+                const paymentMethod = document.getElementById('callback-payment-method').value;
+                const orderId = document.getElementById('callback-order-id').value || `test_${Date.now()}`;
+                const amount = document.getElementById('callback-amount').value;
+                const status = document.getElementById('callback-status').value;
+                const membershipId = document.getElementById('callback-membership-id').value;
+                
+                let callbackData = {};
+                
+                if (paymentMethod === 'alipay') {
+                    callbackData = {
+                        out_trade_no: orderId,
+                        total_amount: amount.toString(),
+                        trade_status: status,
+                        passback_params: membershipId
+                    };
+                } else if (paymentMethod === 'wechat') {
+                    callbackData = {
+                        out_trade_no: orderId,
+                        total_fee: (parseFloat(amount) * 100).toString(),
+                        result_code: status === 'TRADE_SUCCESS' ? 'SUCCESS' : 'FAIL',
+                        attach: membershipId
+                    };
+                }
+                
+                const response = await apiService.handlePaymentCallback(paymentMethod, callbackData);
+                showResult('callback-result', response);
+            } catch (error) {
+                showResult('callback-result', { error: error.message }, false);
+            }
+        });
+        
+        // 自动化测试相关事件处理
+        document.getElementById('run-all-tests-btn').addEventListener('click', async () => {
+            try {
+                await apiTestRunner.runAllTests();
+            } catch (error) {
+                const logEl = document.getElementById('test-log');
+                logEl.innerHTML += `<div class="log-error">[${new Date().toLocaleTimeString()}] 测试过程中发生错误: ${error.message}</div>`;
+            }
+        });
+        
+        document.getElementById('clear-log-btn').addEventListener('click', () => {
+            document.getElementById('test-log').innerHTML = '';
+            document.getElementById('test-results').innerHTML = '';
+        });
+    </script>
+</body>
+</html>

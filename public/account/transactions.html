@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction History - NexusOrbital Space Technology Platform</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .transactions-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .page-title {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    .filters-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .filter-group label {
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    
+    .filter-group select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+    
+    .apply-filters-btn {
+      align-self: flex-end;
+      margin-top: auto;
+      padding: 8px 15px;
+    }
+    
+    .transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    
+    .transactions-table th {
+      background-color: #f2f2f2;
+      padding: 12px;
+      text-align: left;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 2px solid #ddd;
+    }
+    
+    .transactions-table td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .transactions-table tr:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .transaction-status {
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+    
+    .status-paid {
+      background-color: #e6f7ee;
+      color: #2ecc71;
+    }
+    
+    .status-pending {
+      background-color: #fff8e6;
+      color: #f39c12;
+    }
+    
+    .status-failed {
+      background-color: #fde9e9;
+      color: #e74c3c;
+    }
+    
+    .status-refunded {
+      background-color: #e6f0f9;
+      color: #3498db;
+    }
+    
+    .transaction-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .action-btn {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .pagination-btn {
+      padding: 8px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #fff;
+      cursor: pointer;
+    }
+    
+    .pagination-btn.active {
+      background-color: #4a90e2;
+      color: #fff;
+      border-color: #4a90e2;
+    }
+    
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 0;
+    }
+    
+    .empty-state-icon {
+      font-size: 3rem;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+    
+    .transaction-details-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: #fff;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      position: relative;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #888;
+    }
+    
+    .detail-section {
+      margin-bottom: 25px;
+    }
+    
+    .detail-section h3 {
+      margin-bottom: 15px;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      color: #555;
+    }
+    
+    @media (max-width: 768px) {
+      .filters-container {
+        flex-direction: column;
+      }
+      
+      .transactions-table {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      .transaction-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <a href="/">
+          <img src="/images/logo.png" alt="NexusOrbital Logo">
+          <span>NexusOrbital</span>
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/community">Community</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/membership">Membership</a></li>
+        </ul>
+      </nav>
+      <div class="user-actions">
+        <a href="/account" class="btn btn-outline">My Account</a>
+        <button id="logout-btn" class="btn btn-primary">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="transactions-container">
+        <h1 class="page-title">Transaction History</h1>
+        
+        <div class="filters-container">
+          <div class="filter-group">
+            <label for="status-filter">Status</label>
+            <select id="status-filter">
+              <option value="all">All Statuses</option>
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+              <option value="refunded">Refunded</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="payment-method-filter">Payment Method</label>
+            <select id="payment-method-filter">
+              <option value="all">All Methods</option>
+              <option value="alipay">Alipay</option>
+              <option value="wechat">WeChat Pay</option>
+              <option value="paypal">PayPal</option>
+              <option value="stripe">Credit Card</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="time-filter">Time Period</label>
+            <select id="time-filter">
+              <option value="all">All Time</option>
+              <option value="month">Last 30 Days</option>
+              <option value="week">Last 7 Days</option>
+              <option value="today">Today</option>
+            </select>
+          </div>
+          
+          <button id="apply-filters-btn" class="btn btn-primary apply-filters-btn">Apply Filters</button>
+        </div>
+        
+        <div id="transactions-table-container">
+          <table class="transactions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Transaction ID</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-table-body">
+              <!-- Transaction rows will be populated by JavaScript -->
+            </tbody>
+          </table>
+          
+          <div id="pagination" class="pagination">
+            <!-- Pagination buttons will be populated by JavaScript -->
+          </div>
+          
+          <div id="empty-state" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">📋</div>
+            <h3>No Transactions Found</h3>
+            <p>You don't have any transactions matching your filters.</p>
+            <button id="clear-filters-btn" class="btn btn-outline">Clear Filters</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Transaction Details Modal -->
+  <div id="transaction-details-modal" class="transaction-details-modal">
+    <div class="modal-content">
+      <button class="close-modal">&times;</button>
+      <h2>Transaction Details</h2>
+      
+      <div class="detail-section">
+        <h3>General Information</h3>
+        <div class="detail-row">
+          <span class="detail-label">Transaction ID:</span>
+          <span id="detail-transaction-id"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Date:</span>
+          <span id="detail-date"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Status:</span>
+          <span id="detail-status"></span>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <h3>Payment Information</h3>
+        <div class="detail-row">
+          <span class="detail-label">Amount:</span>
+          <span id="detail-amount"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Payment Method:</span>
+          <span id="detail-payment-method"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Description:</span>
+          <span id="detail-description"></span>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <h3>Membership Information</h3>
+        <div class="detail-row">
+          <span class="detail-label">Membership Plan:</span>
+          <span id="detail-membership-plan"></span>
+        </div>
+      </div>
+      
+      <div class="detail-actions">
+        <button id="download-receipt-btn" class="btn btn-primary">Download Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="NexusOrbital Logo">
+          <span>NexusOrbital</span>
+        </div>
+        <div class="footer-links">
+          <div class="link-group">
+            <h4>Platform</h4>
+            <ul>
+              <li><a href="/projects">Projects</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/resources">Resources</a></li>
+              <li><a href="/membership">Membership</a></li>
+            </ul>
+          </div>
+          <div class="link-group">
+            <h4>About</h4>
+            <ul>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/team">Team</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/contact">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="link-group">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/support">Support Center</a></li>
+              <li><a href="/terms">Terms of Service</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 NexusOrbital. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="icon-twitter"></i></a>
+          <a href="#" class="social-link"><i class="icon-facebook"></i></a>
+          <a href="#" class="social-link"><i class="icon-linkedin"></i></a>
+          <a href="#" class="social-link"><i class="icon-github"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // State variables
+      let currentPage = 1;
+      let totalPages = 1;
+      let transactions = [];
+      let filters = {
+        status: 'all',
+        paymentMethod: 'all',
+        timeFilter: 'all'
+      };
+      
+      // Elements
+      const transactionsTableBody = document.getElementById('transactions-table-body');
+      const paginationContainer = document.getElementById('pagination');
+      const emptyState = document.getElementById('empty-state');
+      const statusFilter = document.getElementById('status-filter');
+      const paymentMethodFilter = document.getElementById('payment-method-filter');
+      const timeFilter = document.getElementById('time-filter');
+      const applyFiltersBtn = document.getElementById('apply-filters-btn');
+      const clearFiltersBtn = document.getElementById('clear-filters-btn');
+      const modal = document.getElementById('transaction-details-modal');
+      const closeModalBtn = document.querySelector('.close-modal');
+      const downloadReceiptBtn = document.getElementById('download-receipt-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+      
+      // Initialize
+      fetchTransactions();
+      
+      // Event listeners
+      applyFiltersBtn.addEventListener('click', () => {
+        filters.status = statusFilter.value;
+        filters.paymentMethod = paymentMethodFilter.value;
+        filters.timeFilter = timeFilter.value;
+        currentPage = 1;
+        fetchTransactions();
+      });
+      
+      clearFiltersBtn.addEventListener('click', () => {
+        statusFilter.value = 'all';
+        paymentMethodFilter.value = 'all';
+        timeFilter.value = 'all';
+        filters.status = 'all';
+        filters.paymentMethod = 'all';
+        filters.timeFilter = 'all';
+        currentPage = 1;
+        fetchTransactions();
+      });
+      
+      closeModalBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+      
+      window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+      
+      logoutBtn.addEventListener('click', () => {
+        // Handle logout
+        if (confirm('Are you sure you want to log out?')) {
+          // Clear authentication tokens
+          localStorage.removeItem('authToken');
+          // Redirect to login page
+          window.location.href = '/login';
+        }
+      });
+      
+      // Functions
+      async function fetchTransactions() {
+        try {
+          // Show loading state
+          transactionsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading transactions...</td></tr>';
+          
+          // Build query parameters
+          const queryParams = new URLSearchParams({
+            page: currentPage,
+            limit: 10
+          });
+          
+          if (filters.status !== 'all') {
+            queryParams.append('status', filters.status);
+          }
+          
+          if (filters.paymentMethod !== 'all') {
+            queryParams.append('paymentMethod', filters.paymentMethod);
+          }
+          
+          if (filters.timeFilter !== 'all') {
+            queryParams.append('timeFilter', filters.timeFilter);
+          }
+          
+          // Fetch transactions from API
+          const response = await fetch(`/api/payment/transactions?${queryParams.toString()}`);
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch transactions');
+          }
+          
+          const result = await response.json();
+          
+          if (!result.success) {
+            throw new Error(result.error || 'Failed to fetch transactions');
+          }
+          
+          transactions = result.data.transactions;
+          totalPages = result.data.pagination.totalPages;
+          currentPage = result.data.pagination.currentPage;
+          
+          // Render transactions
+          renderTransactions();
+          
+          // Render pagination
+          renderPagination();
+        } catch (error) {
+          console.error('Error fetching transactions:', error);
+          transactionsTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e74c3c;">Error: ${error.message}</td></tr>`;
+        }
+      }
+      
+      function renderTransactions() {
+        if (transactions.length === 0) {
+          // Show empty state
+          emptyState.style.display = 'block';
+          transactionsTableBody.innerHTML = '';
+          return;
+        }
+        
+        // Hide empty state
+        emptyState.style.display = 'none';
+        
+        // Clear table
+        transactionsTableBody.innerHTML = '';
+        
+        // Add transaction rows
+        transactions.forEach(transaction => {
+          const row = document.createElement('tr');
+          
+          // Format date
+          const date = new Date(transaction.date);
+          const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          // Create status class
+          const statusClass = `status-${transaction.status}`;
+          
+          row.innerHTML = `
+            <td>${formattedDate}</td>
+            <td>${transaction.transactionId}</td>
+            <td>${transaction.description}</td>
+            <td>$${transaction.amount.toFixed(2)}</td>
+            <td>${getPaymentMethodName(transaction.paymentMethod)}</td>
+            <td><span class="transaction-status ${statusClass}">${getStatusName(transaction.status)}</span></td>
+            <td class="transaction-actions">
+              <button class="action-btn btn-outline view-details" data-id="${transaction.transactionId}">View Details</button>
+              ${transaction.status === 'paid' ? `<button class="action-btn btn-outline download-receipt" data-id="${transaction.transactionId}">Receipt</button>` : ''}
+            </td>
+          `;
+          
+          transactionsTableBody.appendChild(row);
+        });
+        
+        // Add event listeners to action buttons
+        document.querySelectorAll('.view-details').forEach(button => {
+          button.addEventListener('click', () => {
+            const transactionId = button.getAttribute('data-id');
+            showTransactionDetails(transactionId);
+          });
+        });
+        
+        document.querySelectorAll('.download-receipt').forEach(button => {
+          button.addEventListener('click', () => {
+            const transactionId = button.getAttribute('data-id');
+            downloadReceipt(transactionId);
+          });
+        });
+      }
+      
+      function renderPagination() {
+        // Clear pagination
+        paginationContainer.innerHTML = '';
+        
+        if (totalPages <= 1) {
+          return;
+        }
+        
+        // Previous button
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-btn';
+        prevButton.textContent = 'Previous';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            fetchTransactions();
+          }
+        });
+        paginationContainer.appendChild(prevButton);
+        
+        // Page buttons
+        const maxButtons = 5;
+        const startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+        const endPage = Math.min(totalPages, startPage + maxButtons - 1);
+        
+        for (let i = startPage; i <= endPage; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+          pageButton.textContent = i;
+          pageButton.addEventListener('click', () => {
+            currentPage = i;
+            fetchTransactions();
+          });
+          paginationContainer.appendChild(pageButton);
+        }
+        
+        // Next button
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-btn';
+        nextButton.textContent = 'Next';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            fetchTransactions();
+          }
+        });
+        paginationContainer.appendChild(nextButton);
+      }
+      
+      async function showTransactionDetails(transactionId) {
+        try {
+          // Fetch transaction details
+          const response = await fetch(`/api/payment/transactions/${transactionId}`);
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch transaction details');
+          }
+          
+          const result = await response.json();
+          
+          if (!result.success) {
+            throw new Error(result.error || 'Failed to fetch transaction details');
+          }
+          
+          const transaction = result.data;
+          
+          // Populate modal with transaction details
+          document.getElementById('detail-transaction-id').textContent = transaction.transactionId;
+          document.getElementById('detail-date').textContent = new Date(transaction.date).toLocaleString();
+          document.getElementById('detail-status').textContent = getStatusName(transaction.status);
+          document.getElementById('detail-amount').textContent = `$${transaction.amount.toFixed(2)}`;
+          document.getElementById('detail-payment-method').textContent = getPaymentMethodName(transaction.paymentMethod);
+          document.getElementById('detail-description').textContent = transaction.description;
+          document.getElementById('detail-membership-plan').textContent = getMembershipName(transaction.membershipId);
+          
+          // Set up download receipt button
+          downloadReceiptBtn.onclick = () => downloadReceipt(transaction.transactionId);
+          
+          // Show modal
+          modal.style.display = 'flex';
+        } catch (error) {
+          console.error('Error fetching transaction details:', error);
+          alert(`Error: ${error.message}`);
+        }
+      }
+      
+      async function downloadReceipt(transactionId) {
+        try {
+          const response = await fetch(`/api/payment/receipt/${transactionId}`);
+          
+          if (!response.ok) {
+            throw new Error('Failed to download receipt');
+          }
+          
+          const result = await response.json();
+          
+          if (!result.success) {
+            throw new Error(result.error || 'Failed to download receipt');
+          }
+          
+          // In a real implementation, this would download a PDF receipt
+          // For now, we'll just show an alert
+          alert('Receipt downloaded successfully!');
+        } catch (error) {
+          console.error('Error downloading receipt:', error);
+          alert(`Error: ${error.message}`);
+        }
+      }
+      
+      // Helper functions
+      function getPaymentMethodName(paymentMethod) {
+        const methodNames = {
+          'alipay': 'Alipay',
+          'wechat': 'WeChat Pay',
+          'paypal': 'PayPal',
+          'stripe': 'Credit Card'
+        };
+        
+        return methodNames[paymentMethod] || paymentMethod;
+      }
+      
+      function getStatusName(status) {
+        const statusNames = {
+          'created': 'Created',
+          'pending': 'Pending',
+          'processing': 'Processing',
+          'paid': 'Paid',
+          'completed': 'Completed',
+          'failed': 'Failed',
+          'cancelled': 'Cancelled',
+          'refunded': 'Refunded'
+        };
+        
+        return statusNames[status] || status;
+      }
+      
+      function getMembershipName(membershipId) {
+        const membershipNames = {
+          'basic': 'Basic Membership',
+          'professional': 'Professional Membership',
+          'enterprise': 'Enterprise Membership',
+          'founder': 'Founder Membership'
+        };
+        
+        return membershipNames[membershipId] || 'Unknown Membership';
+      }
+    });
+  </script>
+</body>
+</html>

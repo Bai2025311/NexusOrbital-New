@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员中心 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/web-global.css">
+    <link rel="stylesheet" href="css/web-membership.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目展示</a></li>
+                    <li><a href="resources.html">技术资源</a></li>
+                    <li><a href="experts.html">专家目录</a></li>
+                    <li><a href="news.html">新闻动态</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li class="active"><a href="membership.html">会员中心</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button class="btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <section class="page-title">
+        <div class="container">
+            <h1>会员中心</h1>
+            <p>加入NexusOrbital社区，与太空人居技术领域的专家和爱好者共同探索未来</p>
+        </div>
+    </section>
+
+    <!-- 会员认证部分 -->
+    <section id="auth-section" class="section">
+        <div class="membership-container">
+            <!-- 登录表单 -->
+            <div id="login-container" class="auth-container">
+                <div class="auth-form">
+                    <h2>会员登录</h2>
+                    <p>欢迎回来，请登录您的账号</p>
+                    
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-email">电子邮箱</label>
+                            <input type="email" id="login-email" placeholder="请输入您的邮箱" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-password">密码</label>
+                            <input type="password" id="login-password" placeholder="请输入您的密码" required>
+                            <a href="#" class="forgot-password">忘记密码？</a>
+                        </div>
+                        
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">记住我</label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">登录</button>
+                    </form>
+                    
+                    <div class="auth-alt">
+                        还没有账号？<a href="#" id="show-register">立即注册</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 注册表单 -->
+            <div id="register-container" class="auth-container hidden">
+                <div class="auth-form">
+                    <h2>会员注册</h2>
+                    <p>创建您的NexusOrbital账号，加入太空人居技术社区</p>
+                    
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-name">姓名</label>
+                            <input type="text" id="register-name" placeholder="请输入您的姓名" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-email">电子邮箱</label>
+                            <input type="email" id="register-email" placeholder="请输入您的邮箱" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-password">密码</label>
+                            <input type="password" id="register-password" placeholder="请设置密码（至少8位）" minlength="8" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-confirm-password">确认密码</label>
+                            <input type="password" id="register-confirm-password" placeholder="请再次输入密码" minlength="8" required>
+                        </div>
+                        
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="agree-terms" required>
+                            <label for="agree-terms">我已阅读并同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a></label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">注册</button>
+                    </form>
+                    
+                    <div class="auth-alt">
+                        已有账号？<a href="#" id="show-login">立即登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 会员中心仪表盘 -->
+    <section id="dashboard-section" class="section hidden">
+        <div class="membership-container">
+            <div class="member-dashboard">
+                <!-- 侧边栏 -->
+                <div class="dashboard-sidebar">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <img src="images/avatars/default-avatar.jpg" alt="用户头像">
+                            <div class="avatar-edit">更换头像</div>
+                        </div>
+                        <h3>用户名</h3>
+                        <p>user@example.com</p>
+                        <div class="user-level">
+                            <span class="level-badge">普通会员</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="dashboard-menu">
+                        <li class="active" data-panel="overview-panel">
+                            <i class="fas fa-tachometer-alt"></i> 概览
+                        </li>
+                        <li data-panel="profile-panel">
+                            <i class="fas fa-user"></i> 个人资料
+                        </li>
+                        <li data-panel="projects-panel">
+                            <i class="fas fa-project-diagram"></i> 我的项目
+                        </li>
+                        <li data-panel="resources-panel">
+                            <i class="fas fa-book"></i> 我的资源
+                        </li>
+                        <li data-panel="subscription-panel">
+                            <i class="fas fa-star"></i> 会员订阅
+                        </li>
+                        <li data-panel="messages-panel">
+                            <i class="fas fa-envelope"></i> 消息
+                            <span class="notification-badge">3</span>
+                        </li>
+                        <li id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> 退出登录
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 内容区域 -->
+                <div class="dashboard-content">
+                    <!-- 概览面板 -->
+                    <div id="overview-panel" class="dashboard-panel active">
+                        <h2>会员中心</h2>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-project-diagram"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="projects-count">0</h3>
+                                    <p>我的项目</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-code-branch"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="contributions-count">0</h3>
+                                    <p>贡献次数</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="resources-count">0</h3>
+                                    <p>我的资源</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="connections-count">0</h3>
+                                    <p>我的人脉</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recent-activity">
+                            <h3>最近活动</h3>
+                            <ul class="activity-list">
+                                <!-- 活动列表将通过JavaScript动态加载 -->
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 个人资料面板 -->
+                    <div id="profile-panel" class="dashboard-panel">
+                        <h2>个人资料</h2>
+                        
+                        <form id="profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-name">姓名</label>
+                                    <input type="text" id="profile-name" placeholder="您的姓名">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-email">电子邮箱</label>
+                                    <input type="email" id="profile-email" placeholder="您的邮箱" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-bio">个人简介</label>
+                                <textarea id="profile-bio" rows="4" placeholder="简单介绍一下您自己"></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-company">公司/组织</label>
+                                    <input type="text" id="profile-company" placeholder="您的公司或组织">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-location">所在地</label>
+                                    <input type="text" id="profile-location" placeholder="您的城市或地区">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-phone">联系电话</label>
+                                <input type="tel" id="profile-phone" placeholder="您的联系电话">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-website">个人网站</label>
+                                <input type="url" id="profile-website" placeholder="您的个人网站或博客">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>社交媒体</label>
+                                <div class="social-links">
+                                    <div class="social-input">
+                                        <i class="fab fa-github"></i>
+                                        <input type="text" id="profile-github" placeholder="GitHub 用户名">
+                                    </div>
+                                    
+                                    <div class="social-input">
+                                        <i class="fab fa-twitter"></i>
+                                        <input type="text" id="profile-twitter" placeholder="Twitter 用户名">
+                                    </div>
+                                    
+                                    <div class="social-input">
+                                        <i class="fab fa-linkedin"></i>
+                                        <input type="text" id="profile-linkedin" placeholder="LinkedIn 用户名">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">保存更改</button>
+                                <button type="reset" class="btn-secondary">重置</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- 我的项目面板 -->
+                    <div id="projects-panel" class="dashboard-panel">
+                        <h2>我的项目</h2>
+                        
+                        <div class="panel-actions">
+                            <button class="btn-primary">创建新项目</button>
+                        </div>
+                        
+                        <div class="projects-grid">
+                            <!-- 项目卡片将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 我的资源面板 -->
+                    <div id="resources-panel" class="dashboard-panel">
+                        <h2>我的资源</h2>
+                        
+                        <div class="panel-actions">
+                            <button class="btn-primary">上传资源</button>
+                        </div>
+                        
+                        <p>您还没有上传或收藏任何资源。</p>
+                    </div>
+                    
+                    <!-- 会员订阅面板 -->
+                    <div id="subscription-panel" class="dashboard-panel">
+                        <h2>会员订阅</h2>
+                        
+                        <div class="subscription-status">
+                            <div class="current-plan">
+                                <h3>当前订阅计划</h3>
+                                <div class="plan-details">
+                                    <div class="plan-badge" id="current-plan-badge">创始会员计划</div>
+                                    <div class="plan-info">
+                                        <p><strong>开始日期:</strong> <span id="subscription-start-date">2023-05-15</span></p>
+                                        <p><strong>下次续费:</strong> <span id="subscription-renewal-date">2024-05-15</span></p>
+                                        <p><strong>状态:</strong> <span class="status-active">有效</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="subscription-actions">
+                                <button class="btn-outline">管理订阅</button>
+                                <button class="btn-text">查看账单历史</button>
+                            </div>
+                        </div>
+                        
+                        <div class="membership-benefits">
+                            <h3>会员权益</h3>
+                            <ul class="benefits-list" id="benefits-list">
+                                <!-- 会员权益将通过JavaScript动态加载 -->
+                            </ul>
+                        </div>
+                        
+                        <div class="membership-upgrade">
+                            <h3>升级您的会员计划</h3>
+                            
+                            <div class="plans-comparison">
+                                <div class="plan-card current">
+                                    <div class="plan-header">
+                                        <h4>创始会员</h4>
+                                        <div class="plan-price">
+                                            <span class="price">¥299</span>
+                                            <span class="period">/年</span>
+                                        </div>
+                                        <span class="plan-tag">当前计划</span>
+                                    </div>
+                                    <div class="plan-features">
+                                        <ul>
+                                            <li><i class="fas fa-check"></i> 整合优质开源资源</li>
+                                            <li><i class="fas fa-check"></i> 太空人居技术研究报告</li>
+                                            <li><i class="fas fa-check"></i> 创始团队在线答疑</li>
+                                            <li><i class="fas fa-check"></i> 创始会员专属徽章</li>
+                                            <li><i class="fas fa-check"></i> 优先参与线上活动</li>
+                                            <li><i class="fas fa-check"></i> 资源优先获取权</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="plan-card premium">
+                                    <div class="plan-header">
+                                        <h4>专业会员</h4>
+                                        <div class="plan-price">
+                                            <span class="price">¥599</span>
+                                            <span class="period">/年</span>
+                                        </div>
+                                        <span class="plan-tag premium-tag">推荐</span>
+                                    </div>
+                                    <div class="plan-features">
+                                        <ul>
+                                            <li><i class="fas fa-check"></i> 创始会员所有权益</li>
+                                            <li><i class="fas fa-check"></i> 高级项目协作工具</li>
+                                            <li><i class="fas fa-check"></i> 专家一对一咨询（每月1次）</li>
+                                            <li><i class="fas fa-check"></i> 优先项目孵化支持</li>
+                                            <li><i class="fas fa-check"></i> 专属技术研讨会</li>
+                                            <li><i class="fas fa-check"></i> API高级访问权限</li>
+                                        </ul>
+                                    </div>
+                                    <button class="btn-upgrade">升级到专业会员</button>
+                                </div>
+                            </div>
+                            
+                            <div class="upgrade-note">
+                                <i class="fas fa-info-circle"></i>
+                                <p>升级到专业会员计划，享受更多高级功能和专属服务。如有疑问，请<a href="#" class="contact-support">联系客服</a>。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="membership-roadmap">
+                            <h3>平台发展路线图</h3>
+                            <div class="roadmap-timeline">
+                                <div class="roadmap-item completed">
+                                    <div class="roadmap-marker"></div>
+                                    <div class="roadmap-content">
+                                        <h4>第一阶段：社区建设</h4>
+                                        <p>建立太空人居技术开源社区，整合优质资源，提供基础会员服务</p>
+                                        <span class="roadmap-date">2023年第二季度</span>
+                                    </div>
+                                </div>
+                                <div class="roadmap-item active">
+                                    <div class="roadmap-marker"></div>
+                                    <div class="roadmap-content">
+                                        <h4>第二阶段：协作工具</h4>
+                                        <p>推出项目协作工具，支持团队远程协作，增强社区互动功能</p>
+                                        <span class="roadmap-date">2023年第四季度</span>
+                                    </div>
+                                </div>
+                                <div class="roadmap-item">
+                                    <div class="roadmap-marker"></div>
+                                    <div class="roadmap-content">
+                                        <h4>第三阶段：AI辅助设计</h4>
+                                        <p>推出AI设计工坊，辅助太空人居方案设计，提供智能推荐服务</p>
+                                        <span class="roadmap-date">2024年第二季度</span>
+                                    </div>
+                                </div>
+                                <div class="roadmap-item">
+                                    <div class="roadmap-marker"></div>
+                                    <div class="roadmap-content">
+                                        <h4>第四阶段：商业化服务</h4>
+                                        <p>推出企业级数据服务，连接工程师与太空科技企业，促进技术商业化</p>
+                                        <span class="roadmap-date">2024年第四季度</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 消息面板 -->
+                    <div id="messages-panel" class="dashboard-panel">
+                        <h2>消息中心</h2>
+                        
+                        <p>暂无消息。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 会员计划介绍 -->
+    <section class="section membership-cta-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>加入NexusOrbital创始会员计划</h2>
+                <p>成为创始会员，与我们一起探索太空人居技术的未来</p>
+            </div>
+            
+            <div class="membership-tiers">
+                <div class="tier-card free">
+                    <div class="tier-header">
+                        <h3>免费用户</h3>
+                        <div class="tier-price">
+                            <span class="price">¥0</span>
+                            <span class="period">/永久</span>
+                        </div>
+                    </div>
+                    <div class="tier-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 浏览公开项目</li>
+                            <li><i class="fas fa-check"></i> 访问基础资源库</li>
+                            <li><i class="fas fa-check"></i> 参与社区讨论</li>
+                            <li><i class="fas fa-check"></i> 订阅平台动态</li>
+                            <li class="disabled"><i class="fas fa-times"></i> 高级资源访问</li>
+                            <li class="disabled"><i class="fas fa-times"></i> 专家答疑</li>
+                        </ul>
+                    </div>
+                    <button class="btn-outline tier-button">当前级别</button>
+                </div>
+                
+                <div class="tier-card founder highlighted">
+                    <div class="tier-badge">热门选择</div>
+                    <div class="tier-header">
+                        <h3>创始会员</h3>
+                        <div class="tier-price">
+                            <span class="price">¥299</span>
+                            <span class="period">/年</span>
+                        </div>
+                    </div>
+                    <div class="tier-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 免费用户所有权益</li>
+                            <li><i class="fas fa-check"></i> 整合优质开源资源</li>
+                            <li><i class="fas fa-check"></i> 太空人居技术研究报告</li>
+                            <li><i class="fas fa-check"></i> 创始团队在线答疑</li>
+                            <li><i class="fas fa-check"></i> 创始会员专属徽章</li>
+                            <li><i class="fas fa-check"></i> 优先参与线上活动</li>
+                            <li><i class="fas fa-check"></i> 资源优先获取权</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary tier-button">立即加入</button>
+                </div>
+                
+                <div class="tier-card professional">
+                    <div class="tier-header">
+                        <h3>专业会员</h3>
+                        <div class="tier-price">
+                            <span class="price">¥599</span>
+                            <span class="period">/年</span>
+                        </div>
+                    </div>
+                    <div class="tier-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 创始会员所有权益</li>
+                            <li><i class="fas fa-check"></i> 高级项目协作工具</li>
+                            <li><i class="fas fa-check"></i> 专家一对一咨询（每月1次）</li>
+                            <li><i class="fas fa-check"></i> 优先项目孵化支持</li>
+                            <li><i class="fas fa-check"></i> 专属技术研讨会</li>
+                            <li><i class="fas fa-check"></i> API高级访问权限</li>
+                        </ul>
+                    </div>
+                    <button class="btn-outline tier-button">升级会员</button>
+                </div>
+                
+                <div class="tier-card enterprise">
+                    <div class="tier-header">
+                        <h3>企业会员</h3>
+                        <div class="tier-price">
+                            <span class="price">联系我们</span>
+                            <span class="period">定制方案</span>
+                        </div>
+                    </div>
+                    <div class="tier-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 专业会员所有权益</li>
+                            <li><i class="fas fa-check"></i> 企业专属服务</li>
+                            <li><i class="fas fa-check"></i> 定制化技术解决方案</li>
+                            <li><i class="fas fa-check"></i> 优先项目合作机会</li>
+                            <li><i class="fas fa-check"></i> 企业品牌展示</li>
+                            <li><i class="fas fa-check"></i> 专属客户经理</li>
+                        </ul>
+                    </div>
+                    <button class="btn-outline tier-button">联系我们</button>
+                </div>
+            </div>
+            
+            <div class="membership-comparison">
+                <h3>会员权益详细对比</h3>
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>功能与权益</th>
+                                <th>免费用户</th>
+                                <th>创始会员</th>
+                                <th>专业会员</th>
+                                <th>企业会员</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="feature-name">浏览公开项目</td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">访问基础资源库</td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">参与社区讨论</td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">高级资源访问</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">太空人居技术研究报告</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">专属会员徽章</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">优先参与线上活动</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">高级项目协作工具</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">专家一对一咨询</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><span class="feature-detail">每月1次</span></td>
+                                <td><span class="feature-detail">无限制</span></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">优先项目孵化支持</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">专属技术研讨会</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">API访问权限</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><span class="feature-detail">基础</span></td>
+                                <td><span class="feature-detail">高级</span></td>
+                                <td><span class="feature-detail">完整</span></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">企业专属服务</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">定制化技术解决方案</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">专属客户经理</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="membership-faq">
+                <h3>常见问题</h3>
+                <div class="faq-items">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>会员费用如何收取？</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>会员费用按年收取，您可以选择支付宝、微信或信用卡支付。订阅成功后，系统会在到期前通知您续费。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>如何取消会员订阅？</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>您可以在会员中心的"会员订阅"页面取消自动续费。取消后，您仍可以使用当前订阅期内的所有会员权益，直到订阅到期。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>创始会员和专业会员有什么区别？</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>专业会员在创始会员的基础上，增加了高级项目协作工具、专家一对一咨询、优先项目孵化支持等更专业的功能，适合深度参与太空人居技术研发的专业人士。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>企业会员如何申请？</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>企业会员提供定制化服务，请通过"联系我们"按钮提交申请，我们的客户经理会在1-2个工作日内与您联系，了解需求并提供定制方案。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-bottom">
+                <h3>准备好加入我们了吗？</h3>
+                <p>成为NexusOrbital创始会员，与我们一起探索太空人居技术的未来</p>
+                <button class="btn-primary">立即加入</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 支付确认模态框 -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">确认订阅</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="payment-confirmation">
+                        <div class="payment-plan-summary">
+                            <h4>订阅计划: <span id="payment-plan-name">高级会员</span></h4>
+                            <div class="plan-price">
+                                <span id="payment-plan-price">299</span> 元/年
+                            </div>
+                            <div class="plan-features" id="payment-plan-features">
+                                <!-- 动态加载计划特性 -->
+                            </div>
+                        </div>
+                        
+                        <div class="payment-methods">
+                            <h4>选择支付方式</h4>
+                            <div class="payment-method-options">
+                                <div class="payment-method-option">
+                                    <input type="radio" name="payment-method" id="method-wechat" value="wechat" checked>
+                                    <label for="method-wechat">
+                                        <img src="images/payment/wechat-pay.png" alt="微信支付">
+                                        <span>微信支付</span>
+                                        <small>安全便捷的在线支付方式</small>
+                                    </label>
+                                </div>
+                                
+                                <div class="payment-method-option">
+                                    <input type="radio" name="payment-method" id="method-stripe" value="stripe">
+                                    <label for="method-stripe">
+                                        <img src="images/payment/stripe.png" alt="信用卡支付">
+                                        <span>信用卡支付</span>
+                                        <small>通过Stripe安全处理，支持Visa、Mastercard等</small>
+                                    </label>
+                                </div>
+                                
+                                <div class="payment-method-option">
+                                    <input type="radio" name="payment-method" id="method-alipay" value="alipay">
+                                    <label for="method-alipay">
+                                        <img src="images/payment/alipay.png" alt="支付宝">
+                                        <span>支付宝</span>
+                                        <small>即将支持</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="payment-form-container">
+                            <!-- 支付表单将根据选择的支付方式动态加载 -->
+                            <div id="wechat-payment-form" class="payment-form active">
+                                <p class="payment-instructions">点击下方按钮生成支付二维码，使用微信扫码完成支付</p>
+                                <div class="wechat-qrcode-container" id="wechat-qrcode-container">
+                                    <div class="qrcode-placeholder">
+                                        <i class="fas fa-qrcode"></i>
+                                        <p>点击生成支付二维码</p>
+                                    </div>
+                                </div>
+                                <div class="wechat-payment-status" id="wechat-payment-status">
+                                    <!-- 支付状态信息 -->
+                                </div>
+                            </div>
+                            
+                            <div id="stripe-payment-form" class="payment-form">
+                                <div class="form-group">
+                                    <label for="card-holder-name">持卡人姓名</label>
+                                    <input type="text" id="card-holder-name" placeholder="请输入持卡人姓名">
+                                </div>
+                                <div class="form-group">
+                                    <label for="card-element">信用卡信息</label>
+                                    <div id="card-element">
+                                        <!-- Stripe Elements 将在此处插入信用卡表单 -->
+                                    </div>
+                                    <div id="card-errors" class="payment-errors"></div>
+                                </div>
+                            </div>
+                            
+                            <div id="alipay-payment-form" class="payment-form">
+                                <p class="payment-instructions">点击下方按钮跳转至支付宝支付页面，完成支付后将自动返回</p>
+                                <div class="alipay-info">
+                                    <div class="alipay-logo">
+                                        <img src="images/payment/alipay-large.png" alt="支付宝支付">
+                                    </div>
+                                    <p>支付宝是中国领先的第三方支付平台，安全便捷</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn-primary" id="confirm-payment-btn">确认支付</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 微信支付二维码模态框 -->
+    <div class="modal fade" id="wechatQRCodeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">微信扫码支付</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="wechat-payment-container">
+                        <div class="wechat-payment-instructions">
+                            <p>请使用微信扫描下方二维码完成支付</p>
+                            <p class="merchant-note">通过"忠间居住设计研究院"小程序处理付款</p>
+                        </div>
+                        <div class="wechat-qrcode" id="wechat-qrcode-image">
+                            <!-- 二维码图片将在这里显示 -->
+                        </div>
+                        <div class="payment-amount">
+                            <span id="wechat-payment-amount">299.00</span> 元
+                        </div>
+                        <div class="payment-order-id">
+                            订单号: <span id="wechat-order-id"></span>
+                        </div>
+                        <div class="payment-expiry">
+                            二维码有效期: <span id="wechat-qrcode-expiry">30分钟</span>
+                        </div>
+                        <div class="payment-status-container">
+                            <div class="payment-status-indicator">
+                                <div class="status-icon pending active" id="status-pending">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="status-icon processing" id="status-processing">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                                <div class="status-icon success" id="status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="status-icon failed" id="status-failed">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="payment-status-text" id="payment-status-text">
+                                等待扫码支付...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn-primary" id="check-payment-status-btn">
+                        <i class="fas fa-sync-alt"></i> 刷新支付状态
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 支付成功模态框 -->
+    <div class="modal fade" id="paymentSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">支付成功</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="payment-success-container">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>订阅成功！</h3>
+                        <p>感谢您订阅 <span id="success-plan-name">高级会员</span> 计划</p>
+                        <div class="transaction-details">
+                            <div class="transaction-detail">
+                                <span class="detail-label">交易号:</span>
+                                <span class="detail-value" id="transaction-id"></span>
+                            </div>
+                            <div class="transaction-detail">
+                                <span class="detail-label">支付方式:</span>
+                                <span class="detail-value" id="payment-method-used"></span>
+                            </div>
+                            <div class="transaction-detail">
+                                <span class="detail-label">支付金额:</span>
+                                <span class="detail-value" id="payment-amount-paid"></span>
+                            </div>
+                            <div class="transaction-detail">
+                                <span class="detail-label">支付时间:</span>
+                                <span class="detail-value" id="payment-time"></span>
+                            </div>
+                        </div>
+                        <div class="membership-activated">
+                            <p>您的会员权益已激活，立即开始享受更多功能！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-primary" data-dismiss="modal">完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-columns">
+                    <div class="footer-column">
+                        <div class="footer-logo">
+                            <img src="images/logo-white.png" alt="NexusOrbital Logo">
+                        </div>
+                        <p class="footer-description">
+                            NexusOrbital是一个专注于太空人居技术的协作平台，连接工程师、科学家与太空科技企业，共同推进太空基建技术的研发与商业化。
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-weibo"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-weixin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3 class="footer-title">快速链接</h3>
+                        <ul class="footer-links">
+                            <li><a href="index.html">首页</a></li>
+                            <li><a href="projects.html">项目</a></li>
+                            <li><a href="community.html">社区</a></li>
+                            <li><a href="about.html">关于我们</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3 class="footer-title">会员服务</h3>
+                        <ul class="footer-links">
+                            <li><a href="membership.html">会员计划</a></li>
+                            <li><a href="#">会员权益</a></li>
+                            <li><a href="#">创始会员专区</a></li>
+                            <li><a href="#">常见问题</a></li>
+                            <li><a href="#">帮助中心</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3 class="footer-title">联系我们</h3>
+                        <ul class="contact-info">
+                            <li><i class="fas fa-envelope"></i> info@nexusorbital.com</li>
+                            <li><i class="fas fa-phone"></i> +86 123 4567 8910</li>
+                            <li><i class="fas fa-map-marker-alt"></i> 北京市海淀区中关村科技园</li>
+                        </ul>
+                        <div class="newsletter">
+                            <h4>订阅我们的通讯</h4>
+                            <form class="newsletter-form">
+                                <input type="email" placeholder="您的邮箱地址" required>
+                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+                <ul class="footer-bottom-links">
+                    <li><a href="#">隐私政策</a></li>
+                    <li><a href="#">用户协议</a></li>
+                    <li><a href="#">Cookie政策</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/web-auth.js"></script>
+    <script src="js/payment-api.js"></script>
+    <script src="js/web-membership.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化会员中心
+            initMembershipCenter();
+            
+            // 初始化支付方式选择
+            handlePaymentMethodSelection();
+            
+            // 添加支付提交事件
+            document.getElementById('submit-payment').addEventListener('click', handlePaymentSubmit);
+        });
+    </script>
+</body>
+</html>

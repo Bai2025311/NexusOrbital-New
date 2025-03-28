@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人资料 - NexusOrbital | 太空人居技术协作平台</title>
+    <meta name="description" content="管理您在NexusOrbital平台上的个人资料、账户安全和会员状态">
+    <!-- 字体图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- 基础样式 -->
+    <link rel="stylesheet" href="css/web-base.css">
+    <!-- 个人资料页面样式 -->
+    <link rel="stylesheet" href="css/web-profile.css">
+    <!-- 认证系统脚本 -->
+    <script src="js/auth.js"></script>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="#">技术资源</a></li>
+                    <li><a href="#">项目展示</a></li>
+                    <li><a href="#">专家目录</a></li>
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="#" class="user-avatar active">
+                    <div class="avatar-placeholder">JD</div>
+                </a>
+                <button class="menu-toggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 个人资料部分 -->
+    <section class="profile-section">
+        <div class="profile-container">
+            <!-- 侧边栏 -->
+            <aside class="profile-sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <div class="avatar-placeholder">JD</div>
+                        <button class="change-avatar-btn" title="更换头像">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <h3 class="user-name">张三</h3>
+                    <p class="user-role">航天工程师</p>
+                    <span class="user-membership">创始会员</span>
+                </div>
+                
+                <nav class="profile-nav">
+                    <ul>
+                        <li class="active"><a href="#personal-info"><i class="fas fa-user"></i> 个人信息</a></li>
+                        <li><a href="#account-security"><i class="fas fa-shield-alt"></i> 账户安全</a></li>
+                        <li><a href="#social-profiles"><i class="fas fa-share-alt"></i> 社交账号</a></li>
+                        <li><a href="#expertise"><i class="fas fa-brain"></i> 专业领域</a></li>
+                        <li><a href="#my-projects"><i class="fas fa-rocket"></i> 我的项目</a></li>
+                        <li><a href="#membership"><i class="fas fa-crown"></i> 会员状态</a></li>
+                        <li><a href="#notifications"><i class="fas fa-bell"></i> 通知设置</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="sidebar-footer">
+                    <button class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> 退出登录
+                    </button>
+                </div>
+            </aside>
+            
+            <!-- 主要内容 -->
+            <div class="profile-content">
+                <div class="content-header">
+                    <h2>个人信息</h2>
+                    <p>管理您的个人信息和联系方式</p>
+                </div>
+                
+                <!-- 个人信息标签页 -->
+                <div id="personal-info" class="profile-tab active">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>基本信息</h3>
+                            <button class="edit-btn" data-editing="false">
+                                <i class="fas fa-edit"></i> 编辑
+                            </button>
+                        </div>
+                        
+                        <form id="personal-info-form" class="profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">姓名</label>
+                                    <input type="text" id="name" name="name" placeholder="您的姓名" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">电子邮箱</label>
+                                    <input type="email" id="email" name="email" placeholder="您的电子邮箱" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">联系电话</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="您的联系电话" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">所在地区</label>
+                                    <input type="text" id="location" name="location" placeholder="城市, 国家" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="bio">个人简介</label>
+                                <textarea id="bio" name="bio" placeholder="简单介绍一下您自己..." disabled></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="company">公司/组织</label>
+                                    <input type="text" id="company" name="company" placeholder="您的公司或组织" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jobTitle">职位</label>
+                                    <input type="text" id="jobTitle" name="jobTitle" placeholder="您的职位" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions" style="display: none;">
+                                <button type="button" class="cancel-btn">取消</button>
+                                <button type="submit" class="save-btn">保存更改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 账户安全标签页 -->
+                <div id="account-security" class="profile-tab">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>修改密码</h3>
+                            <button class="edit-btn" data-editing="false">
+                                <i class="fas fa-edit"></i> 编辑
+                            </button>
+                        </div>
+                        
+                        <form id="password-form" class="profile-form">
+                            <div class="form-group">
+                                <label for="current-password">当前密码</label>
+                                <div class="password-input">
+                                    <input type="password" id="current-password" name="current-password" placeholder="输入当前密码" disabled>
+                                    <button type="button" class="toggle-password" tabindex="-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="new-password">新密码</label>
+                                <div class="password-input">
+                                    <input type="password" id="new-password" name="new-password" placeholder="设置新密码" disabled>
+                                    <button type="button" class="toggle-password" tabindex="-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <div class="strength-meter">
+                                        <div class="strength-bar"></div>
+                                    </div>
+                                    <div class="strength-text">密码强度: 弱</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="confirm-password">确认新密码</label>
+                                <div class="password-input">
+                                    <input type="password" id="confirm-password" name="confirm-password" placeholder="再次输入新密码" disabled>
+                                    <button type="button" class="toggle-password" tabindex="-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="info-note">
+                                <p><i class="fas fa-info-circle"></i> 强密码应包含至少8个字符，并混合使用大小写字母、数字和特殊符号。</p>
+                            </div>
+                            
+                            <div class="form-actions" style="display: none;">
+                                <button type="button" class="cancel-btn">取消</button>
+                                <button type="submit" class="save-btn">更新密码</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>登录方式</h3>
+                        </div>
+                        
+                        <div class="login-methods">
+                            <div class="login-method">
+                                <div class="method-info">
+                                    <div class="method-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="method-details">
+                                        <h4>电子邮箱</h4>
+                                        <div class="method-status connected">已连接</div>
+                                    </div>
+                                </div>
+                                <div class="method-actions">
+                                    <div class="primary-method">主要登录方式</div>
+                                </div>
+                            </div>
+                            
+                            <div class="login-method">
+                                <div class="method-info">
+                                    <div class="method-icon">
+                                        <i class="fab fa-github"></i>
+                                    </div>
+                                    <div class="method-details">
+                                        <h4>GitHub</h4>
+                                        <div class="method-status not-connected">未连接</div>
+                                    </div>
+                                </div>
+                                <div class="method-actions">
+                                    <button class="connect-btn">连接</button>
+                                </div>
+                            </div>
+                            
+                            <div class="login-method">
+                                <div class="method-info">
+                                    <div class="method-icon">
+                                        <i class="fab fa-weixin"></i>
+                                    </div>
+                                    <div class="method-details">
+                                        <h4>微信</h4>
+                                        <div class="method-status not-connected">未连接</div>
+                                    </div>
+                                </div>
+                                <div class="method-actions">
+                                    <button class="connect-btn">连接</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 社交账号标签页 -->
+                <div id="social-profiles" class="profile-tab">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>社交媒体</h3>
+                            <button class="edit-btn" data-editing="false">
+                                <i class="fas fa-edit"></i> 编辑
+                            </button>
+                        </div>
+                        
+                        <form id="social-media-form" class="profile-form">
+                            <div class="form-group social-input">
+                                <label for="website"><i class="fas fa-globe"></i> 个人网站</label>
+                                <input type="url" id="website" name="website" placeholder="https://yourwebsite.com" disabled>
+                            </div>
+                            
+                            <div class="form-group social-input">
+                                <label for="github"><i class="fab fa-github"></i> GitHub</label>
+                                <input type="url" id="github" name="github" placeholder="https://github.com/username" disabled>
+                            </div>
+                            
+                            <div class="form-group social-input">
+                                <label for="twitter"><i class="fab fa-twitter"></i> Twitter</label>
+                                <input type="url" id="twitter" name="twitter" placeholder="https://twitter.com/username" disabled>
+                            </div>
+                            
+                            <div class="form-group social-input">
+                                <label for="linkedin"><i class="fab fa-linkedin"></i> LinkedIn</label>
+                                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/username" disabled>
+                            </div>
+                            
+                            <div class="form-group social-input">
+                                <label for="weibo"><i class="fab fa-weibo"></i> 微博</label>
+                                <input type="url" id="weibo" name="weibo" placeholder="https://weibo.com/username" disabled>
+                            </div>
+                            
+                            <div class="form-group social-input">
+                                <label for="wechat"><i class="fab fa-weixin"></i> 微信公众号</label>
+                                <input type="text" id="wechat" name="wechat" placeholder="您的微信公众号ID" disabled>
+                            </div>
+                            
+                            <div class="form-actions" style="display: none;">
+                                <button type="button" class="cancel-btn">取消</button>
+                                <button type="submit" class="save-btn">保存更改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 专业领域标签页 -->
+                <div id="expertise" class="profile-tab">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>专业技能与兴趣</h3>
+                            <button class="edit-btn" data-editing="false">
+                                <i class="fas fa-edit"></i> 编辑
+                            </button>
+                        </div>
+                        
+                        <form id="expertise-form" class="profile-form">
+                            <div class="form-group">
+                                <label for="skills">专业技能</label>
+                                <select id="skills" name="skills" multiple disabled>
+                                    <option value="aerospace_engineering">航空航天工程</option>
+                                    <option value="mechanical_design">机械设计</option>
+                                    <option value="structural_analysis">结构分析</option>
+                                    <option value="thermal_management">热管理系统</option>
+                                    <option value="propulsion_systems">推进系统</option>
+                                    <option value="life_support_systems">生命支持系统</option>
+                                    <option value="materials_science">材料科学</option>
+                                    <option value="robotics">机器人技术</option>
+                                    <option value="ai_ml">人工智能/机器学习</option>
+                                    <option value="software_development">软件开发</option>
+                                    <option value="project_management">项目管理</option>
+                                    <option value="systems_engineering">系统工程</option>
+                                    <option value="electrical_engineering">电气工程</option>
+                                    <option value="environmental_control">环境控制</option>
+                                    <option value="radiation_protection">辐射防护</option>
+                                    <option value="space_medicine">太空医学</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="interests">兴趣领域</label>
+                                <select id="interests" name="interests" multiple disabled>
+                                    <option value="space_habitats">太空居住舱</option>
+                                    <option value="lunar_bases">月球基地</option>
+                                    <option value="mars_colonization">火星殖民</option>
+                                    <option value="space_stations">空间站</option>
+                                    <option value="space_tourism">太空旅游</option>
+                                    <option value="asteroid_mining">小行星采矿</option>
+                                    <option value="in_situ_resource">就地资源利用</option>
+                                    <option value="space_agriculture">太空农业</option>
+                                    <option value="closed_ecosystems">封闭生态系统</option>
+                                    <option value="space_architecture">太空建筑</option>
+                                    <option value="space_manufacturing">太空制造</option>
+                                    <option value="space_debris">太空碎片管理</option>
+                                    <option value="space_policy">太空政策</option>
+                                    <option value="space_economy">太空经济</option>
+                                    <option value="space_education">太空教育</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="experience">工作经验</label>
+                                <textarea id="experience" name="experience" placeholder="描述您在太空技术领域的工作经验..." disabled></textarea>
+                            </div>
+                            
+                            <div class="form-actions" style="display: none;">
+                                <button type="button" class="cancel-btn">取消</button>
+                                <button type="submit" class="save-btn">保存更改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 我的项目标签页 -->
+                <div id="my-projects" class="profile-tab">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>我参与的项目</h3>
+                            <a href="#" class="view-all-link">查看全部 <i class="fas fa-angle-right"></i></a>
+                        </div>
+                        
+                        <div class="projects-list" id="participating-projects">
+                            <div class="project-item">
+                                <div class="project-image">
+                                    <img src="images/projects/moon-base.jpg" alt="月球基地生命支持系统">
+                                </div>
+                                <div class="project-info">
+                                    <h4>月球基地生命支持系统</h4>
+                                    <p>为长期月球居住设计的闭环生命支持系统方案</p>
+                                    <div class="project-meta">
+                                        <span class="project-role"><i class="fas fa-user-cog"></i> 系统工程师</span>
+                                        <span class="project-status active"><i class="fas fa-circle"></i> 进行中</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <button class="action-btn"><i class="fas fa-external-link-alt"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="empty-state" style="display: none;">
+                                <div class="empty-icon">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <h4>您还没有参与任何项目</h4>
+                                <p>浏览项目大厅，寻找感兴趣的项目加入吧</p>
+                                <a href="#" class="primary-btn">浏览项目</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>我关注的项目</h3>
+                            <a href="#" class="view-all-link">查看全部 <i class="fas fa-angle-right"></i></a>
+                        </div>
+                        
+                        <div class="projects-list" id="following-projects">
+                            <div class="project-item">
+                                <div class="project-image">
+                                    <img src="images/projects/space-farm.jpg" alt="太空农场模块化设计">
+                                </div>
+                                <div class="project-info">
+                                    <h4>太空农场模块化设计</h4>
+                                    <p>适用于轨道空间站和月球基地的高效农业系统</p>
+                                    <div class="project-meta">
+                                        <span class="project-members"><i class="fas fa-users"></i> 12名成员</span>
+                                        <span class="project-status active"><i class="fas fa-circle"></i> 进行中</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <button class="action-btn"><i class="fas fa-external-link-alt"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="project-item">
+                                <div class="project-image">
+                                    <img src="images/projects/mars-habitat.jpg" alt="火星栖息地概念设计">
+                                </div>
+                                <div class="project-info">
+                                    <h4>火星栖息地概念设计</h4>
+                                    <p>利用当地资源建造的火星永久居住设施</p>
+                                    <div class="project-meta">
+                                        <span class="project-members"><i class="fas fa-users"></i> 8名成员</span>
+                                        <span class="project-status planning"><i class="fas fa-circle"></i> 规划中</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <button class="action-btn"><i class="fas fa-external-link-alt"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="empty-state" style="display: none;">
+                                <div class="empty-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <h4>您还没有关注任何项目</h4>
+                                <p>浏览项目大厅，发现感兴趣的项目</p>
+                                <a href="#" class="primary-btn">发现项目</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>推荐项目</h3>
+                        </div>
+                        
+                        <div class="projects-list" id="recommended-projects">
+                            <div class="project-item">
+                                <div class="project-image">
+                                    <img src="images/projects/space-radiation.jpg" alt="太空辐射防护材料研究">
+                                </div>
+                                <div class="project-info">
+                                    <h4>太空辐射防护材料研究</h4>
+                                    <p>开发新型轻量化辐射防护材料，适用于长期太空任务</p>
+                                    <div class="project-meta">
+                                        <span class="project-members"><i class="fas fa-users"></i> 15名成员</span>
+                                        <span class="project-status recruiting"><i class="fas fa-circle"></i> 招募中</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <button class="action-btn"><i class="fas fa-external-link-alt"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="view-more-container">
+                                <a href="#" class="view-more-btn">查看更多推荐 <i class="fas fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 会员状态标签页 -->
+                <div id="membership" class="profile-tab">
+                    <div class="profile-card membership-card">
+                        <div class="membership-status">
+                            <div class="membership-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="membership-details">
+                                <h3>普通会员</h3>
+                                <p>升级到创始会员以获取更多功能</p>
+                            </div>
+                        </div>
+                        
+                        <div class="membership-upgrade">
+                            <h3>升级到创始会员</h3>
+                            <p>成为NexusOrbital的创始会员，获取独家权益和优先体验</p>
+                            
+                            <div class="membership-benefits">
+                                <div class="benefit-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span><strong>技术资源库</strong>：完整访问所有研究报告和开源资源</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span><strong>专家互动</strong>：参与创始团队答疑和专属线上活动</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span><strong>优先体验</strong>：抢先体验平台新功能和工具</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span><strong>身份标识</strong>：专属创始会员徽章和社区特权</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span><strong>AI工具</strong>：无限制使用AI设计工坊和智能体推荐</span>
+                                </div>
+                            </div>
+                            
+                            <div class="membership-price">
+                                <div class="price-tag">
+                                    <span class="price">¥49</span>
+                                    <span class="period">/月</span>
+                                </div>
+                                <div class="price-note">
+                                    <p>创始会员特惠价，含30天无条件退款保证</p>
+                                    <p>加入创始会员计划，参与塑造太空人居技术的未来</p>
+                                </div>
+                            </div>
+                            
+                            <button class="upgrade-btn" onclick="upgradeToMembership()">立即升级</button>
+                            <div class="upgrade-note">安全支付，随时可取消</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 通知设置标签页 -->
+                <div id="notifications" class="profile-tab">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>通知偏好设置</h3>
+                        </div>
+                        
+                        <div class="notification-preview">
+                            <h4>通知预览</h4>
+                            <div class="preview-container">
+                                <div class="notification-example">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h5>项目更新通知</h5>
+                                        <p>月球基地生命支持系统项目有新的更新</p>
+                                        <span class="notification-time">刚刚</span>
+                                    </div>
+                                </div>
+                                <button class="test-notification-btn" onclick="testNotification()">
+                                    <i class="fas fa-paper-plane"></i> 发送测试通知
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="notification-option">
+                            <div class="notification-info">
+                                <h4>项目更新</h4>
+                                <p>当您关注的项目有新动态时通知您</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-type="project_updates" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-option">
+                            <div class="notification-info">
+                                <h4>评论回复</h4>
+                                <p>当有人回复您的评论时通知您</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-type="comment_replies" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-option">
+                            <div class="notification-info">
+                                <h4>资源更新</h4>
+                                <p>当技术资源库有新内容时通知您</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-type="resource_updates" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-option">
+                            <div class="notification-info">
+                                <h4>活动邀请</h4>
+                                <p>接收关于线上活动和研讨会的邀请</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-type="event_invitations" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-option">
+                            <div class="notification-info">
+                                <h4>系统公告</h4>
+                                <p>接收关于平台更新和重要通知</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-type="system_announcements" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-option">
+                            <div class="notification-info">
+                                <h4>营销邮件</h4>
+                                <p>接收关于新功能和促销信息</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-type="marketing_emails">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-delivery">
+                            <h4>通知接收方式</h4>
+                            <div class="delivery-options">
+                                <label class="radio-option">
+                                    <input type="radio" name="delivery_method" value="all" checked>
+                                    <span>全部（网站内+邮件）</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="delivery_method" value="site_only">
+                                    <span>仅网站内通知</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="delivery_method" value="email_only">
+                                    <span>仅电子邮件</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo-white.png" alt="NexusOrbital Logo">
+                    <p>太空人居技术协作平台</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>平台</h4>
+                        <ul>
+                            <li><a href="#">技术资源</a></li>
+                            <li><a href="#">项目展示</a></li>
+                            <li><a href="#">专家目录</a></li>
+                            <li><a href="#">任务大厅</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>关于</h4>
+                        <ul>
+                            <li><a href="#">关于我们</a></li>
+                            <li><a href="#">团队介绍</a></li>
+                            <li><a href="#">联系我们</a></li>
+                            <li><a href="#">加入我们</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>资源</h4>
+                        <ul>
+                            <li><a href="#">帮助中心</a></li>
+                            <li><a href="#">常见问题</a></li>
+                            <li><a href="#">使用条款</a></li>
+                            <li><a href="#">隐私政策</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+                <div class="social-links">
+                    <a href="#" aria-label="微信"><i class="fab fa-weixin"></i></a>
+                    <a href="#" aria-label="微博"><i class="fab fa-weibo"></i></a>
+                    <a href="#" aria-label="知乎"><i class="fab fa-zhihu"></i></a>
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/web-navigation.js"></script>
+    <script src="js/web-profile.js"></script>
+</body>
+</html>

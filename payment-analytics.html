@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支付分析 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    <style>
+        .analytics-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .tab-content {
+            padding: 20px 0;
+        }
+        
+        .date-filter {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .date-filter label {
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+        
+        .date-filter input {
+            margin-right: 15px;
+        }
+        
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">NexusOrbital</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="membership.html">会员</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="payment.html">支付</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="refund.html">退款</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="payment-analytics.html">支付分析</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <span id="currentUser">用户</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">个人资料</a></li>
+                            <li><a class="dropdown-item" href="orders.html">我的订单</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">退出登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container mt-4">
+        <h2 class="mb-4">支付数据分析</h2>
+        
+        <!-- 加载中遮罩 -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+        </div>
+        
+        <!-- 概览统计 -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card analytics-card">
+                    <div class="card-body text-center">
+                        <h5 class="stat-label">本月交易总额</h5>
+                        <div class="stat-value" id="monthlyTotal">¥0</div>
+                        <div class="stat-change text-success" id="monthlyTotalChange">+0%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card analytics-card">
+                    <div class="card-body text-center">
+                        <h5 class="stat-label">本月交易笔数</h5>
+                        <div class="stat-value" id="monthlyCount">0</div>
+                        <div class="stat-change text-success" id="monthlyCountChange">+0%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card analytics-card">
+                    <div class="card-body text-center">
+                        <h5 class="stat-label">本月退款总额</h5>
+                        <div class="stat-value" id="monthlyRefund">¥0</div>
+                        <div class="stat-change text-danger" id="monthlyRefundChange">+0%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card analytics-card">
+                    <div class="card-body text-center">
+                        <h5 class="stat-label">退款率</h5>
+                        <div class="stat-value" id="refundRate">0%</div>
+                        <div class="stat-change" id="refundRateChange">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 分析选项卡 -->
+        <ul class="nav nav-tabs" id="analyticsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="trends-tab" data-bs-toggle="tab" data-bs-target="#trends" type="button" role="tab">趋势分析</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="payment-methods-tab" data-bs-toggle="tab" data-bs-target="#payment-methods" type="button" role="tab">支付方式</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="memberships-tab" data-bs-toggle="tab" data-bs-target="#memberships" type="button" role="tab">会员类型</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="refunds-tab" data-bs-toggle="tab" data-bs-target="#refunds" type="button" role="tab">退款分析</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="custom-tab" data-bs-toggle="tab" data-bs-target="#custom" type="button" role="tab">自定义分析</button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="analyticsTabContent">
+            <!-- 趋势分析 -->
+            <div class="tab-pane fade show active" id="trends" role="tabpanel">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary active" id="dailyBtn">日视图</button>
+                            <button type="button" class="btn btn-outline-primary" id="weeklyBtn">周视图</button>
+                            <button type="button" class="btn btn-outline-primary" id="monthlyBtn">月视图</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary active" id="days30Btn">30天</button>
+                            <button type="button" class="btn btn-outline-secondary" id="days90Btn">90天</button>
+                            <button type="button" class="btn btn-outline-secondary" id="days180Btn">180天</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card analytics-card">
+                    <div class="card-header bg-light">
+                        交易金额趋势
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="trendsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card analytics-card mt-4">
+                    <div class="card-header bg-light">
+                        交易笔数趋势
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="countTrendsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 支付方式分析 -->
+            <div class="tab-pane fade" id="payment-methods" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                支付方式分布 (金额)
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="paymentMethodsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                支付方式分布 (笔数)
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="paymentMethodsCountChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card analytics-card mt-4">
+                    <div class="card-header bg-light">
+                        支付方式详情
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>支付方式</th>
+                                        <th>交易笔数</th>
+                                        <th>成功笔数</th>
+                                        <th>成功率</th>
+                                        <th>交易金额</th>
+                                        <th>退款笔数</th>
+                                        <th>退款金额</th>
+                                        <th>退款率</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="paymentMethodsTable">
+                                    <!-- 数据将通过JavaScript填充 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 会员类型分析 -->
+            <div class="tab-pane fade" id="memberships" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                会员类型分布 (金额)
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="membershipsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                会员类型分布 (笔数)
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="membershipsCountChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card analytics-card mt-4">
+                    <div class="card-header bg-light">
+                        会员类型详情
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>会员类型</th>
+                                        <th>交易笔数</th>
+                                        <th>成功笔数</th>
+                                        <th>成功率</th>
+                                        <th>交易金额</th>
+                                        <th>退款笔数</th>
+                                        <th>退款金额</th>
+                                        <th>退款率</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="membershipsTable">
+                                    <!-- 数据将通过JavaScript填充 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 退款分析 -->
+            <div class="tab-pane fade" id="refunds" role="tabpanel">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary active" id="refundDays30Btn">30天</button>
+                            <button type="button" class="btn btn-outline-secondary" id="refundDays90Btn">90天</button>
+                            <button type="button" class="btn btn-outline-secondary" id="refundDays180Btn">180天</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                退款趋势
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="refundTrendsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                退款原因分布
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="refundReasonsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card analytics-card mt-4">
+                    <div class="card-header bg-light">
+                        退款原因详情
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>退款原因</th>
+                                        <th>退款笔数</th>
+                                        <th>退款金额</th>
+                                        <th>占比</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="refundReasonsTable">
+                                    <!-- 数据将通过JavaScript填充 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 自定义分析 -->
+            <div class="tab-pane fade" id="custom" role="tabpanel">
+                <div class="card analytics-card">
+                    <div class="card-header bg-light">
+                        自定义时间范围分析
+                    </div>
+                    <div class="card-body">
+                        <div class="date-filter">
+                            <label for="startDate">开始日期:</label>
+                            <input type="date" id="startDate" class="form-control">
+                            
+                            <label for="endDate">结束日期:</label>
+                            <input type="date" id="endDate" class="form-control">
+                            
+                            <div class="btn-group ms-3" role="group">
+                                <button type="button" class="btn btn-outline-primary active" id="customDailyBtn">日视图</button>
+                                <button type="button" class="btn btn-outline-primary" id="customWeeklyBtn">周视图</button>
+                                <button type="button" class="btn btn-outline-primary" id="customMonthlyBtn">月视图</button>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary ms-3" id="applyCustomRangeBtn">应用</button>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="customRangeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                自定义范围统计
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <div class="stat-label">交易总额</div>
+                                            <div class="stat-value" id="customTotalAmount">¥0</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="stat-label">交易笔数</div>
+                                            <div class="stat-value" id="customTotalCount">0</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <div class="stat-label">退款总额</div>
+                                            <div class="stat-value" id="customRefundAmount">¥0</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="stat-label">退款率</div>
+                                            <div class="stat-value" id="customRefundRate">0%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card analytics-card">
+                            <div class="card-header bg-light">
+                                日均统计
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <div class="stat-label">日均交易额</div>
+                                            <div class="stat-value" id="customDailyAvgAmount">¥0</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="stat-label">日均交易笔数</div>
+                                            <div class="stat-value" id="customDailyAvgCount">0</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <div class="stat-label">日均退款额</div>
+                                            <div class="stat-value" id="customDailyRefundAmount">¥0</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="stat-label">日均退款笔数</div>
+                                            <div class="stat-value" id="customDailyRefundCount">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/payment-analytics.js"></script>
+</body>
+</html>

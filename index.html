@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusOrbital - 太空人居技术协作平台</title>
+    <meta name="description" content="NexusOrbital是连接工程师与太空科技企业的协作平台，通过AI设计工具、技术开源库和众筹任务大厅，降低太空技术民用化门槛。">
+    <link rel="stylesheet" href="css/web-base.css">
+    <link rel="stylesheet" href="css/web-header.css">
+    <link rel="stylesheet" href="css/web-hero.css">
+    <link rel="stylesheet" href="css/web-projects.css">
+    <link rel="stylesheet" href="css/web-news.css">
+    <link rel="stylesheet" href="css/web-footer.css">
+    <link rel="stylesheet" href="css/web-layers.css">
+    <link rel="stylesheet" href="css/web-resources.css">
+    <link rel="stylesheet" href="css/web-membership.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- 主题样式支持 -->
+    <style>
+        /* 主题变量将由theme-manager.js动态添加 */
+        body, .page-container, .stars-background, .main-header, .main-footer,
+        .hero-section, .projects-preview, .news-preview, .resources-preview,
+        .cta-section, .section-title, .project-card, .news-card, .resource-card {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        /* 用户反馈浮动按钮 */
+        .feedback-button {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--nexus-color-primary, #1e88e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 反馈表单 */
+        .feedback-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .feedback-modal.active {
+            display: flex;
+        }
+        
+        .feedback-form {
+            background-color: var(--nexus-color-background, white);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feedback-form h3 {
+            margin-top: 0;
+            color: var(--nexus-color-primary, #1e88e5);
+        }
+        
+        .feedback-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .feedback-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--nexus-color-text-primary, #333);
+        }
+        
+        .feedback-form input,
+        .feedback-form textarea,
+        .feedback-form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--nexus-color-border, #ddd);
+            border-radius: 5px;
+            background-color: var(--nexus-color-background, white);
+            color: var(--nexus-color-text-primary, #333);
+        }
+        
+        .feedback-form textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .feedback-form .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .feedback-form button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .feedback-form .submit-btn {
+            background-color: var(--nexus-color-primary, #1e88e5);
+            color: white;
+        }
+        
+        .feedback-form .cancel-btn {
+            background-color: var(--nexus-color-secondary, #6c757d);
+            color: white;
+        }
+        
+        /* 反馈成功消息 */
+        .feedback-success {
+            display: none;
+            background-color: var(--nexus-color-success, #28a745);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars-background"></div>
+    
+    <!-- 页面容器 -->
+    <div class="page-container">
+        <!-- 顶部导航 -->
+        <header class="main-header">
+            <div class="header-container">
+                <div class="logo">
+                    <h1>NexusOrbital</h1>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item active"><a href="index.html">首页</a></li>
+                        <li class="nav-item"><a href="projects.html">项目</a></li>
+                        <li class="nav-item"><a href="resources.html">技术资源</a></li>
+                        <li class="nav-item"><a href="experts.html">专家目录</a></li>
+                        <li class="nav-item"><a href="about.html">关于我们</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-actions">
+                    <button class="login-btn">登录</button>
+                    <button class="join-btn primary-btn-small">成为创始会员</button>
+                    <button class="mobile-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 英雄区域 -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2 class="hero-title">让地球工程师参与建造<br>下一个太空城市</h2>
+                <p class="hero-subtitle">NexusOrbital是太空人居技术的协作平台<br>连接工程师/科学家与太空科技企业，降低技术民用化门槛</p>
+                <div class="hero-actions">
+                    <a href="projects.html" class="primary-btn">探索项目</a>
+                    <a href="membership.html" class="secondary-btn">创始会员特权</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <!-- 3D交互元素将通过JS加载 -->
+                <div id="heroCanvas" class="hero-canvas"></div>
+            </div>
+        </section>
+        
+        <!-- 平台三层架构 -->
+        <section class="platform-layers">
+            <h2 class="section-title">太空人居技术民主化平台</h2>
+            <div class="layers-container">
+                <div class="layer-card">
+                    <div class="layer-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="layer-title">工具层</h3>
+                    <p class="layer-desc">AI设计工坊与智能体推荐系统，降低太空设施设计门槛</p>
+                    <a href="#" class="layer-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="layer-card">
+                    <div class="layer-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="layer-title">社区层</h3>
+                    <p class="layer-desc">技术开源库与众筹任务大厅，促进协作与资源共享</p>
+                    <a href="#" class="layer-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="layer-card">
+                    <div class="layer-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="layer-title">商业层</h3>
+                    <p class="layer-desc">会员服务与数据分析，将技术能力转化为可交易资产</p>
+                    <a href="#" class="layer-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 数据统计 -->
+        <section class="stats-section">
+            <div class="stat-item">
+                <div class="stat-value">50+</div>
+                <div class="stat-label">太空居住项目</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2,500+</div>
+                <div class="stat-label">工程师社区</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12</div>
+                <div class="stat-label">合作机构</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">实体落地</div>
+            </div>
+        </section>
+        
+        <!-- 特色项目 -->
+        <section class="featured-projects">
+            <div class="section-header">
+                <h2 class="section-title">特色项目</h2>
+                <a href="projects.html" class="view-all">查看全部</a>
+            </div>
+            <div class="projects-grid">
+                <!-- 项目卡片将通过JS动态加载 -->
+            </div>
+        </section>
+        
+        <!-- 技术资源库预览 -->
+        <section class="resources-preview">
+            <div class="section-header">
+                <h2 class="section-title">技术资源库</h2>
+                <a href="resources.html" class="view-all">浏览全部资源</a>
+            </div>
+            <div class="resources-container">
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3 class="resource-title">月球基地结构设计指南</h3>
+                    <p class="resource-desc">包含辐射防护、温度控制和微重力适应的全面技术方案</p>
+                    <div class="resource-meta">
+                        <span class="resource-type">技术报告</span>
+                        <span class="resource-access">会员专享</span>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-cube"></i></div>
+                    <h3 class="resource-title">太空舱室内部布局3D模型</h3>
+                    <p class="resource-desc">优化空间利用率的模块化设计，适用于长期太空任务</p>
+                    <div class="resource-meta">
+                        <span class="resource-type">3D模型</span>
+                        <span class="resource-access">部分开放</span>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-flask"></i></div>
+                    <h3 class="resource-title">太空农业系统研究报告</h3>
+                    <p class="resource-desc">封闭循环生态系统中的植物种植与养殖技术分析</p>
+                    <div class="resource-meta">
+                        <span class="resource-type">研究报告</span>
+                        <span class="resource-access">免费预览</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 新闻动态 -->
+        <section class="news-section">
+            <div class="section-header">
+                <h2 class="section-title">新闻动态</h2>
+                <a href="news.html" class="view-all">查看全部</a>
+            </div>
+            <div class="news-grid">
+                <!-- 新闻卡片将通过JS动态加载 -->
+            </div>
+        </section>
+        
+        <!-- 创始会员计划 -->
+        <section class="membership-cta">
+            <div class="cta-content">
+                <h2 class="cta-title">加入创始会员计划</h2>
+                <p class="cta-desc">成为NexusOrbital的早期支持者，获取独家技术资源、专家咨询和未来价格锁定特权</p>
+                <ul class="cta-benefits">
+                    <li><i class="fas fa-check-circle"></i> 独家技术资料完整访问权</li>
+                    <li><i class="fas fa-check-circle"></i> 每月可向平台专家提问技术问题</li>
+                    <li><i class="fas fa-check-circle"></i> 优先参与新项目协作机会</li>
+                    <li><i class="fas fa-check-circle"></i> 创始会员身份标识与社区影响力</li>
+                </ul>
+                <div class="cta-pricing">
+                    <div class="price-tag">¥49<span>/月</span></div>
+                    <div class="price-note">限时优惠 · 仅限100名</div>
+                </div>
+                <a href="membership.html" class="cta-button">立即加入</a>
+            </div>
+            <div class="cta-image">
+                <img src="images/membership-visual.jpg" alt="创始会员特权">
+            </div>
+        </section>
+        
+        <!-- 合作伙伴 -->
+        <section class="partners-section">
+            <h2 class="section-title">合作伙伴</h2>
+            <div class="partners-grid">
+                <div class="partner-logo">
+                    <img src="images/partner-1.png" alt="合作伙伴1">
+                </div>
+                <div class="partner-logo">
+                    <img src="images/partner-2.png" alt="合作伙伴2">
+                </div>
+                <div class="partner-logo">
+                    <img src="images/partner-3.png" alt="合作伙伴3">
+                </div>
+                <div class="partner-logo">
+                    <img src="images/partner-4.png" alt="合作伙伴4">
+                </div>
+                <div class="partner-logo">
+                    <img src="images/partner-5.png" alt="合作伙伴5">
+                </div>
+            </div>
+        </section>
+        
+        <!-- 底部区域 -->
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <h2>NexusOrbital</h2>
+                    <p>太空人居技术协作平台</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>关于我们</h3>
+                        <ul>
+                            <li><a href="#">团队介绍</a></li>
+                            <li><a href="#">使命愿景</a></li>
+                            <li><a href="#">发展历程</a></li>
+                            <li><a href="#">加入我们</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>项目中心</h3>
+                        <ul>
+                            <li><a href="#">月球基地</a></li>
+                            <li><a href="#">火星前哨</a></li>
+                            <li><a href="#">太空农业</a></li>
+                            <li><a href="#">低重力家居</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>技术资源</h3>
+                        <ul>
+                            <li><a href="#">设计工具</a></li>
+                            <li><a href="#">技术文档</a></li>
+                            <li><a href="#">研究报告</a></li>
+                            <li><a href="#">3D模型库</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>会员中心</h3>
+                        <ul>
+                            <li><a href="#">创始会员计划</a></li>
+                            <li><a href="#">会员权益</a></li>
+                            <li><a href="#">专家咨询</a></li>
+                            <li><a href="#">常见问题</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2025 NexusOrbital. 保留所有权利。
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-weibo"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-weixin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 用户反馈按钮 -->
+    <div class="feedback-button" id="feedback-button">
+        <i class="fas fa-comment"></i>
+    </div>
+    
+    <!-- 用户反馈表单 -->
+    <div class="feedback-modal" id="feedback-modal">
+        <div class="feedback-form">
+            <h3>用户体验反馈</h3>
+            <div class="form-group">
+                <label for="feedback-type">反馈类型</label>
+                <select id="feedback-type">
+                    <option value="general">一般反馈</option>
+                    <option value="performance">性能相关</option>
+                    <option value="visual">视觉设计相关</option>
+                    <option value="responsive">响应式设计相关</option>
+                    <option value="bug">问题报告</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feedback-content">您的反馈</label>
+                <textarea id="feedback-content" placeholder="请输入您的反馈内容..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="feedback-email">电子邮箱（可选）</label>
+                <input type="email" id="feedback-email" placeholder="您的电子邮箱，用于我们回复您">
+            </div>
+            <div class="form-group">
+                <label for="feedback-rating">体验评分</label>
+                <select id="feedback-rating">
+                    <option value="5">非常满意</option>
+                    <option value="4">满意</option>
+                    <option value="3">一般</option>
+                    <option value="2">不满意</option>
+                    <option value="1">非常不满意</option>
+                </select>
+            </div>
+            <div class="feedback-success" id="feedback-success">
+                感谢您的反馈！我们将认真考虑您的建议。
+            </div>
+            <div class="buttons">
+                <button class="cancel-btn" id="feedback-cancel">取消</button>
+                <button class="submit-btn" id="feedback-submit">提交反馈</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 脚本引用 -->
+    <script src="js/web-navigation.js"></script>
+    <script src="js/web-hero.js"></script>
+    <script src="js/web-projects.js"></script>
+    <script src="js/web-news.js"></script>
+    
+    <!-- 用户体验优化工具 -->
+    <script type="module">
+        import uxOptimizer from './js/ux-optimizer.js';
+        
+        // 初始化用户体验优化器
+        uxOptimizer.init({
+            debug: false,
+            performance: {
+                enabled: true,
+                monitoring: true,
+                imageOptimization: true,
+                resourceOptimization: true
+            },
+            responsive: {
+                enabled: true,
+                adaptNavigation: true,
+                optimizeTouch: true,
+                adaptFontSize: true
+            },
+            visualConsistency: {
+                enabled: true,
+                theme: {
+                    enabled: true,
+                    defaultTheme: 'light',
+                    supportDarkMode: true,
+                    respectUserPreference: true
+                }
+            }
+        });
+        
+        // 用户反馈功能
+        document.addEventListener('DOMContentLoaded', () => {
+            const feedbackButton = document.getElementById('feedback-button');
+            const feedbackModal = document.getElementById('feedback-modal');
+            const feedbackCancel = document.getElementById('feedback-cancel');
+            const feedbackSubmit = document.getElementById('feedback-submit');
+            const feedbackSuccess = document.getElementById('feedback-success');
+            
+            // 打开反馈表单
+            feedbackButton.addEventListener('click', () => {
+                feedbackModal.classList.add('active');
+            });
+            
+            // 关闭反馈表单
+            feedbackCancel.addEventListener('click', () => {
+                feedbackModal.classList.remove('active');
+                feedbackSuccess.style.display = 'none';
+            });
+            
+            // 提交反馈
+            feedbackSubmit.addEventListener('click', () => {
+                const feedbackType = document.getElementById('feedback-type').value;
+                const feedbackContent = document.getElementById('feedback-content').value;
+                const feedbackEmail = document.getElementById('feedback-email').value;
+                const feedbackRating = document.getElementById('feedback-rating').value;
+                
+                if (!feedbackContent.trim()) {
+                    alert('请输入反馈内容');
+                    return;
+                }
+                
+                // 收集性能数据（如果可用）
+                let performanceData = {};
+                if (uxOptimizer.getPerformanceReport) {
+                    const report = uxOptimizer.getPerformanceReport();
+                    if (report && report.performance) {
+                        performanceData = report.performance;
+                    }
+                }
+                
+                // 收集当前主题
+                let currentTheme = 'unknown';
+                if (uxOptimizer.getCurrentTheme) {
+                    currentTheme = uxOptimizer.getCurrentTheme();
+                }
+                
+                // 准备反馈数据
+                const feedbackData = {
+                    type: feedbackType,
+                    content: feedbackContent,
+                    email: feedbackEmail,
+                    rating: feedbackRating,
+                    theme: currentTheme,
+                    performance: performanceData,
+                    userAgent: navigator.userAgent,
+                    screenWidth: window.innerWidth,
+                    screenHeight: window.innerHeight,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // 在实际项目中，这里应该发送到服务器
+                console.log('用户反馈数据:', feedbackData);
+                
+                // 模拟发送成功
+                feedbackSuccess.style.display = 'block';
+                
+                // 清空表单
+                document.getElementById('feedback-content').value = '';
+                document.getElementById('feedback-email').value = '';
+                
+                // 5秒后关闭反馈表单
+                setTimeout(() => {
+                    feedbackModal.classList.remove('active');
+                    feedbackSuccess.style.display = 'none';
+                }, 5000);
+            });
+            
+            // 点击模态框外部关闭
+            feedbackModal.addEventListener('click', (e) => {
+                if (e.target === feedbackModal) {
+                    feedbackModal.classList.remove('active');
+                    feedbackSuccess.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

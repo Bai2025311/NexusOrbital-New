@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": "user_001",
+      "username": "testuser",
+      "email": "test@example.com",
+      "password": "hashed_password_here",
+      "name": "测试用户",
+      "avatar": "../images/avatar-placeholder.jpg",
+      "membership": {
+        "id": "free",
+        "name": "免费用户",
+        "startDate": "2025-01-01",
+        "endDate": null,
+        "features": [
+          "基础技术资源访问",
+          "社区讨论参与",
+          "公开项目浏览"
+        ]
+      },
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ]
+}

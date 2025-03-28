@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusOrbital - 促销活动管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        .promotion-card {
+            border-left: 4px solid #007bff;
+        }
+        .expired-promotion {
+            opacity: 0.7;
+            border-left: 4px solid #6c757d;
+        }
+        .inactive-promotion {
+            opacity: 0.7;
+            border-left: 4px solid #dc3545;
+        }
+        .coupon-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .promotion-details {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .tab-content {
+            padding: 20px 0;
+        }
+        .nav-tabs .nav-link {
+            font-weight: 500;
+        }
+        .nav-tabs .nav-link.active {
+            border-bottom: 3px solid #007bff;
+        }
+        .batch-coupon-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .coupon-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .coupon-code {
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .coupon-item {
+            border-left: 4px solid #28a745;
+            margin-bottom: 10px;
+        }
+        .coupon-item.expired {
+            border-left: 4px solid #6c757d;
+            opacity: 0.7;
+        }
+        .coupon-item.inactive {
+            border-left: 4px solid #dc3545;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">NexusOrbital</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="payment.html">支付</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="refund.html">退款</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="payment-analytics.html">支付分析</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="auto-renewal.html">自动续费</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="membership-upgrade.html">会员升级</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="promotion-management.html">促销管理</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <span class="navbar-text me-3" id="userInfo">未登录</span>
+                    <button class="btn btn-outline-light" id="loginBtn">登录</button>
+                    <button class="btn btn-outline-light ms-2 d-none" id="logoutBtn">退出</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>促销与优惠券管理</h1>
+            <div>
+                <a href="coupon-history.html" class="btn btn-outline-primary me-2">
+                    <i class="bi bi-clock-history"></i> 优惠券使用历史
+                </a>
+                <a href="admin/coupon-analytics.html" class="btn btn-outline-success">
+                    <i class="bi bi-graph-up"></i> 优惠券分析
+                </a>
+            </div>
+        </div>
+        
+        <!-- 管理员视图 -->
+        <div id="adminView" class="d-none">
+            <ul class="nav nav-tabs" id="promotionTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="promotions-tab" data-bs-toggle="tab" data-bs-target="#promotions" type="button" role="tab">促销活动</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="coupons-tab" data-bs-toggle="tab" data-bs-target="#coupons" type="button" role="tab">优惠券</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="promotionTabContent">
+                <!-- 促销活动标签页 -->
+                <div class="tab-pane fade show active" id="promotions" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>促销活动列表</h3>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPromotionModal">
+                            <i class="bi bi-plus-circle"></i> 创建促销活动
+                        </button>
+                    </div>
+                    
+                    <div class="row" id="promotionsList">
+                        <!-- 促销活动卡片将通过JS动态添加 -->
+                        <div class="col-12 text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 优惠券标签页 -->
+                <div class="tab-pane fade" id="coupons" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>优惠券管理</h3>
+                        <div>
+                            <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#createCouponModal">
+                                <i class="bi bi-plus-circle"></i> 创建单个优惠券
+                            </button>
+                            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#batchCouponForm">
+                                <i class="bi bi-plus-circle-fill"></i> 批量生成优惠券
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 批量生成优惠券表单 -->
+                    <div class="collapse mb-4" id="batchCouponForm">
+                        <div class="batch-coupon-form">
+                            <h4 class="mb-3">批量生成优惠券</h4>
+                            <form id="batchCouponGenerateForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="batchPromotionId" class="form-label">选择促销活动</label>
+                                        <select class="form-select" id="batchPromotionId" required>
+                                            <option value="">请选择促销活动</option>
+                                            <!-- 促销活动选项将通过JS动态添加 -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="batchCount" class="form-label">生成数量</label>
+                                        <input type="number" class="form-control" id="batchCount" min="1" max="100" value="10" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="batchPrefix" class="form-label">优惠码前缀 (可选)</label>
+                                        <input type="text" class="form-control" id="batchPrefix" placeholder="例如: NEXUS-">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="batchCodeLength" class="form-label">优惠码长度</label>
+                                        <input type="number" class="form-control" id="batchCodeLength" min="4" max="12" value="8">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="batchMaxUsesPerUser" class="form-label">每用户最大使用次数</label>
+                                        <input type="number" class="form-control" id="batchMaxUsesPerUser" min="1" value="1">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="batchDescription" class="form-label">描述 (可选)</label>
+                                        <input type="text" class="form-control" id="batchDescription" placeholder="批量生成的优惠券描述">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">生成优惠券</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#batchCouponForm">取消</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- 优惠券列表 -->
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">优惠券列表</h5>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="showActiveOnly" checked>
+                                    <label class="form-check-label" for="showActiveOnly">仅显示有效优惠券</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="couponsList" class="coupon-list">
+                                <!-- 优惠券项将通过JS动态添加 -->
+                                <div class="text-center py-3">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">加载中...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 用户视图 -->
+        <div id="userView">
+            <div class="alert alert-info">
+                <h4>优惠券使用</h4>
+                <p>在购买会员或进行支付时，您可以输入优惠码获得折扣。如果您有任何问题，请联系客服。</p>
+            </div>
+            
+            <!-- 用户优惠券使用记录 -->
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">我的优惠券使用记录</h5>
+                </div>
+                <div class="card-body">
+                    <div id="userCouponUsage">
+                        <!-- 用户优惠券使用记录将通过JS动态添加 -->
+                        <div class="text-center py-3" id="userCouponUsageLoading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 未登录视图 -->
+        <div id="notLoggedInView" class="d-none">
+            <div class="alert alert-warning">
+                <h4>请先登录</h4>
+                <p>您需要登录后才能查看和管理促销活动。</p>
+                <button class="btn btn-primary" id="loginBtnAlert">登录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建促销活动模态框 -->
+    <div class="modal fade" id="createPromotionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">创建促销活动</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createPromotionForm">
+                        <div class="mb-3">
+                            <label for="promotionName" class="form-label">促销活动名称</label>
+                            <input type="text" class="form-control" id="promotionName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="promotionDescription" class="form-label">描述</label>
+                            <textarea class="form-control" id="promotionDescription" rows="2"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="promotionType" class="form-label">促销类型</label>
+                                <select class="form-select" id="promotionType" required>
+                                    <option value="percentage">百分比折扣</option>
+                                    <option value="fixed">固定金额折扣</option>
+                                    <option value="free_upgrade">免费升级</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="promotionValue" class="form-label">促销值</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="promotionValue" min="0" step="0.01" required>
+                                    <span class="input-group-text" id="valueType">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="promotionStartDate" class="form-label">开始日期</label>
+                                <input type="datetime-local" class="form-control" id="promotionStartDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="promotionEndDate" class="form-label">结束日期</label>
+                                <input type="datetime-local" class="form-control" id="promotionEndDate">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="promotionMinPurchase" class="form-label">最低消费金额</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">¥</span>
+                                    <input type="number" class="form-control" id="promotionMinPurchase" min="0" step="0.01" value="0">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="promotionMaxDiscount" class="form-label">最大折扣金额 (可选)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">¥</span>
+                                    <input type="number" class="form-control" id="promotionMaxDiscount" min="0" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">适用会员等级 (可选)</label>
+                            <div id="membershipOptions" class="d-flex flex-wrap gap-2">
+                                <!-- 会员等级选项将通过JS动态添加 -->
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">加载中...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="promotionIsActive" checked>
+                            <label class="form-check-label" for="promotionIsActive">立即激活</label>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="createCouponForPromotion">
+                                <label class="form-check-label" for="createCouponForPromotion">
+                                    为此促销活动创建优惠券
+                                </label>
+                            </div>
+                        </div>
+                        <div id="couponCodeSection" class="mb-3 d-none">
+                            <label for="promotionCouponCode" class="form-label">优惠码</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="promotionCouponCode" placeholder="例如: SUMMER2023">
+                                <button class="btn btn-outline-secondary" type="button" id="generateRandomCode">生成随机码</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="savePromotionBtn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建优惠券模态框 -->
+    <div class="modal fade" id="createCouponModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">创建优惠券</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createCouponForm">
+                        <div class="mb-3">
+                            <label for="couponCode" class="form-label">优惠码</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="couponCode" required>
+                                <button class="btn btn-outline-secondary" type="button" id="generateRandomCodeCoupon">生成随机码</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="couponPromotionId" class="form-label">关联促销活动</label>
+                            <select class="form-select" id="couponPromotionId" required>
+                                <option value="">请选择促销活动</option>
+                                <!-- 促销活动选项将通过JS动态添加 -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="couponDescription" class="form-label">描述</label>
+                            <input type="text" class="form-control" id="couponDescription">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="couponMaxUsesPerUser" class="form-label">每用户最大使用次数</label>
+                                <input type="number" class="form-control" id="couponMaxUsesPerUser" min="1" value="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="couponMaxUsesTotal" class="form-label">总使用次数限制 (0为不限)</label>
+                                <input type="number" class="form-control" id="couponMaxUsesTotal" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="couponStartDate" class="form-label">开始日期</label>
+                                <input type="datetime-local" class="form-control" id="couponStartDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="couponEndDate" class="form-label">结束日期</label>
+                                <input type="datetime-local" class="form-control" id="couponEndDate">
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="couponIsActive" checked>
+                            <label class="form-check-label" for="couponIsActive">立即激活</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveCouponBtn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑促销活动模态框 -->
+    <div class="modal fade" id="editPromotionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">编辑促销活动</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPromotionForm">
+                        <input type="hidden" id="editPromotionId">
+                        <div class="mb-3">
+                            <label for="editPromotionName" class="form-label">促销活动名称</label>
+                            <input type="text" class="form-control" id="editPromotionName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPromotionDescription" class="form-label">描述</label>
+                            <textarea class="form-control" id="editPromotionDescription" rows="2"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editPromotionType" class="form-label">促销类型</label>
+                                <select class="form-select" id="editPromotionType" required>
+                                    <option value="percentage">百分比折扣</option>
+                                    <option value="fixed">固定金额折扣</option>
+                                    <option value="free_upgrade">免费升级</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editPromotionValue" class="form-label">促销值</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="editPromotionValue" min="0" step="0.01" required>
+                                    <span class="input-group-text" id="editValueType">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editPromotionStartDate" class="form-label">开始日期</label>
+                                <input type="datetime-local" class="form-control" id="editPromotionStartDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editPromotionEndDate" class="form-label">结束日期</label>
+                                <input type="datetime-local" class="form-control" id="editPromotionEndDate">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editPromotionMinPurchase" class="form-label">最低消费金额</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">¥</span>
+                                    <input type="number" class="form-control" id="editPromotionMinPurchase" min="0" step="0.01" value="0">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editPromotionMaxDiscount" class="form-label">最大折扣金额 (可选)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">¥</span>
+                                    <input type="number" class="form-control" id="editPromotionMaxDiscount" min="0" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">适用会员等级 (可选)</label>
+                            <div id="editMembershipOptions" class="d-flex flex-wrap gap-2">
+                                <!-- 会员等级选项将通过JS动态添加 -->
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="editPromotionIsActive">
+                            <label class="form-check-label" for="editPromotionIsActive">激活</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="updatePromotionBtn">更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量生成的优惠券结果模态框 -->
+    <div class="modal fade" id="batchResultModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">批量生成优惠券结果</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="batchResultContent">
+                        <!-- 批量生成结果将通过JS动态添加 -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="downloadCouponsBtn">下载CSV</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 依赖 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/promotion-management.js"></script>
+</body>
+</html>

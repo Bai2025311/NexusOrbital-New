@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>优惠券分析 - NexusOrbital管理后台</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+    
+    .sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      padding: 48px 0 0;
+      box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+      background-color: #343a40;
+    }
+    
+    .sidebar-sticky {
+      position: relative;
+      top: 0;
+      height: calc(100vh - 48px);
+      padding-top: .5rem;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    
+    .sidebar .nav-link {
+      font-weight: 500;
+      color: #ced4da;
+      padding: .75rem 1rem;
+    }
+    
+    .sidebar .nav-link:hover {
+      color: #fff;
+      background-color: rgba(255, 255, 255, .1);
+    }
+    
+    .sidebar .nav-link.active {
+      color: #fff;
+      background-color: rgba(255, 255, 255, .2);
+    }
+    
+    .sidebar .nav-link i {
+      margin-right: 10px;
+    }
+    
+    .navbar-brand {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+      font-size: 1rem;
+      background-color: rgba(0, 0, 0, .25);
+      box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    }
+    
+    .main-content {
+      margin-left: 240px;
+      padding: 20px;
+    }
+    
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    
+    .card-header {
+      background-color: #4a90e2;
+      color: white;
+      font-weight: bold;
+      padding: 15px 20px;
+      border-radius: 10px 10px 0 0;
+    }
+    
+    .stat-card {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      background-color: white;
+    }
+    
+    .stat-card i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #4a90e2;
+    }
+    
+    .stat-card h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .stat-card p {
+      color: #6c757d;
+      margin-bottom: 0;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin-bottom: 20px;
+    }
+    
+    .table th {
+      background-color: #f1f5f9;
+    }
+    
+    .badge-success {
+      background-color: #28a745;
+    }
+    
+    .badge-warning {
+      background-color: #ffc107;
+      color: #212529;
+    }
+    
+    .badge-danger {
+      background-color: #dc3545;
+    }
+    
+    .badge-info {
+      background-color: #17a2b8;
+    }
+    
+    .badge-secondary {
+      background-color: #6c757d;
+    }
+    
+    .date-range-picker {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .date-range-picker label {
+      margin-right: 10px;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    
+    .date-range-picker input {
+      margin-right: 15px;
+    }
+    
+    .filter-section {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">NexusOrbital 管理后台</a>
+      <div class="d-flex">
+        <span class="navbar-text me-3">
+          管理员: Admin
+        </span>
+        <button class="btn btn-outline-light btn-sm">退出</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 侧边栏 -->
+  <div class="sidebar" style="width: 240px;">
+    <div class="sidebar-sticky">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">
+            <i class="bi bi-speedometer2"></i>
+            仪表盘
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="users.html">
+            <i class="bi bi-people"></i>
+            用户管理
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="memberships.html">
+            <i class="bi bi-card-list"></i>
+            会员管理
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="transactions.html">
+            <i class="bi bi-credit-card"></i>
+            交易记录
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="promotions.html">
+            <i class="bi bi-tags"></i>
+            促销管理
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="coupon-analytics.html">
+            <i class="bi bi-graph-up"></i>
+            优惠券分析
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="settings.html">
+            <i class="bi bi-gear"></i>
+            系统设置
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 主要内容 -->
+  <div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>优惠券使用分析</h1>
+      <a href="../promotion-management.html" class="btn btn-primary">
+        <i class="bi bi-arrow-left"></i> 返回优惠券管理
+      </a>
+    </div>
+
+    <!-- 筛选条件 -->
+    <div class="filter-section">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="date-range-picker">
+            <label for="start-date">日期范围:</label>
+            <input type="date" id="start-date" class="form-control form-control-sm">
+            <label for="end-date">至</label>
+            <input type="date" id="end-date" class="form-control form-control-sm">
+            <button id="apply-date-filter" class="btn btn-primary btn-sm ms-2">应用</button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="promotion-filter" class="form-label">促销活动:</label>
+                <select id="promotion-filter" class="form-select form-select-sm">
+                  <option value="all">所有活动</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="coupon-type-filter" class="form-label">优惠券类型:</label>
+                <select id="coupon-type-filter" class="form-select form-select-sm">
+                  <option value="all">所有类型</option>
+                  <option value="percentage">百分比折扣</option>
+                  <option value="fixed">固定金额</option>
+                  <option value="free_upgrade">免费升级</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="stat-card">
+          <i class="bi bi-ticket-perforated"></i>
+          <h2 id="total-coupons">0</h2>
+          <p>优惠券总数</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card">
+          <i class="bi bi-check-circle"></i>
+          <h2 id="total-usage">0</h2>
+          <p>总使用次数</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card">
+          <i class="bi bi-currency-dollar"></i>
+          <h2 id="total-discount">$0</h2>
+          <p>总折扣金额</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card">
+          <i class="bi bi-percent"></i>
+          <h2 id="conversion-rate">0%</h2>
+          <p>转化率</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 图表 -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            优惠券使用趋势
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="usage-trend-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            优惠券类型分布
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="coupon-type-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            促销活动效果对比
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="promotion-comparison-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            优惠券使用时间分布
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="usage-time-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 热门优惠券表格 -->
+    <div class="card mt-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>热门优惠券排行</span>
+        <div>
+          <button id="export-csv" class="btn btn-sm btn-outline-light">
+            <i class="bi bi-download"></i> 导出CSV
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>排名</th>
+                <th>优惠券码</th>
+                <th>促销活动</th>
+                <th>折扣类型</th>
+                <th>使用次数</th>
+                <th>总折扣金额</th>
+                <th>转化率</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="popular-coupons-table">
+              <!-- 数据将通过JavaScript动态加载 -->
+              <tr>
+                <td colspan="8" class="text-center">加载中...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 优惠券详情模态框 -->
+  <div class="modal fade" id="couponDetailModal" tabindex="-1" aria-labelledby="couponDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="couponDetailModalLabel">优惠券详情</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="coupon-detail-content">
+          <!-- 优惠券详情将在这里动态加载 -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script src="js/coupon-analytics.js"></script>
+</body>
+</html>

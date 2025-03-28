@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusOrbital API 简易测试</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .test-result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .test-result.success {
+            background-color: #e6f7e6;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .test-result.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .test-log {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                    <span>NexusOrbital</span>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="resources.html">资源库</a></li>
+                    <li><a href="projects.html">项目展示</a></li>
+                    <li><a href="experts.html">专家目录</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="test-container">
+        <h1>API 简易测试</h1>
+        <p>此页面用于测试 NexusOrbital 平台的 API 集成功能是否正常工作。</p>
+        
+        <div class="test-section">
+            <h2>1. 资源加载测试</h2>
+            <p>测试资源列表加载功能是否正常工作。</p>
+            <button id="testLoadResources" class="btn primary-btn">测试资源加载</button>
+            <div id="loadResourcesResult" class="test-result" style="display: none;"></div>
+            <div id="loadResourcesLog" class="test-log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. 资源详情测试</h2>
+            <p>测试资源详情加载功能是否正常工作。</p>
+            <button id="testResourceDetail" class="btn primary-btn">测试资源详情</button>
+            <div id="resourceDetailResult" class="test-result" style="display: none;"></div>
+            <div id="resourceDetailLog" class="test-log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. 用户认证测试</h2>
+            <p>测试用户登录和认证功能是否正常工作。</p>
+            <div class="form-group">
+                <label for="testEmail">测试邮箱:</label>
+                <input type="email" id="testEmail" value="test@example.com">
+            </div>
+            <div class="form-group">
+                <label for="testPassword">测试密码:</label>
+                <input type="password" id="testPassword" value="password123">
+            </div>
+            <button id="testAuthentication" class="btn primary-btn">测试用户认证</button>
+            <div id="authenticationResult" class="test-result" style="display: none;"></div>
+            <div id="authenticationLog" class="test-log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>4. 资源交互测试</h2>
+            <p>测试资源评分、收藏等交互功能是否正常工作。</p>
+            <div class="form-group">
+                <label for="testResourceId">资源ID:</label>
+                <input type="text" id="testResourceId" placeholder="输入要测试的资源ID">
+            </div>
+            <button id="testResourceInteraction" class="btn primary-btn">测试资源交互</button>
+            <div id="resourceInteractionResult" class="test-result" style="display: none;"></div>
+            <div id="resourceInteractionLog" class="test-log" style="display: none;"></div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="NexusOrbital Logo">
+                    <span>NexusOrbital</span>
+                </div>
+                <div class="footer-links">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="resources.html">资源库</a></li>
+                        <li><a href="projects.html">项目展示</a></li>
+                        <li><a href="experts.html">专家目录</a></li>
+                        <li><a href="about.html">关于我们</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>联系我们</h3>
+                    <p>邮箱：info@nexusorbital.com</p>
+                    <p>电话：+86 123 4567 8910</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { apiService } from './js/api-service.js';
+        
+        // 辅助函数：显示测试结果
+        function showTestResult(elementId, success, message) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = success ? 'test-result success' : 'test-result error';
+            element.innerHTML = message;
+        }
+        
+        // 辅助函数：记录日志
+        function logMessage(elementId, message, isError = false) {
+            const logElement = document.getElementById(elementId);
+            logElement.style.display = 'block';
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = isError ? 'log-error' : 'log-info';
+            logEntry.textContent = message;
+            
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        // 辅助函数：清除日志
+        function clearLog(elementId) {
+            const logElement = document.getElementById(elementId);
+            logElement.innerHTML = '';
+            logElement.style.display = 'none';
+        }
+        
+        // 1. 资源加载测试
+        document.getElementById('testLoadResources').addEventListener('click', async function() {
+            const resultElement = document.getElementById('loadResourcesResult');
+            const logElement = document.getElementById('loadResourcesLog');
+            
+            // 清除之前的结果
+            resultElement.style.display = 'none';
+            clearLog('loadResourcesLog');
+            
+            try {
+                logMessage('loadResourcesLog', '开始测试资源加载...');
+                
+                // 测试资源加载
+                const resources = await apiService.getResources();
+                
+                logMessage('loadResourcesLog', `成功获取资源列表，共 ${resources.length} 个资源`);
+                
+                // 测试资源筛选
+                logMessage('loadResourcesLog', '测试资源筛选...');
+                const filteredResources = await apiService.getResources({
+                    search: 'test',
+                    type: '文档'
+                });
+                
+                logMessage('loadResourcesLog', `成功获取筛选后的资源列表，共 ${filteredResources.length} 个资源`);
+                
+                // 显示成功结果
+                showTestResult('loadResourcesResult', true, `
+                    <h3>测试通过 ✓</h3>
+                    <p>成功加载资源列表和筛选资源。</p>
+                    <p>资源总数: ${resources.length}</p>
+                    <p>筛选后资源数: ${filteredResources.length}</p>
+                `);
+            } catch (error) {
+                logMessage('loadResourcesLog', `错误: ${error.message}`, true);
+                
+                // 显示错误结果
+                showTestResult('loadResourcesResult', false, `
+                    <h3>测试失败 ✗</h3>
+                    <p>加载资源时出错: ${error.message}</p>
+                    <p>请检查API服务是否正常运行，以及网络连接是否正常。</p>
+                `);
+            }
+        });
+        
+        // 2. 资源详情测试
+        document.getElementById('testResourceDetail').addEventListener('click', async function() {
+            const resultElement = document.getElementById('resourceDetailResult');
+            const logElement = document.getElementById('resourceDetailLog');
+            
+            // 清除之前的结果
+            resultElement.style.display = 'none';
+            clearLog('resourceDetailLog');
+            
+            try {
+                logMessage('resourceDetailLog', '开始测试资源详情加载...');
+                
+                // 先获取资源列表
+                logMessage('resourceDetailLog', '获取资源列表...');
+                const resources = await apiService.getResources();
+                
+                if (!resources || resources.length === 0) {
+                    throw new Error('无法获取资源列表，无法继续测试');
+                }
+                
+                // 获取第一个资源的ID
+                const resourceId = resources[0].id;
+                logMessage('resourceDetailLog', `选择资源ID: ${resourceId} 进行测试`);
+                
+                // 测试获取资源详情
+                logMessage('resourceDetailLog', '获取资源详情...');
+                const resourceDetail = await apiService.getResourceDetail(resourceId);
+                
+                logMessage('resourceDetailLog', `成功获取资源详情: ${resourceDetail.title}`);
+                
+                // 测试获取相关资源
+                logMessage('resourceDetailLog', '获取相关资源...');
+                const relatedResources = await apiService.getRelatedResources(resourceId);
+                
+                logMessage('resourceDetailLog', `成功获取相关资源，共 ${relatedResources.length} 个相关资源`);
+                
+                // 显示成功结果
+                showTestResult('resourceDetailResult', true, `
+                    <h3>测试通过 ✓</h3>
+                    <p>成功加载资源详情和相关资源。</p>
+                    <p>资源标题: ${resourceDetail.title}</p>
+                    <p>相关资源数: ${relatedResources.length}</p>
+                `);
+            } catch (error) {
+                logMessage('resourceDetailLog', `错误: ${error.message}`, true);
+                
+                // 显示错误结果
+                showTestResult('resourceDetailResult', false, `
+                    <h3>测试失败 ✗</h3>
+                    <p>加载资源详情时出错: ${error.message}</p>
+                    <p>请检查API服务是否正常运行，以及网络连接是否正常。</p>
+                `);
+            }
+        });
+        
+        // 3. 用户认证测试
+        document.getElementById('testAuthentication').addEventListener('click', async function() {
+            const resultElement = document.getElementById('authenticationResult');
+            const logElement = document.getElementById('authenticationLog');
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            // 清除之前的结果
+            resultElement.style.display = 'none';
+            clearLog('authenticationLog');
+            
+            try {
+                logMessage('authenticationLog', '开始测试用户认证...');
+                
+                // 确保用户已登出
+                if (apiService.isAuthenticated()) {
+                    logMessage('authenticationLog', '用户已登录，先进行登出...');
+                    await apiService.logout();
+                }
+                
+                // 测试登录
+                logMessage('authenticationLog', `尝试使用邮箱 ${email} 登录...`);
+                const loginResponse = await apiService.login(email, password);
+                
+                logMessage('authenticationLog', '登录成功，获取用户信息...');
+                
+                // 测试获取用户信息
+                const userInfo = await apiService.getUserInfo();
+                
+                logMessage('authenticationLog', `成功获取用户信息: ${userInfo.username}`);
+                
+                // 测试登出
+                logMessage('authenticationLog', '测试登出...');
+                await apiService.logout();
+                
+                const isStillAuthenticated = apiService.isAuthenticated();
+                logMessage('authenticationLog', `登出后认证状态: ${isStillAuthenticated ? '仍然认证' : '已登出'}`);
+                
+                if (isStillAuthenticated) {
+                    throw new Error('登出失败，用户仍然处于认证状态');
+                }
+                
+                // 显示成功结果
+                showTestResult('authenticationResult', true, `
+                    <h3>测试通过 ✓</h3>
+                    <p>成功完成用户登录、获取信息和登出测试。</p>
+                    <p>用户名: ${userInfo.username}</p>
+                    <p>邮箱: ${userInfo.email}</p>
+                `);
+            } catch (error) {
+                logMessage('authenticationLog', `错误: ${error.message}`, true);
+                
+                // 显示错误结果
+                showTestResult('authenticationResult', false, `
+                    <h3>测试失败 ✗</h3>
+                    <p>用户认证测试失败: ${error.message}</p>
+                    <p>请检查API服务是否正常运行，以及提供的用户凭据是否正确。</p>
+                `);
+            }
+        });
+        
+        // 4. 资源交互测试
+        document.getElementById('testResourceInteraction').addEventListener('click', async function() {
+            const resultElement = document.getElementById('resourceInteractionResult');
+            const logElement = document.getElementById('resourceInteractionLog');
+            let resourceId = document.getElementById('testResourceId').value;
+            
+            // 清除之前的结果
+            resultElement.style.display = 'none';
+            clearLog('resourceInteractionLog');
+            
+            try {
+                logMessage('resourceInteractionLog', '开始测试资源交互...');
+                
+                // 如果未提供资源ID，则获取一个
+                if (!resourceId) {
+                    logMessage('resourceInteractionLog', '未提供资源ID，获取资源列表...');
+                    const resources = await apiService.getResources();
+                    
+                    if (!resources || resources.length === 0) {
+                        throw new Error('无法获取资源列表，无法继续测试');
+                    }
+                    
+                    resourceId = resources[0].id;
+                    document.getElementById('testResourceId').value = resourceId;
+                    logMessage('resourceInteractionLog', `自动选择资源ID: ${resourceId}`);
+                }
+                
+                // 确保用户已登录
+                if (!apiService.isAuthenticated()) {
+                    logMessage('resourceInteractionLog', '用户未登录，尝试登录...');
+                    const email = document.getElementById('testEmail').value;
+                    const password = document.getElementById('testPassword').value;
+                    await apiService.login(email, password);
+                    logMessage('resourceInteractionLog', '登录成功');
+                }
+                
+                // 测试更新资源浏览量
+                logMessage('resourceInteractionLog', '测试更新资源浏览量...');
+                await apiService.updateResourceViews(resourceId);
+                logMessage('resourceInteractionLog', '成功更新资源浏览量');
+                
+                // 测试获取资源下载链接
+                logMessage('resourceInteractionLog', '测试获取资源下载链接...');
+                const downloadUrl = await apiService.getResourceDownloadUrl(resourceId);
+                logMessage('resourceInteractionLog', `成功获取下载链接: ${downloadUrl}`);
+                
+                // 测试提交评分
+                const testRating = 4;
+                logMessage('resourceInteractionLog', `测试提交评分 ${testRating}...`);
+                await apiService.submitRating(resourceId, testRating);
+                logMessage('resourceInteractionLog', '成功提交评分');
+                
+                // 测试获取用户评分
+                logMessage('resourceInteractionLog', '测试获取用户评分...');
+                const userRating = await apiService.getUserRating(resourceId);
+                logMessage('resourceInteractionLog', `成功获取用户评分: ${userRating.rating}`);
+                
+                // 测试收藏资源
+                logMessage('resourceInteractionLog', '测试收藏资源...');
+                await apiService.saveResource(resourceId);
+                logMessage('resourceInteractionLog', '成功收藏资源');
+                
+                // 测试获取收藏的资源
+                logMessage('resourceInteractionLog', '测试获取收藏的资源...');
+                const savedResources = await apiService.getSavedResources();
+                const isSaved = savedResources.some(res => res.id === resourceId);
+                logMessage('resourceInteractionLog', `资源是否在收藏列表中: ${isSaved ? '是' : '否'}`);
+                
+                // 测试取消收藏资源
+                logMessage('resourceInteractionLog', '测试取消收藏资源...');
+                await apiService.unsaveResource(resourceId);
+                logMessage('resourceInteractionLog', '成功取消收藏资源');
+                
+                // 显示成功结果
+                showTestResult('resourceInteractionResult', true, `
+                    <h3>测试通过 ✓</h3>
+                    <p>成功完成资源交互测试。</p>
+                    <p>资源ID: ${resourceId}</p>
+                    <p>用户评分: ${userRating.rating}</p>
+                    <p>下载链接可用: ${downloadUrl ? '是' : '否'}</p>
+                `);
+            } catch (error) {
+                logMessage('resourceInteractionLog', `错误: ${error.message}`, true);
+                
+                // 显示错误结果
+                showTestResult('resourceInteractionResult', false, `
+                    <h3>测试失败 ✗</h3>
+                    <p>资源交互测试失败: ${error.message}</p>
+                    <p>请检查API服务是否正常运行，以及用户是否已登录。</p>
+                `);
+            }
+        });
+    </script>
+</body>
+</html>

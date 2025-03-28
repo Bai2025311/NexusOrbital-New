@@ -1,0 +1,7 @@
+.git
+node_modules
+.env
+package-lock.json
+deploy-simple.bat
+deploy-to-github.ps1
+exclude.txt

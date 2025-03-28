@@ -1,0 +1,217 @@
+/**
+ * NexusOrbital 网页端头部导航样式
+ * 版本: 2025.03.23
+ * 作者: 星际人居技术设计团队
+ */
+
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background-color: rgba(10, 25, 47, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+    transition: var(--transition);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.header-container {
+    max-width: var(--container-width);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo样式 */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: linear-gradient(to right, var(--text-primary), var(--accent-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+/* 导航菜单 */
+.main-nav {
+    height: 100%;
+}
+
+.nav-list {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    height: 100%;
+    position: relative;
+    margin: 0 5px;
+}
+
+.nav-item a {
+    height: 100%;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-item a:hover {
+    color: var(--text-primary);
+}
+
+.nav-item.active a {
+    color: var(--accent-teal);
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    height: 3px;
+    background: linear-gradient(to right, var(--accent-blue), var(--accent-teal));
+    border-radius: 3px 3px 0 0;
+}
+
+/* 导航操作区 */
+.nav-actions {
+    display: flex;
+    align-items: center;
+}
+
+.login-btn {
+    padding: 8px 20px;
+    background: transparent;
+    color: var(--accent-teal);
+    border: 1px solid var(--accent-teal);
+    border-radius: 20px;
+    font-weight: 500;
+    margin-right: 15px;
+    transition: var(--transition);
+}
+
+.login-btn:hover {
+    background-color: rgba(100, 233, 238, 0.1);
+    transform: translateY(-2px);
+}
+
+/* 移动端菜单按钮 */
+.mobile-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 200;
+}
+
+.mobile-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--text-primary);
+    border-radius: 3px;
+    transition: var(--transition);
+}
+
+/* 滚动效果 */
+.main-header.scrolled {
+    height: 60px;
+    background-color: rgba(10, 25, 47, 0.95);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+    .main-nav {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 100vh;
+        background-color: var(--primary-light);
+        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+        padding: 80px 20px 20px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 99;
+    }
+    
+    .main-nav.active {
+        display: block;
+        transform: translateX(0);
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+    }
+    
+    .nav-item {
+        width: 100%;
+        height: auto;
+        margin: 0;
+        margin-bottom: 15px;
+    }
+    
+    .nav-item a {
+        width: 100%;
+        padding: 15px 0;
+    }
+    
+    .nav-item.active::after {
+        display: none;
+    }
+    
+    .mobile-toggle {
+        display: flex;
+    }
+    
+    .mobile-toggle.active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+    
+    .mobile-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-toggle.active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+}
+
+@media (max-width: 576px) {
+    .header-container {
+        padding: 0 15px;
+    }
+    
+    .logo h1 {
+        font-size: 1.5rem;
+    }
+    
+    .login-btn {
+        padding: 6px 15px;
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub登录回调 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/web-global.css">
+    <style>
+        .callback-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status-message {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+        }
+        
+        .account-linking {
+            display: none;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .account-linking h3 {
+            margin-bottom: 15px;
+        }
+        
+        .account-linking .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .account-linking label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .account-linking input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .account-linking button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .account-linking button:hover {
+            background-color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="callback-container">
+        <div class="loading-spinner" id="loadingSpinner"></div>
+        <div class="status-message" id="statusMessage">正在处理GitHub登录，请稍候...</div>
+        
+        <div class="account-linking" id="accountLinking">
+            <h3>关联已有账号</h3>
+            <p>检测到您已经有一个使用相同邮箱的账号，您可以选择关联这两个账号。</p>
+            
+            <div class="form-group">
+                <label for="password">请输入您的密码进行验证</label>
+                <input type="password" id="password" placeholder="输入您的密码">
+            </div>
+            
+            <button id="linkAccountBtn">关联账号</button>
+            <button id="skipLinkingBtn">跳过，使用新账号</button>
+        </div>
+    </div>
+    
+    <script src="js/oauth-providers.js"></script>
+    <script src="js/web-auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const statusMessage = document.getElementById('statusMessage');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const accountLinking = document.getElementById('accountLinking');
+            const linkAccountBtn = document.getElementById('linkAccountBtn');
+            const skipLinkingBtn = document.getElementById('skipLinkingBtn');
+            
+            // 获取URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const state = urlParams.get('state');
+            
+            // 存储OAuth信息
+            let oauthUserInfo = null;
+            
+            try {
+                if (!code) {
+                    throw new Error('未收到授权码，登录失败');
+                }
+                
+                // 处理GitHub登录回调
+                oauthUserInfo = await window.OAuthProviders.handleOAuthCallback('github', code, state);
+                
+                // 检查是否需要账号关联
+                if (oauthUserInfo.needsLinking) {
+                    // 显示账号关联界面
+                    loadingSpinner.style.display = 'none';
+                    statusMessage.textContent = '请完成账号关联';
+                    accountLinking.style.display = 'block';
+                    
+                    // 设置关联按钮事件
+                    linkAccountBtn.addEventListener('click', async function() {
+                        const password = document.getElementById('password').value;
+                        
+                        if (!password) {
+                            alert('请输入密码');
+                            return;
+                        }
+                        
+                        try {
+                            loadingSpinner.style.display = 'inline-block';
+                            accountLinking.style.display = 'none';
+                            statusMessage.textContent = '正在关联账号...';
+                            
+                            // 调用账号关联API
+                            const result = await window.OAuthProviders.linkAccount(
+                                oauthUserInfo.existingUserId,
+                                'github',
+                                oauthUserInfo.id,
+                                password
+                            );
+                            
+                            // 使用关联后的用户信息登录
+                            const loginResult = window.OAuthProviders.loginWithOAuth(result.user);
+                            
+                            statusMessage.textContent = '账号关联成功，正在跳转...';
+                            
+                            // 延迟跳转到首页
+                            setTimeout(() => {
+                                window.opener.location.href = 'index.html';
+                                window.close();
+                            }, 1500);
+                        } catch (error) {
+                            loadingSpinner.style.display = 'none';
+                            accountLinking.style.display = 'block';
+                            alert('账号关联失败: ' + error.message);
+                        }
+                    });
+                    
+                    // 设置跳过按钮事件
+                    skipLinkingBtn.addEventListener('click', function() {
+                        // 使用新账号登录
+                        const loginResult = window.OAuthProviders.loginWithOAuth(oauthUserInfo);
+                        
+                        loadingSpinner.style.display = 'inline-block';
+                        accountLinking.style.display = 'none';
+                        statusMessage.textContent = '登录成功，正在跳转...';
+                        
+                        // 延迟跳转到首页
+                        setTimeout(() => {
+                            window.opener.location.href = 'index.html';
+                            window.close();
+                        }, 1500);
+                    });
+                } else {
+                    // 直接登录
+                    const loginResult = window.OAuthProviders.loginWithOAuth(oauthUserInfo);
+                    
+                    if (loginResult.success) {
+                        statusMessage.textContent = '登录成功，正在跳转...';
+                        
+                        // 延迟跳转到首页
+                        setTimeout(() => {
+                            window.opener.location.href = 'index.html';
+                            window.close();
+                        }, 1500);
+                    } else {
+                        throw new Error(loginResult.message || '登录失败');
+                    }
+                }
+            } catch (error) {
+                loadingSpinner.style.display = 'none';
+                statusMessage.textContent = '登录失败: ' + error.message;
+                statusMessage.classList.add('error-message');
+                
+                // 延迟关闭窗口
+                setTimeout(() => {
+                    window.close();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

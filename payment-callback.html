@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支付结果 - NexusOrbital</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="css/web-global.css">
+    <link rel="stylesheet" href="css/web-membership.css">
+    <style>
+        .payment-result-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .payment-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-icon.success {
+            color: #4caf50;
+        }
+        
+        .payment-icon.pending {
+            color: #ff9800;
+        }
+        
+        .payment-icon.failed {
+            color: #f44336;
+        }
+        
+        .payment-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .payment-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .payment-details {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .payment-details .row {
+            margin-bottom: 10px;
+        }
+        
+        .payment-details .label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .payment-details .value {
+            color: #666;
+        }
+        
+        .action-buttons {
+            margin-top: 20px;
+        }
+        
+        .action-buttons .btn {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="NexusOrbital Logo" height="30">
+                NexusOrbital
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projects.html">项目</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">社区</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="membership.html">会员中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">关于我们</a>
+                    </li>
+                </ul>
+                <div class="d-flex" id="navbarButtons">
+                    <a href="login.html" class="btn btn-outline-light me-2">登录</a>
+                    <a href="register.html" class="btn btn-primary">注册</a>
+                </div>
+                <div class="d-none" id="userProfileNav">
+                    <div class="dropdown">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <img src="images/avatar-placeholder.jpg" alt="用户头像" class="avatar-small me-1" id="navbarUserAvatar">
+                            <span id="navbarUsername">用户名</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.html">个人资料</a></li>
+                            <li><a class="dropdown-item" href="membership.html">会员中心</a></li>
+                            <li><a class="dropdown-item" href="settings.html">账号设置</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton">退出登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 支付结果容器 -->
+    <div class="container">
+        <div class="payment-result-container">
+            <div id="loadingResult">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">加载中...</span>
+                </div>
+                <p class="mt-3">正在处理支付结果，请稍候...</p>
+            </div>
+            
+            <div id="paymentResult" class="d-none">
+                <!-- 支付成功 -->
+                <div id="paymentSuccess" class="d-none">
+                    <div class="payment-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="payment-title">支付成功</h2>
+                    <p class="payment-message">感谢您的支付，您的会员已成功升级！</p>
+                </div>
+                
+                <!-- 支付处理中 -->
+                <div id="paymentPending" class="d-none">
+                    <div class="payment-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2 class="payment-title">支付处理中</h2>
+                    <p class="payment-message">您的支付正在处理中，这可能需要一些时间。处理完成后，您的会员将自动升级。</p>
+                </div>
+                
+                <!-- 支付失败 -->
+                <div id="paymentFailed" class="d-none">
+                    <div class="payment-icon failed">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <h2 class="payment-title">支付失败</h2>
+                    <p class="payment-message">很抱歉，您的支付未能完成。请稍后再试或尝试其他支付方式。</p>
+                    <p id="paymentErrorMessage" class="text-danger"></p>
+                </div>
+                
+                <!-- 支付详情 -->
+                <div class="payment-details" id="paymentDetails">
+                    <div class="row">
+                        <div class="col-md-4 label">交易编号</div>
+                        <div class="col-md-8 value" id="transactionId">-</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 label">支付方式</div>
+                        <div class="col-md-8 value" id="paymentMethod">-</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 label">支付金额</div>
+                        <div class="col-md-8 value" id="paymentAmount">-</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 label">支付时间</div>
+                        <div class="col-md-8 value" id="paymentTime">-</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 label">会员类型</div>
+                        <div class="col-md-8 value" id="membershipType">-</div>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="action-buttons">
+                    <a href="membership.html" class="btn btn-primary">返回会员中心</a>
+                    <a href="index.html" class="btn btn-outline-secondary">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>NexusOrbital</h5>
+                    <p>连接创新者，共建未来</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>链接</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">首页</a></li>
+                        <li><a href="projects.html" class="text-white">项目</a></li>
+                        <li><a href="community.html" class="text-white">社区</a></li>
+                        <li><a href="about.html" class="text-white">关于我们</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>资源</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">文档</a></li>
+                        <li><a href="#" class="text-white">API</a></li>
+                        <li><a href="#" class="text-white">教程</a></li>
+                        <li><a href="#" class="text-white">常见问题</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>联系我们</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i>contact@nexusorbital.com</li>
+                        <li><i class="fas fa-phone me-2"></i>+86 123 4567 8910</li>
+                        <li class="mt-3">
+                            <a href="#" class="text-white me-2"><i class="fab fa-weixin fa-lg"></i></a>
+                            <a href="#" class="text-white me-2"><i class="fab fa-weibo fa-lg"></i></a>
+                            <a href="#" class="text-white me-2"><i class="fab fa-github fa-lg"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2025 NexusOrbital. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript 库 -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/web-auth.js"></script>
+    <script src="js/payment-api.js"></script>
+    
+    <!-- 支付回调处理脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查用户是否已登录
+            checkUserLoginStatus();
+            
+            // 处理支付回调
+            handlePaymentCallback();
+        });
+        
+        /**
+         * 检查用户登录状态
+         */
+        function checkUserLoginStatus() {
+            const user = JSON.parse(localStorage.getItem('nexusorbital_user') || 'null');
+            
+            if (user) {
+                // 用户已登录，显示用户信息
+                document.getElementById('navbarButtons').classList.add('d-none');
+                document.getElementById('userProfileNav').classList.remove('d-none');
+                document.getElementById('navbarUsername').textContent = user.name || '用户';
+                
+                if (user.avatar) {
+                    document.getElementById('navbarUserAvatar').src = user.avatar;
+                }
+            }
+        }
+        
+        /**
+         * 处理支付回调
+         */
+        async function handlePaymentCallback() {
+            try {
+                // 获取URL参数
+                const urlParams = new URLSearchParams(window.location.search);
+                const method = urlParams.get('method'); // 支付方式
+                const status = urlParams.get('status'); // 支付状态
+                const transactionId = urlParams.get('out_trade_no') || urlParams.get('transaction_id'); // 交易编号
+                
+                // 如果没有支付方式参数，可能是直接访问页面
+                if (!method) {
+                    showPaymentResult('failed', { error: '无效的支付回调' });
+                    return;
+                }
+                
+                // 构建回调数据
+                const callbackData = {};
+                
+                // 将URL参数转换为回调数据
+                for (const [key, value] of urlParams.entries()) {
+                    callbackData[key] = value;
+                }
+                
+                // 如果有明确的状态参数，直接使用
+                if (status) {
+                    if (status === 'success') {
+                        // 模拟支付成功数据
+                        const paymentResult = {
+                            success: true,
+                            transactionId: transactionId || 'TX' + Date.now(),
+                            amount: urlParams.get('amount') || '299.00',
+                            paymentMethod: method,
+                            membershipType: urlParams.get('membership_type') || 'professional',
+                            paidTime: new Date().toISOString()
+                        };
+                        
+                        // 更新用户会员信息
+                        updateUserMembership(paymentResult);
+                        
+                        // 显示支付结果
+                        showPaymentResult('success', paymentResult);
+                    } else if (status === 'pending') {
+                        showPaymentResult('pending', { transactionId });
+                    } else {
+                        showPaymentResult('failed', { error: urlParams.get('error_msg') || '支付失败' });
+                    }
+                    return;
+                }
+                
+                // 否则，通过支付API处理回调
+                const result = await PaymentAPI.handleCallback(method, callbackData);
+                
+                if (result.success) {
+                    // 更新用户会员信息
+                    updateUserMembership(result);
+                    
+                    // 显示支付成功
+                    showPaymentResult('success', result);
+                } else {
+                    // 显示支付失败
+                    showPaymentResult('failed', result);
+                }
+            } catch (error) {
+                console.error('处理支付回调时出错:', error);
+                showPaymentResult('failed', { error: error.message || '处理支付回调时出错' });
+            }
+        }
+        
+        /**
+         * 更新用户会员信息
+         * @param {Object} paymentResult - 支付结果
+         */
+        function updateUserMembership(paymentResult) {
+            // 获取用户信息
+            const user = JSON.parse(localStorage.getItem('nexusorbital_user') || '{}');
+            
+            // 根据支付的会员类型更新用户信息
+            if (paymentResult.membershipType === 'professional') {
+                user.subscription = {
+                    plan: '专业会员计划',
+                    startDate: new Date().toISOString().split('T')[0],
+                    nextBilling: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+                    features: [
+                        "创始会员所有权益",
+                        "高级项目协作工具",
+                        "专家一对一咨询（每月1次）",
+                        "优先项目孵化支持",
+                        "专属技术研讨会",
+                        "API高级访问权限"
+                    ]
+                };
+            } else if (paymentResult.membershipType === 'enterprise') {
+                user.subscription = {
+                    plan: '企业会员计划',
+                    startDate: new Date().toISOString().split('T')[0],
+                    nextBilling: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+                    features: [
+                        "专业会员所有权益",
+                        "定制化技术支持",
+                        "企业级API访问",
+                        "优先漏洞修复",
+                        "专属技术顾问",
+                        "企业品牌展示"
+                    ]
+                };
+            }
+            
+            // 保存更新后的用户信息
+            localStorage.setItem('nexusorbital_user', JSON.stringify(user));
+            
+            // 保存交易记录
+            saveTransaction(paymentResult);
+        }
+        
+        /**
+         * 保存交易记录
+         * @param {Object} transaction - 交易数据
+         */
+        function saveTransaction(transaction) {
+            // 获取现有交易记录
+            const transactions = JSON.parse(localStorage.getItem('nexusorbital_transactions') || '[]');
+            
+            // 添加新交易
+            transactions.push({
+                ...transaction,
+                timestamp: transaction.paidTime || new Date().toISOString()
+            });
+            
+            // 保存交易记录
+            localStorage.setItem('nexusorbital_transactions', JSON.stringify(transactions));
+        }
+        
+        /**
+         * 显示支付结果
+         * @param {string} status - 支付状态: success, pending, failed
+         * @param {Object} data - 支付数据
+         */
+        function showPaymentResult(status, data) {
+            // 隐藏加载中
+            document.getElementById('loadingResult').classList.add('d-none');
+            
+            // 显示支付结果容器
+            document.getElementById('paymentResult').classList.remove('d-none');
+            
+            // 根据状态显示对应的结果
+            if (status === 'success') {
+                document.getElementById('paymentSuccess').classList.remove('d-none');
+                document.getElementById('paymentPending').classList.add('d-none');
+                document.getElementById('paymentFailed').classList.add('d-none');
+                
+                // 填充支付详情
+                document.getElementById('transactionId').textContent = data.transactionId || '-';
+                document.getElementById('paymentMethod').textContent = formatPaymentMethod(data.paymentMethod);
+                document.getElementById('paymentAmount').textContent = `¥${data.amount || '0.00'}`;
+                document.getElementById('paymentTime').textContent = formatDateTime(data.paidTime || new Date().toISOString());
+                document.getElementById('membershipType').textContent = formatMembershipType(data.membershipType);
+            } else if (status === 'pending') {
+                document.getElementById('paymentSuccess').classList.add('d-none');
+                document.getElementById('paymentPending').classList.remove('d-none');
+                document.getElementById('paymentFailed').classList.add('d-none');
+                
+                // 填充支付详情
+                document.getElementById('transactionId').textContent = data.transactionId || '-';
+                document.getElementById('paymentMethod').textContent = formatPaymentMethod(data.paymentMethod);
+                document.getElementById('paymentAmount').textContent = `¥${data.amount || '0.00'}`;
+                document.getElementById('paymentTime').textContent = '处理中';
+                document.getElementById('membershipType').textContent = formatMembershipType(data.membershipType);
+            } else {
+                document.getElementById('paymentSuccess').classList.add('d-none');
+                document.getElementById('paymentPending').classList.add('d-none');
+                document.getElementById('paymentFailed').classList.remove('d-none');
+                
+                // 显示错误信息
+                if (data.error) {
+                    document.getElementById('paymentErrorMessage').textContent = data.error;
+                }
+                
+                // 填充支付详情
+                document.getElementById('transactionId').textContent = data.transactionId || '-';
+                document.getElementById('paymentMethod').textContent = formatPaymentMethod(data.paymentMethod);
+                document.getElementById('paymentAmount').textContent = `¥${data.amount || '0.00'}`;
+                document.getElementById('paymentTime').textContent = formatDateTime(data.paidTime || new Date().toISOString());
+                document.getElementById('membershipType').textContent = formatMembershipType(data.membershipType);
+            }
+        }
+        
+        /**
+         * 格式化支付方式
+         * @param {string} method - 支付方式
+         * @returns {string} 格式化后的支付方式
+         */
+        function formatPaymentMethod(method) {
+            const methods = {
+                'alipay': '支付宝',
+                'wechat': '微信支付',
+                'creditcard': '信用卡'
+            };
+            
+            return methods[method] || method || '-';
+        }
+        
+        /**
+         * 格式化会员类型
+         * @param {string} type - 会员类型
+         * @returns {string} 格式化后的会员类型
+         */
+        function formatMembershipType(type) {
+            const types = {
+                'professional': '专业会员',
+                'enterprise': '企业会员',
+                'founder': '创始会员'
+            };
+            
+            return types[type] || type || '-';
+        }
+        
+        /**
+         * 格式化日期时间
+         * @param {string} dateTimeStr - ISO格式的日期时间字符串
+         * @returns {string} 格式化后的日期时间
+         */
+        function formatDateTime(dateTimeStr) {
+            if (!dateTimeStr) return '-';
+            
+            try {
+                const date = new Date(dateTimeStr);
+                return date.toLocaleString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            } catch (error) {
+                return dateTimeStr;
+            }
+        }
+    </script>
+</body>
+</html>
